@@ -5,6 +5,13 @@ describe ::PPC::Baidu::Plan do
             password:$baidu_password,
             token:$baidu_token
   )}
+  it "can get all plans" do
+    response = subject.plans
+    expect(response.class).to be Array
+    expect(response.first.class).to be Hash
+    expect(response.first['campaignId']).to be > 0
+  end
+
   it "can add a plan" do
     response = subject.add({name:"测试计划#{Time.now.to_i}"})
     expect(response).to have_key 'campaignId'
