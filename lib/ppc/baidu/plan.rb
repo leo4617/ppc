@@ -45,6 +45,17 @@ module PPC
         end
       end
 
+      def update_by_id(id,params = {})
+        params['campaignId'] = id
+        options = {campaignTypes: [params]}
+        request('updateCampaign',options)['campaignTypes']
+      end
+
+      def update(plans)
+        options = {campaignTypes: plans}
+        request('updateCampaign',options)['campaignTypes']
+      end
+
       def delete(ids)
         ids = [ids] unless ids.class == Array
         options = {campaignIds: ids}
