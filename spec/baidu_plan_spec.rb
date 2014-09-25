@@ -29,7 +29,7 @@ describe ::PPC::Baidu::Plan do
   it "can delete one plan by the id" do
     ids = subject.ids()
     response = subject.delete(ids.first)
-    expect(response)
+    expect(response).to be true
   end
   # it "could download all plan" do
   #   result = subject.all
