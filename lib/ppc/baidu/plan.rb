@@ -45,6 +45,22 @@ module PPC
         end
       end
 
+      def get(ids)
+        if ids.class != Array
+          ids = [ids]
+          single = true
+        end
+
+        options = {campaignIds: ids}
+        response = request('getCampaignByCampaignId',options)['campaignTypes']
+
+        if single
+          response.first
+        else
+          response
+        end
+      end
+
       def update_by_id(id,params = {})
         params['campaignId'] = id
         options = {campaignTypes: [params]}

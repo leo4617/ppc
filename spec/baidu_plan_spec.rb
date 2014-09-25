@@ -60,6 +60,14 @@ describe ::PPC::Baidu::Plan do
     expect(response.class).to be Array
   end
 
+  it "can get plans by one id" do
+    id = subject.ids().first
+    response = subject.get(id)
+    expect(response.class).to be Hash
+    expect(response['campaignId']).to be id
+    expect(response).to have_key 'campaignName'
+  end
+
   it "can delete one plan by the id" do
     ids = subject.ids()
     response = subject.delete(ids.first)
