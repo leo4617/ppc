@@ -77,6 +77,18 @@ module PPC
         options = {campaignIds: ids}
         request('deleteCampaign',options)['result'] == 1
       end
+
+      def pause(ids)
+        if ids.class == Array
+          options = []
+          ids.each do |id|
+            options << {campaignId: id, pause: true}
+          end
+          update(options)
+        else
+          update_by_id(ids,{pause:true})
+        end
+      end
     end
   end
 end
