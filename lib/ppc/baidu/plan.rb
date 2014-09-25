@@ -42,9 +42,9 @@ module PPC
       end
 
       def delete(ids)
-        ids = [ids] unless ids.class = Array
+        ids = [ids] unless ids.class == Array
         options = {campaignIds: ids}
-        request('deleteCampaign',options)
+        request('deleteCampaign',options)['result'] == 1
       end
     end
   end
