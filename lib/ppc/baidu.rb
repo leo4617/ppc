@@ -35,7 +35,7 @@ module PPC
       http.use_ssl = true
 
       response = http.post(uri.path, http_body, http_header)
-      (JSON.parse response.body)['body']['accountInfoType']
+      (JSON.parse response.body)['body']
     end
 
     def operations
