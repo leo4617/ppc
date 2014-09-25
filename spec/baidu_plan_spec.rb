@@ -88,4 +88,22 @@ describe ::PPC::Baidu::Plan do
   #     expect(subject.code).to eq '901162'
   #   end
   # end
+  it "pauses one plan by id" do
+    id = subject.ids().first
+
+    response = subject.pause(id)
+    expect(response.class).to be Array
+    expect(response.first.class).to be Hash
+    expect(response.first['pause']).to be true
+  end
+
+  it "pauses two plans by ids" do
+    id1 = subject.ids()[0]
+    id2 = subject.ids()[1]
+    response = subject.pause([id1,id2])
+    expect(response.class).to be Array
+    expect(response.first.class).to be Hash
+    expect(response[0]['pause']).to be true
+    expect(response[1]['pause']).to be true
+  end
 end
