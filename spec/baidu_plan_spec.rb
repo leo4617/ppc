@@ -88,6 +88,26 @@ describe ::PPC::Baidu::Plan do
   #     expect(subject.code).to eq '901162'
   #   end
   # end
+  it "enables one plan by id" do
+    id = subject.ids().first
+
+    response = subject.enable(id)
+    expect(response.class).to be Array
+    expect(response.first.class).to be Hash
+    expect(response.first['pause']).to be false
+  end
+
+  it "enables two plans by ids" do
+    id1 = subject.ids()[0]
+    id2 = subject.ids()[1]
+
+    response = subject.enable([id1,id2])
+    expect(response.class).to be Array
+    expect(response.first.class).to be Hash
+    expect(response[0]['pause']).to be false
+    expect(response[1]['pause']).to be false
+  end
+
   it "pauses one plan by id" do
     id = subject.ids().first
 
