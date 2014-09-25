@@ -12,6 +12,10 @@ module PPC
         download(params)
       end
 
+      def plans
+        request('getAllCampaign')['campaignTypes']
+      end
+
       def ids
         request('getAllCampaignId')['campaignIds']
       end
