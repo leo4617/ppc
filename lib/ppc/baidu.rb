@@ -1,10 +1,12 @@
 require 'ppc/baidu/account'
+require 'ppc/baidu/group'
 require 'ppc/baidu/plan'
 require 'ppc/baidu/bulk'
 require 'ppc/baidu/report'
 require 'awesome_print'
 require 'net/http'
 require 'net/https'
+require 'json'
 # require 'savon'
 module PPC
   class Baidu
@@ -19,7 +21,7 @@ module PPC
     end
 
 
-    def request(method,params = {})
+    def request(method,params = {}, with_header = false)
       uri = URI("https://api.baidu.com/json/sms/v3/#{@service}/#{method}")
       http_body = {
         header: request_header,
@@ -35,7 +37,11 @@ module PPC
       http.use_ssl = true
 
       response = http.post(uri.path, http_body, http_header)
-      (JSON.parse response.body)['body']
+      response =  (JSON.parse response.body)
+      # if not needed, only return body
+      unless with_header
+       response['body']
+      end
     end
 
     def operations
