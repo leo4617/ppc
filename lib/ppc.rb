@@ -1,6 +1,4 @@
 require 'ppc/baidu'
-require 'ppc/sogou'
-require 'ppc/qihu'
 module PPC
   VERSION = "1.0.7"
   attr_reader :header,:body,:rquota,:quota,:status,:desc,:oprs,:oprtime,:code,:message

@@ -7,7 +7,7 @@ module PPC
       end
 
       def info
-        request('getAccountInfo')#[:envelope][:body][:get_account_info_response][:account_info_type]
+        response = request('getAccountInfo')["accountInfoType"]
       end
 
       def all(params = {})
@@ -37,7 +37,7 @@ module PPC
           info[:accountInfoType].delete(key) if value == nil
         }
 
-        request('updateAccountInfo', info)
+        request('updateAccountInfo', info)["accountInfoType"]
       end
 
       def query_report(params = {})
