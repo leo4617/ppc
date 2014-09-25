@@ -16,14 +16,29 @@ module PPC
         request('getAllCampaignId')['campaignIds']
       end
 
-      def add(params = {})
-        options = {
-          campaignTypes:  [
-            campaignName: params[:name],
-            negativeWords: params[:negative],
-            exactNegativeWords: params[:exact_negative]
-          ]}
-        request('addCampaign',options)['campaignTypes'].first
+      #add one or more plans
+      def add(plans)
+        if plans.class == Hash
+          plans = [plans]
+          single = true
+        end
+        campaignTypes = []
+
+        plans.each do |plan|
+          campaignTypes << {
+            campaignName: plan[:name],
+            negativeWords: plan[:negative],
+            exactNegativeWords: plan[:exact_negative]
+          }
+        end
+
+        options = {campaignTypes:  campaignTypes}
+        response = request('addCampaign',options)['campaignTypes']
+        if single
+          response.first
+        else
+          response
+        end
       end
 
       def delete(ids)
