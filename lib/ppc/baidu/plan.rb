@@ -89,6 +89,18 @@ module PPC
           update_by_id(ids,{pause:true})
         end
       end
+
+      def enable(ids)
+        if ids.class == Array
+          options = []
+          ids.each do |id|
+            options << {campaignId: id, pause: false}
+          end
+          update(options)
+        else
+          update_by_id(ids,{pause:false})
+        end
+      end
     end
   end
 end
