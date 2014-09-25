@@ -31,6 +31,13 @@ describe ::PPC::Baidu::Plan do
     response = subject.delete(ids.first)
     expect(response).to be true
   end
+
+  it "can delete two plans by the ids" do
+    ids = subject.ids()
+    pending if ids.size < 2
+    response = subject.delete(ids[0..1])
+    expect(response).to be true
+  end
   # it "could download all plan" do
   #   result = subject.all
   #   if result
