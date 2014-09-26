@@ -13,13 +13,6 @@ module PPC
   class Baidu
     include ::PPC
 
-    def initialize(params = {})
-      @service = params[:service] + 'Service'
-      @username = params[:username]
-      @password = params[:password]
-      @token = params[:token]
-      @debug = params[:debug] || false
-    end
 
 
     def request(method,params = {}, with_header = false)
