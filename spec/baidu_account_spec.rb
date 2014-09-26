@@ -19,6 +19,8 @@ describe ::PPC::Baidu::Account do
     expect(response["budget"]).to eq 3000
   end
 
+
+
   # it "could download all plan" do
   #   result = subject.all
   #   if result
