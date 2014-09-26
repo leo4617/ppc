@@ -13,12 +13,14 @@ module PPC
   module Baidu
     include ::PPC
 
-
-
-    def request(method,params = {}, with_header = false)
-      uri = URI("https://api.baidu.com/json/sms/v3/#{@service}/#{method}")
+    def request(service,method,params = {})
+      uri = URI("https://api.baidu.com/json/sms/v3/#{service}Service/#{method}")
       http_body = {
-        header: request_header,
+        header: {
+          username:   @username,
+          password:   @password,
+          token:      @token
+        },
         body: params
       }.to_json
 
@@ -31,12 +33,13 @@ module PPC
       http.use_ssl = true
 
       response = http.post(uri.path, http_body, http_header)
-      response =  (JSON.parse response.body)
+      response = JSON.parse response.body
+      if params[:with_header]
+        response
+      else
+        response['body']
+      end
       # if not needed, only return body
-      return response['body'] unless with_header else response
-    end
-
-    def operations
     end
 
     protected
@@ -91,15 +94,6 @@ module PPC
     end
 
     private
-
-
-    def request_header
-      {
-        username:   @username,
-        password:   @password,
-        token:      @token
-      }
-    end
 
     def example(operation,with_header=false)
       operation = make_operation(operation)
