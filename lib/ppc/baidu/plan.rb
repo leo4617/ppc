@@ -41,6 +41,40 @@ module PPC
         end
       end
 
+      def get(ids)
+        if ids.class != Array
+          ids = [ids]
+          single = true
+        end
+
+        options = {campaignIds: ids}
+        response = request('getCampaignByCampaignId',options)['campaignTypes']
+
+        if single
+          response.first
+        else
+          response
+        end
+      end
+
+      # @todo needs testing
+      def updates(params)
+        params['campaignId'] = @se_id
+        options = {campaignTypes: [params]}
+        request('updateCampaign',options)['campaignTypes']
+      end
+
+      def update_by_id(id,params = {})
+        params['campaignId'] = id
+        options = {campaignTypes: [params]}
+        request('updateCampaign',options)['campaignTypes']
+      end
+
+      def update(plans)
+        options = {campaignTypes: plans}
+        request('updateCampaign',options)['campaignTypes']
+      end
+
       def delete(ids)
         ids = [ids] unless ids.class == Array
         options = {campaignIds: ids}
