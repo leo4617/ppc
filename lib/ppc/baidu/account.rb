@@ -1,13 +1,80 @@
 module PPC
-    class Account < ::PPC::Baidu
-      def initialize(params = {})
-        params[:service] = 'Account'
-        super(params)
   module Baidu
+    class Account
+      Service = 'Account'
+      include ::PPC
+      include ::PPC::Baidu
+
+      ##########################plan#####################
+      def plans
+        request('Campaign','getAllCampaign')['campaignTypes']
       end
 
+      def get_plan_by_id(ids)
+        if ids.class != Array
+          ids = [ids]
+          single = true
+        end
+
+        options = {campaignIds: ids}
+        response = request('Campaign','getCampaignByCampaignId',options)['campaignTypes']
+
+        if single
+          response.first
+        else
+          response
+        end
+      end
+
+      def plan_ids
+        request('Campaign','getAllCampaignId')['campaignIds']
+      end
+
+      def update_plan_by_id(id,params = {})
+        params['campaignId'] = id
+        options = {campaignTypes: [params]}
+        request('Campaign','updateCampaign',options)['campaignTypes']
+      end
+
+      #add one or more plans
+      def add_plan(plans)
+        if plans.class == Hash
+          plans = [plans]
+          single = true
+        end
+        campaignTypes = []
+
+        plans.each do |plan|
+          campaignTypes << {
+            campaignName: plan[:name],
+            negativeWords: plan[:negative],
+            exactNegativeWords: plan[:exact_negative]
+          }
+        end
+
+        options = {campaignTypes:  campaignTypes}
+        response = request('Campaign','addCampaign',options)['campaignTypes']
+        if single
+          response.first
+        else
+          response
+        end
+      end
+
+      def update_plans(plans)
+        options = {campaignTypes: plans}
+        request('Campaign','updateCampaign',options)['campaignTypes']
+      end
+
+      def delete_plan_by_id(ids)
+        ids = [ids] unless ids.class == Array
+        options = {campaignIds: ids}
+        request('Campaign','deleteCampaign',options)['result'] == 1
+      end
+      ##########################plan#####################
+
       def info
-        response = request('getAccountInfo')["accountInfoType"]
+        request(Service,'getAccountInfo')['accountInfoType']#[:envelope][:body][:get_account_info_response][:account_info_type]
       end
 
       def all(params = {})
@@ -37,8 +104,9 @@ module PPC
           info[:accountInfoType].delete(key) if value == nil
         }
 
-        request('updateAccountInfo', info)["accountInfoType"]
+        request(Service,'updateAccountInfo', info)['accountInfoType']
       end
+
 
       def query_report(params = {})
         report = ::PPC::Baidu::Report.new({username: @username, password: @password, token: @token, debug: @debug})
