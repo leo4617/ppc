@@ -4,6 +4,11 @@ module PPC
   attr_reader :header,:body,:rquota,:quota,:status,:desc,:oprs,:oprtime,:code,:message
   attr_accessor :username,:password,:token,:debug
   def initialize(params = {})
+    @service    = params[:service]
+    @username   = params[:username]
+    @password   = params[:password]
+    @token      = params[:token]
+    @debug      = params[:debug] || false
   end
 
   protected
