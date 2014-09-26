@@ -1,6 +1,6 @@
 module PPC
-  class Baidu
     class Key < ::PPC::Baidu
+  module Baidu
       def initialize(params = {})
         params[:service] = 'Keyword'
         @se_id = params[:se_id]

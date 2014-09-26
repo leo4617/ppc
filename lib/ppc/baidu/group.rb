@@ -1,6 +1,7 @@
 module PPC
   class Baidu
     class Group < ::PPC::Baidu
+  module Baidu
       def initialize(params = {})
         params[:service] = 'Adgroup'
         super(params)

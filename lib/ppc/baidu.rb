@@ -10,7 +10,7 @@ require 'net/https'
 require 'json'
 # require 'savon'
 module PPC
-  class Baidu
+  module Baidu
     include ::PPC
 
 

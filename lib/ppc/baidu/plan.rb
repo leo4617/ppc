@@ -1,6 +1,6 @@
 module PPC
-  class Baidu
     class Plan < ::PPC::Baidu
+  module Baidu
       def initialize(params = {})
         params[:service] = 'Campaign'
         @se_id = params[:se_id]

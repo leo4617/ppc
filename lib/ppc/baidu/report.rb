@@ -1,5 +1,5 @@
 module PPC
-  class Baidu
+  module Baidu
     class ReportException < Exception
       attr_reader :file_id,:report,:exception
       def initialize(file_id,report,exception)

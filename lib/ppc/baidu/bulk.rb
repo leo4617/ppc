@@ -1,5 +1,5 @@
 module PPC
-  class Baidu
+  module Baidu
     class BulkException < Exception
       attr_reader :file_id,:bulk,:exception
       def initialize(file_id,bulk,exception)

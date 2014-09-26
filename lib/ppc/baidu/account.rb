@@ -1,9 +1,9 @@
 module PPC
-  class Baidu
     class Account < ::PPC::Baidu
       def initialize(params = {})
         params[:service] = 'Account'
         super(params)
+  module Baidu
       end
 
       def info
