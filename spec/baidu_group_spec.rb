@@ -6,45 +6,51 @@ describe ::PPC::Baidu::Group do
             token:$baidu_token
   )}
 
-  it " test get all group info " do
+  Test_group1 = {plan_id: 8537330, name:"test_group1",maxprice: 500 }
+  Test_group2 = {plan_id: 8537330, name:"test_group2",maxprice: 500 }
+  Test_groups = [ Test_group1, Test_group2 ]
+  $test_group_ids = []
+  $test_plan_ids = []
+
+  it " can get all group info " do
     response = subject.all()
     response.each{  |campaign|
       expect( campaign.keys ).to eq ["campaignId", "adgroupIds"] 
+      $test_plan_ids << campaign["campaignId"]
     }
   end
 
-  it " test add group " do
-    response = subject.add( {plan_id: 8537330, name:"test_group",maxprice: 500 })
-    response.each{  |adgrouptype|
-      expact(adgrouptype["adgroupId"].class ).to be != nil 
+  it " can add group " do
+    response = subject.add( Test_groups, true )
+    expect( response['header']['desc'] ).to eq 'success'
+
+    # store test_group _id s
+    response = response['body']['adgroupTypes']
+    response.each{  |group|
+     $test_group_ids << group[ 'adgroupId' ]
     }
   end
 
-  it " test updat group " do
-    params = [ {group_id: 718157905, name:"testgroup", maxprice: 3030},
-                        {group_id: 719515376, name:"testgroup1", maxprice: 3030} ]
-    response = subject.update( params )
-    response.each{  | group |
-      expect(group["maxPrice"]).to eq 3030
-    }
+  it " can update group " do
+    updates = [ { group_id: $test_group_ids[0], maxprice:550 } , 
+                      { group_id: $test_group_ids[1], maxprice:550 } ]
+    response = subject.update( updates, true )
+    expect( response['header']['desc'] ).to eq 'success'
   end
 
-  it " test delete  group " do
-    ids = [718157905, 719515376, 719515373]
-    response = subject.delete( ids, test_model = true )
-    expect(response["header"]["desc"]).to eq "success"
-  end
-
-  it "test search group by campaignId" do
-    ids = [ 8537330 ]
-    response = subject.search_by_campaignID( ids , with_header = true)
+  it "can search group by group id" do
+    response = subject.search_by_groupid( $test_group_ids ,  true)
     expect( response["header"]["desc"] ).to eq "success"
   end
 
-  it "test search group by group id" do
-    ids = [ 161474486, 161474483 ]
-    response = subject.search_by_campaignID( ids , with_header = true)
-    expect( response["header"]["desc"] ).to eq "success"
+  it " can delete group " do
+    response = subject.delete( $test_group_ids )
+    expect( response ).to eq "success"
   end
 
+  it "can search group by planId" do
+    response = subject.search_by_planid( $test_plan_ids , true)
+    expect( response["header"]["desc"] ).to eq "success"
+  end
+  
 end
