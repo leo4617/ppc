@@ -13,7 +13,7 @@ module PPC
         request( "getAllAdgroupId" )["campaignAdgroupIds"]
       end
 
-      def add( params = {})
+      def add( params={}, test = false)
         """
         @ input : one or list of AdgroupType
         @ output : list of AdgroupType
@@ -22,13 +22,15 @@ module PPC
         adgroupType = []
         
         params.each{  | group_i |
-          adgroupType << make_adgroupType( group_i ) 
+          adgroupType << make_adgrouptype( group_i ) 
         }
 
-        request( "addAdgroup", {adgroupTypes: adgroupType} )["adgroupTypes"]
+        body = {adgroupTypes: adgroupType}
+        response = request( "addAdgroup", body, test )
+        return response['adgroupTypes'] unless test else response
       end
 
-      def update( params = {} )
+      def update( params={}, test = false )
         """
         @ input : one or list of AdgroupType
         @ output : list of AdgroupType
@@ -37,34 +39,39 @@ module PPC
         adgroupType = []
         
         params.each{  | group_i |
-          adgroupType << make_adgroupType( group_i ) 
+          adgroupType << make_adgrouptype( group_i ) 
         }
 
-        request( "updateAdgroup", {adgroupTypes: adgroupType} )["adgroupTypes"]
+        body = {adgroupTypes: adgroupType}
+        responses = request( "updateAdgroup", body, test )
+        return responses['adgroupTypes'] unless test else responses
       end
 
-      def delete( ids, return_header = false )
-        """
-        """
+      def delete( ids )
+        # delete responses have no content therefore we 
+        #return header.desc to judge whether operation success
         ids = [ ids ] unless ids.class == Array
-        # enable request to return header so that we can examine the test
-        request("deleteAdgroup", { adgroupIds: ids } , return_header )          
+        
+        body = { adgroupIds: ids }
+        request( "deleteAdgroup", body, true )[ 'header' ][ 'desc' ]
       end
 
-      def search_by_campaignID( ids, return_header = false )
-        params = [ params ] unless params.class == Array
-        request("getAdgroupByCampaignId", { campaignIds: ids } ,return_header )  
+      def search_by_planid( ids, test = false )
+        ids = [ ids ] unless ids.class == Array
+        body = { campaignIds: ids }
+        responses = request("getAdgroupByCampaignId",  body, test )
+        return responses["campaignAdgroups"]  unless test else responses
       end
 
-      def search_by_groupID( ids, return_header = false )
-        params = [ params ] unless params.class == Array
-        request("getAdgroupByAdgroupId", { adgroupIds: ids } )
-        request("getAdgroupByCampaignId", { campaignIds: ids } ,return_header )  
-
+      def search_by_groupid( ids, test = false )
+        ids = [ ids ] unless ids.class == Array
+        body = { adgroupIds: ids }
+        responses = request("getAdgroupByAdgroupId",body, test )
+        return responses["adgroupTypes"]  unless test else responses
       end
 
       private 
-        def make_adgroupType( params={} )
+        def make_adgrouptype( params={} )
           adgrouptype = {
             campaignId:               params[:plan_id],
             adgroupId:              params[:group_id],
@@ -85,7 +92,7 @@ module PPC
           # delete invalid note according to request type
           # unimplemented
           return adgrouptype
-        end #make_adgroupType
+        end #make_adgrouptype
 
     end # class group
   end # class baidu 

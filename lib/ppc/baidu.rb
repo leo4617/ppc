@@ -1,7 +1,8 @@
 require 'ppc/baidu/account'
-require 'ppc/baidu/group'
 require 'ppc/baidu/plan'
 require 'ppc/baidu/bulk'
+require 'ppc/baidu/group'
+require 'ppc/baidu/key'
 require 'ppc/baidu/report'
 require 'awesome_print'
 require 'net/http'
@@ -39,9 +40,7 @@ module PPC
       response = http.post(uri.path, http_body, http_header)
       response =  (JSON.parse response.body)
       # if not needed, only return body
-      unless with_header
-       response['body']
-      end
+      return response['body'] unless with_header else response
     end
 
     def operations
