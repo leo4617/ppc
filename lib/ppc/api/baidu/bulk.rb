@@ -9,7 +9,8 @@ module PPC
       end
     end
 
-    class Bulk < ::PPC::Baidu
+    class Bulk
+      include ::PPC::Baidu
       def initialize(params = {})
         params[:service] = 'BulkJob'
         super(params)

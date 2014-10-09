@@ -1,11 +1,12 @@
 module PPC
-    class Key < ::PPC::Baidu
   module Baidu
+    class Key
+      include ::PPC::Baidu
       def initialize(params = {})
         params[:service] = 'Keyword'
         @se_id = params[:se_id]
         super(params)
-      end 
+      end
 
       def add()
       end
@@ -13,7 +14,8 @@ module PPC
       def update()
       end
 
-      def delete()
+      def self.delete(params = {})
+
       end
 
       def active()

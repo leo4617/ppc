@@ -1,7 +1,7 @@
 module PPC
-  class Baidu
-    class Group < ::PPC::Baidu
   module Baidu
+    class Group
+      include ::PPC::Baidu
       def initialize(params = {})
         params[:service] = 'Adgroup'
         super(params)
@@ -18,12 +18,12 @@ module PPC
         """
         @ input : one or list of AdgroupType
         @ output : list of AdgroupType
-        """       
+        """
         params = [ params ] unless params.class == Array
         adgroupType = []
-        
+
         params.each{  | group_i |
-          adgroupType << make_adgrouptype( group_i ) 
+          adgroupType << make_adgrouptype( group_i )
         }
 
         body = {adgroupTypes: adgroupType}
@@ -38,9 +38,9 @@ module PPC
         """
         params = [ params ] unless params.class == Array
         adgroupType = []
-        
+
         params.each{  | group_i |
-          adgroupType << make_adgrouptype( group_i ) 
+          adgroupType << make_adgrouptype( group_i )
         }
 
         body = {adgroupTypes: adgroupType}
@@ -49,10 +49,10 @@ module PPC
       end
 
       def delete( ids )
-        # delete responses have no content therefore we 
+        # delete responses have no content therefore we
         #return header.desc to judge whether operation success
         ids = [ ids ] unless ids.class == Array
-        
+
         body = { adgroupIds: ids }
         request( "deleteAdgroup", body, true )[ 'header' ][ 'desc' ]
       end
@@ -71,7 +71,7 @@ module PPC
         return responses["adgroupTypes"]  unless test else responses
       end
 
-      private 
+      private
         def make_adgrouptype( params={} )
           adgrouptype = {
             campaignId:               params[:plan_id],
@@ -96,5 +96,5 @@ module PPC
         end #make_adgrouptype
 
     end # class group
-  end # class baidu 
+  end # class baidu
 end # module
