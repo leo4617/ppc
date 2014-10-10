@@ -35,6 +35,7 @@ module PPC
 
         response = http.post(uri.path, http_body, http_header)
         response = JSON.parse response.body
+
         if params[:with_header]
           response
         else

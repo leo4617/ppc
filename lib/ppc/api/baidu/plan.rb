@@ -4,87 +4,69 @@ module PPC
       include ::PPC::Baidu
       Service = 'Campaign'
 
-      def self.all(auth)
-        request(auth,Service,'getAllCampaign')['campaignTypes']
+      def self.get_all( auth )
+        request( auth, Service, 'getAllCampaign' )['campaignTypes']
       end
 
-      def self.ids(auth)
-        request(auth,Service,'getAllCampaignId')['campaignIds']
+      def self.get_all_id( auth )
+        request( auth, Service, 'getAllCampaignId' )['campaignIds']
       end
 
-      def self.get(auth,ids)
-        if ids.class != Array
-          ids = [ids]
-          single = true
-        end
-
-        options = {campaignIds: ids}
-        response = request(Service,'getCampaignByCampaignId',options)['campaignTypes']
-
-        if single
-          response.first
-        else
-          response
-        end
+      def self.get_by_id( auth, ids )
+        ids = [ ids ] unless ids.is_a ? Array
+        body = { campaignIds: ids }
+        request( Service, 'getCampaignByCampaignId', body)['campaignTypes']
       end
 
-      #add one or more plans
-      def self.add(auth,plans)
-        if plans.class == Hash
-          plans = [plans]
-          single = true
-        end
-        campaignTypes = []
+      def self.add( auth,plans )
+        plans = [ plans ]unless plans.is_a ? Array
+        campaigntypes = []
 
         plans.each do |plan|
-          campaignTypes << {
+          campaigntypes << {
             campaignName: plan[:name],
             negativeWords: plan[:negative],
             exactNegativeWords: plan[:exact_negative]
           }
         end
 
-        options = {campaignTypes:  campaignTypes}
-        response = request(auth,'Campaign','addCampaign',options)['campaignTypes']
-        if single
-          response.first
-        else
-          response
-        end
+        body = {campaignTypes:  campaigntypes}
+        request( auth, Service, 'addCampaign', body)['campaignTypes']
       end
 
       def self.update(auth,plans)
         plans = [plans] unless plan.is_a? Array
+        campaigntypes = []
 
-        options = []
         plans.each do |plan|
-          option = {
-            campaignId:             plan[:id]
-            campaignName:           plan[:name]                 || nil
-            budget:                 plan[:budget]               || nil
-            regionTarget:           plan[:region]               || nil
-            excludeIp:              plan[:ip]                   || nil
-            negativeWords:          plan[:negative]             || nil
-            exactNegativeWords:     plan[:exact_negative]       || nil
-            schedule:               plan[:schedule]             || nil
-            budgetOfflineTime:      plan[:budget_offline_time]  || nil
-            showProb:               plan[:show_prob]            || nil
-            device:                 plan[:device]               || nil
-            priceRatio:             plan[:price_ratio]          || nil
-            pause:                  plan[:pause]                || nil
-            status:                 plan[:status]               || nil
-          }
-          options << option
+          campaigntype = {}
+          
+          campaigntype[:campaignId]                    plan[:id]                                  if    plan[:id]  
+          campaigntype[:campaignName]             plan[:name]                           if    plan[:name]
+          campaigntype[:budget]                             plan[:budget]                        if    plan[:budget]
+          campaigntype[:regionTarget]                   plan[:region]                         if    plan[:region] 
+          campaigntype[:excludeIp]                        plan[:ip]                                  if    plan[:ip]
+          campaigntype[:negativeWords]               plan[:negative]                      if    plan[:negative]  
+          campaigntype[:exactNegativeWords]     plan[:exact_negative]           if    plan[:exact_negative]
+          campaigntype[:schedule]                          plan[:schedule]                      if    plan[:schedule]
+          campaigntype[:budgetOfflineTime]         plan[:budget_offline_time]  if    plan[:budget_offline_time]
+          campaigntype[:showProb]                        plan[:show_prob]                  if    plan[:show_prob]
+          campaigntype[:device]                               plan[:device]                          if    plan[:device] 
+          campaigntype[:priceRatio]                        plan[:price_ratio]                   if    plan[:price_ratio]
+          campaigntype[:pause]                                plan[:pause]                           if    plan[:pause]
+
+          campaigntypes << campaigntype
         end
-        options = {campaignTypes: options}
-        request(auth,Service,'updateCampaign',options)['campaignTypes']
+        body = { campaignTypes: campaigntypes }
+        request( auth, Service, 'updateCampaign', body)['campaignTypes']
       end
 
       def self.delete(ids)
-        ids = [ids] unless ids.class == Array
-        options = {campaignIds: ids}
-        request(auth,'Campaign','deleteCampaign',options)['result'] == 1
+        ids = [ ids ] unless ids.class == Array
+        body = { campaignIds: ids }
+        request( auth, 'Campaign', 'deleteCampaign', body)['result'] == 1
       end
+      
     end
   end
 end
