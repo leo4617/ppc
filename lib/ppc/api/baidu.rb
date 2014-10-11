@@ -12,9 +12,8 @@ require 'json'
 module PPC
   module API
     module Baidu
-      include ::PPC::API
 
-      def self.request(auth,service,method,params = {})
+      def request( auth, service, method, params = {}, with_header = false)
         uri = URI("https://api.baidu.com/json/sms/v3/#{service}Service/#{method}")
         http_body = {
           header: {
@@ -36,18 +35,10 @@ module PPC
         response = http.post(uri.path, http_body, http_header)
         response = JSON.parse response.body
 
-        if params[:with_header]
-          response
-        else
-          response['body']
-        end
-        # if not needed, only return body
+        return response if with_header else response['body']
       end
 
-
-
       # private
-
       # def process_response(response)
       #   body = response[:envelope]
       #   print_debug(body,'response.envelope') if @debug
@@ -74,8 +65,7 @@ module PPC
       #   else
       #     raise "unknown desc from baidu: #{@desc}"
       #   end
-      # end
-
+      # end 
     end
   end
 end

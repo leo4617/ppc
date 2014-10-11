@@ -1,110 +1,110 @@
 module PPC
-  module Baidu
-    module Report
-      include ::PPC::Baidu
-      Service 'Report'
-    
-      # 需要用到的映射集合
-      Type_map = { 'account' => 2, 'plan'=> 10, 'group'=> 11, 
-                                            'keyword'=> 14, 'creative'=> 12, 'pair'=> 15, 
-                                            'region'=> 3, 'wordid'=> 9 }
-      Level_map = {  'account' => 2, 'plan' => 3, 'group' => 5, 
-                                'creative' => 7, 'keywordid' => 11, 'pair' => 12, 
-                                'wordid' => 6 }
-      Device_map = { 'all' => 0, 'pc' => 1, 'mobile' => 2 }
-      Unit_map = { 'day' => 5, 'week' => 4, 'month' => 3, 'year' => 1, 'hour' => 7 }
+  module API
+    module Baidu
+      module Report
+        include ::PPC::Baidu
+        Service 'Report'
+      
+        # 需要用到的映射集合
+        Type_map = { 'account' => 2, 'plan'=> 10, 'group'=> 11, 
+                                              'keyword'=> 14, 'creative'=> 12, 'pair'=> 15, 
+                                              'region'=> 3, 'wordid'=> 9 }
+        Level_map = {  'account' => 2, 'plan' => 3, 'group' => 5, 
+                                  'creative' => 7, 'keywordid' => 11, 'pair' => 12, 
+                                  'wordid' => 6 }
+        Device_map = { 'all' => 0, 'pc' => 1, 'mobile' => 2 }
+        Unit_map = { 'day' => 5, 'week' => 4, 'month' => 3, 'year' => 1, 'hour' => 7 }
 
-      def self.get_real_time( auth, params, type = :data )
-        params = [ params ] unless params.is_a ? Array
-        request = make_realtimetype(params)
-        body = { realTimeRequestTypes:  request }
-        response = request( auth, Service, 'getRealTimeData' ,body)
+        def self.get_real_time( auth, params, type = :data )
+          params = [ params ] unless params.is_a ? Array
+          request = make_realtimetype(params)
+          body = { realTimeRequestTypes:  request }
+          response = request( auth, Service, 'getRealTimeData' ,body)
 
-        response = case type
-          when :data     :    response['realTimeResultTypes']
-          when :query  :    response['realTimeQueryResultTypes']
-          when :pair      :    response['realTimePairResultTypes']
+          response = case type
+            when :data     :    response['realTimeResultTypes']
+            when :query  :    response['realTimeQueryResultTypes']
+            when :pair      :    response['realTimePairResultTypes']
+          end
+          
+          return response                   
         end
-        
-        return response                   
-      end
 
 
-      def self.get_id( auth, params )
-        params = [ params ] unless params.is_a ? Array
-        request = make_reporttype( params )
-        body =  { realTimeRequestTypes:  request }
-        request( auth, Service, 'getProfessionalReportId' ,body)['reportId']       
-      end
-
-      def self.get_status( auth, ids )
-        ids = [ ids ] unless ids.is_a ? Array
-        body = { reportId:  ids }
-        request( auth, Service, 'getReportState' ,body)['isGenerated']      
-      end
-
-      def self.get_file_url( auth, ids )
-        ids = [ ids ] unless ids.is_a ? Array
-        body = { reportId:  ids }
-        request( auth, Service, 'getReportFileUrl' ,body)['reportFilePath']       
-      end
-
-      private 
-      def make_realtimerequest( params )
-        '''
-        make RealTimeRequestType
-        没有封装关键字：attribute，order,statIds
-        '''
-        params = [ params ] unless params.is_a ? Array
-        requesttypes = []
-        params.each do  |param|
-          requesttype = {}
-
-          requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
-          requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]  else 14
-          requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level] else  11
-          requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range] else 11
-          requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit]  else 5
-          requesttype[:number]                     =    param[:number]                         if  param[:number]  
-          requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]  else  0
-          requesttype[:startDate]                   startDate
-          requesttype[:endDate]                     endDate
-          requesttypes << requesttype
+        def self.get_id( auth, params )
+          params = [ params ] unless params.is_a ? Array
+          request = make_reporttype( params )
+          body =  { realTimeRequestTypes:  request }
+          request( auth, Service, 'getProfessionalReportId' ,body)['reportId']       
         end
-        return requesttypes
-      end
 
-
-
-      private
-      def make_reportrequest()
-        '''
-        make RepoerRequestType
-        '''
-        params = [ params ] unless params.is_a ? Array
-        requesttypes = []
-        params.each do  |param|
-          requesttype = {}
-
-          requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
-          requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]  else 14
-          requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level] else  11
-          requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range] else 11
-          requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit]  else 5
-          requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]  else  0
-          requesttype[:idOnly]                        =    param[:id_only]      ||    false
-          requesttype[:startDate]                   startDate
-          requesttype[:endDate]                     endDate
-          requesttypes << requesttype
+        def self.get_status( auth, ids )
+          ids = [ ids ] unless ids.is_a ? Array
+          body = { reportId:  ids }
+          request( auth, Service, 'getReportState' ,body)['isGenerated']      
         end
-        return requesttypes
 
-      end
+        def self.get_file_url( auth, ids )
+          ids = [ ids ] unless ids.is_a ? Array
+          body = { reportId:  ids }
+          request( auth, Service, 'getReportFileUrl' ,body)['reportFilePath']       
+        end
 
-    end
-  end
-end
+        private 
+        def make_realtimerequest( params )
+          '''
+          make RealTimeRequestType
+          没有封装关键字：attribute，order,statIds
+          '''
+          params = [ params ] unless params.is_a ? Array
+          requesttypes = []
+          params.each do  |param|
+            requesttype = {}
 
+            requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
+            requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]  else 14
+            requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level] else  11
+            requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range] else 11
+            requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit]  else 5
+            requesttype[:number]                     =    param[:number]                         if  param[:number]  
+            requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]  else  0
+            requesttype[:startDate]                   startDate
+            requesttype[:endDate]                     endDate
+            requesttypes << requesttype
+          end
+          return requesttypes
+        end
+
+
+
+        private
+        def make_reportrequest()
+          '''
+          make RepoerRequestType
+          '''
+          params = [ params ] unless params.is_a ? Array
+          requesttypes = []
+          params.each do  |param|
+            requesttype = {}
+
+            requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
+            requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]  else 14
+            requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level] else  11
+            requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range] else 11
+            requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit]  else 5
+            requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]  else  0
+            requesttype[:idOnly]                        =    param[:id_only]      ||    false
+            requesttype[:startDate]                   startDate
+            requesttype[:endDate]                     endDate
+            requesttypes << requesttype
+          end
+          return requesttypes
+        end
+
+      end # Repost
+    end # Baidu
+  end # API
+end # PPC
 
 
 
