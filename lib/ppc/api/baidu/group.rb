@@ -1,3 +1,4 @@
+# -*- coding:utf-8  -*-
 module PPC
   module API
     module Baidu
@@ -34,7 +35,7 @@ module PPC
           @ input : one or list of AdgroupType
           @ output : list of AdgroupType
           """
-          groups = [ groups ] unless groups.is_a?Array
+          groups = [ groups ] unless groups.is_a? Array
           adgroupType = []
 
           groups.each{  | group_i |
@@ -50,7 +51,7 @@ module PPC
           """
           目前没办法返回header
           """
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids }
           request( auth, Service,"deleteAdgroup", body )[ 'header' ][ 'desc' ]
         end
@@ -62,14 +63,14 @@ module PPC
         end
 
         def self.search_by_groupid( auth, ids, test = false )
-          ids = [ ids ] unless ids.class == Array
+          ids = [ ids ] unless idsis_a? Array
           body = { adgroupIds: ids }
           responses = request(auth, Service, "getAdgroupByAdgroupId",body )["adgroupTypes"]
         end
 
         private
           def make_adgrouptype( params )
-            params = [ params ] unless params.is_a ? Array
+            params = [ params ] unless params.is_a? Array
             adgrouptypes = []
             params.each{  | param | 
               adgrouptype = {}

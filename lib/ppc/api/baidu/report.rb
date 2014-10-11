@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 module PPC
   module API
     module Baidu
@@ -16,15 +17,15 @@ module PPC
         Unit_map = { 'day' => 5, 'week' => 4, 'month' => 3, 'year' => 1, 'hour' => 7 }
 
         def self.get_real_time( auth, params, type = :data )
-          params = [ params ] unless params.is_a ? Array
+          params = [ params ] unless params.is_a? Array
           request = make_realtimetype(params)
           body = { realTimeRequestTypes:  request }
           response = request( auth, Service, 'getRealTimeData' ,body)
 
           response = case type
-            when :data     :    response['realTimeResultTypes']
-            when :query  :    response['realTimeQueryResultTypes']
-            when :pair      :    response['realTimePairResultTypes']
+            when :data     then    response['realTimeResultTypes']
+            when :query  then   response['realTimeQueryResultTypes']
+            when :pair      then    response['realTimePairResultTypes']
           end
           
           return response                   
@@ -32,20 +33,20 @@ module PPC
 
 
         def self.get_id( auth, params )
-          params = [ params ] unless params.is_a ? Array
+          params = [ params ] unless params.is_a? Array
           request = make_reporttype( params )
           body =  { realTimeRequestTypes:  request }
           request( auth, Service, 'getProfessionalReportId' ,body)['reportId']       
         end
 
         def self.get_status( auth, ids )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
           body = { reportId:  ids }
           request( auth, Service, 'getReportState' ,body)['isGenerated']      
         end
 
         def self.get_file_url( auth, ids )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
           body = { reportId:  ids }
           request( auth, Service, 'getReportFileUrl' ,body)['reportFilePath']       
         end
@@ -56,7 +57,7 @@ module PPC
           make RealTimeRequestType
           没有封装关键字：attribute，order,statIds
           '''
-          params = [ params ] unless params.is_a ? Array
+          params = [ params ] unless params.is_a? Array
           requesttypes = []
           params.each do  |param|
             requesttype = {}
@@ -82,7 +83,7 @@ module PPC
           '''
           make RepoerRequestType
           '''
-          params = [ params ] unless params.is_a ? Array
+          params = [ params ] unless params.is_a? Array
           requesttypes = []
           params.each do  |param|
             requesttype = {}

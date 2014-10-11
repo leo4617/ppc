@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 module PPC
   module API
     module Baidu
@@ -6,7 +7,7 @@ module PPC
         Service = 'Keyword'
         
         def self.add( auth, keywords )
-          keywords = [ keywords ] unless keywords.is_a ? Array
+          keywords = [ keywords ] unless keywords.is_a? Array
           keywordtype = [ ]
       
           keywords.each{  | key_i |
@@ -21,7 +22,7 @@ module PPC
           '''
           不知道以什么作为返回值好
           '''
-          keywords = [ keywords ] unless keywords.is_a ? Array
+          keywords = [ keywords ] unless keywords.is_a? Array
 
           keywordtype =  []
           keywords.each{  |keyword|
@@ -37,8 +38,8 @@ module PPC
           """
           不知道返回什么好
           """
-          ids = [ ids ] unless ids.class.is_a ? Array
-          body = { :ids}
+          ids = [ ids ] unless ids.class.is_a? Array
+          body = { ids: ids}
           request( auth, Service, 'deleteKeyword', body )
         end
 
@@ -57,7 +58,7 @@ module PPC
           @input: list of group id
           @output:  list of groupKeyword
           """
-          group_ids = [ group_ids ] unless group_ids.is_a ? Array
+          group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { adgroupIds: group_ids }
           request( auth, Service, "getKeywordByAdgroupId", body )
         end
@@ -65,14 +66,13 @@ module PPC
         # 下面三个操作操作对象包括计划，组和关键字
         # 不知道放在这里合不合适
         def self.get_status( auth, ids, type )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
           type = case type
-            when  'plan'      :     3 
-            when  'group'   :     5
-            when  'key'       :     11
-            else{
-                Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
-            }
+            when  'plan'      then     3 
+            when  'group'   then    5
+            when  'key'       then   11
+            else
+              Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
           end
           
           body = { ids: ids, type: type}
@@ -80,15 +80,14 @@ module PPC
         end
 
         def self.get_quality( auth, ids, type )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
 
           type = case type
-            when  'plan'      :     3 
-            when  'group'   :     5
-            when  'key'       :     11
-            else{
-                Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
-            }
+            when  'plan'      then     3 
+            when  'group'   then     5
+            when  'key'        then     11
+            else
+              Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
           end
           
           body = { ids: ids, type: type}
@@ -96,24 +95,22 @@ module PPC
         end
 
         def self.get_10quality( auth ,ids, type, device )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
 
           type = case type
-            when  'plan'      :     3 
-            when  'group'   :     5
-            when  'key'       :     11
-            else{
-                Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
-            }
+            when  'plan'      then     3 
+            when  'group'   then     5
+            when  'key'        then     11
+            else
+              Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
           end
           
           device = case device
-            when 'pc'          :    0
-            when 'mobile'  :    1
-            when 'both'      :    2
-            else{
-                Exception.new( 'device must among: \'pc\',\'mobile\' and \'both\' ')            
-            }
+            when 'pc'          then    0
+            when 'mobile'  then    1
+            when 'both'      then    2
+            else
+              Exception.new( 'device must among: \'pc\',\'mobile\' and \'both\' ')            
           end
 
           body = { ids: ids, type: type, device:device }
@@ -122,7 +119,7 @@ module PPC
 
         private
         def make_keywordtype( params )
-          params = [ params ] unless params.is_a ? Array
+          params = [ params ] unless params.is_a? Array
           keywordttypes = []
 
           params.each{  |param| 

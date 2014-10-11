@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 module PPC
   module API
     module Baidu
@@ -6,7 +7,7 @@ module PPC
         Service = 'Creative'
 
         def self.add( auth, creatives )
-          creatives = [ creatives ] unless creatives.is_a ? Array
+          creatives = [ creatives ] unless creatives.is_a? Array
           body = { creativeTypes: make_creativetype( creatives ) }
           request( auth, Service, 'addCreative', body )['creativeTypes']
         end
@@ -16,33 +17,32 @@ module PPC
           考虑到实际使用情况，update这里的输入里面的symnol
           很可能是按照api的格式来的……看看再说吧
           '''
-          creatives = [ creatives ] unless creatives.is_a ? Array
+          creatives = [ creatives ] unless creatives.is_a? Array
           body = { creativeTypes: make_creativetype( creatives ) }
           request( auth, Service, 'updateCreative', body )['creativeTypes']
         end
 
         def self.delete( auth, ids )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
           body = { creativeIds: ids }
           request( auth, Service, 'deleteCreative', body )['result']
         end
 
         def self.activate( auth, ids )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
           body = { creativeIds: ids }
           request( auth, Service, 'activateCreative', body )['creativeTypes']
         end
 
         def self.status( auth, ids, type  )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
           
           type = case type
-            when  'plan'      :     3 
-            when  'group'   :     5
-            when  'key'       :     11
-            else{
-                Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
-            }
+            when  'plan'      then    3 
+            when  'group'   then     5
+            when  'key'       then     11
+            else
+              Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
           end
 
           body = { ids: ids, type: type }
@@ -50,26 +50,26 @@ module PPC
         end
 
         def self.search_id_by_group_id( auth, ids,  getTemp = 0 )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids, getTemp: getTemp }
           request( auth, Service, 'getCreativeIdByAdgroupId', body )['groupCreativeIds']
         end
 
         def self.search_by_group_id( auth, ids,  getTemp = 0 )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids, getTemp: getTemp }
           request( auth, Service, 'getCreativeByAdgroupId', body )['groupCreatives']
         end
 
         def self.search_by_creative_id( auth, ids,  getTemp = 0 )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
           body = { creativeIds: ids, getTemp: getTemp }
           request( auth, Service, 'getCreativeByCreativeId', body )['creativeTypes']
         end
 
         private 
         def make_creativetype( params )
-          params = [ params ] unless params.is_a ? Array
+          params = [ params ] unless params.is_a? Array
           creativetypes = []
           params.each{  |param| 
             creativetype = {}

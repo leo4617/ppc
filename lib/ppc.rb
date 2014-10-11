@@ -1,4 +1,4 @@
-require 'ppc/baidu'
+require 'ppc/api'
 module PPC
   VERSION = "1.0.7"
 

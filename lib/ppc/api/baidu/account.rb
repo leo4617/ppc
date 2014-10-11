@@ -5,11 +5,11 @@ module PPC
         include ::PPC::API::Baidu
         Service = 'Account'
 
-        def info(auth)
+        def self.info(auth)
           request(auth,Service,'getAccountInfo')['accountInfoType']
         end
 
-        def update(auth, param = {} )
+        def self.update(auth, param = {} )
           """
           update account info
           @ params : account_info_type

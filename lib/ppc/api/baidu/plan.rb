@@ -14,13 +14,13 @@ module PPC
         end
 
         def self.get_by_id( auth, ids )
-          ids = [ ids ] unless ids.is_a ? Array
+          ids = [ ids ] unless ids.is_a? Array
           body = { campaignIds: ids }
           request( Service, 'getCampaignByCampaignId', body)['campaignTypes']
         end
 
         def self.add( auth,plans )
-          plans = [ plans ]unless plans.is_a ? Array
+          plans = [ plans ] unless plans.is_a? Array
           campaigntypes = []
 
           plans.each do |plan|
@@ -31,7 +31,7 @@ module PPC
             }
           end
 
-          body = {campaignTypes:  campaigntypes}
+          body = { campaignTypes: campaigntypes}
           request( auth, Service, 'addCampaign', body)['campaignTypes']
         end
 
@@ -42,19 +42,19 @@ module PPC
           plans.each do |plan|
             campaigntype = {}
             
-            campaigntype[:campaignId]                    plan[:id]                                  if    plan[:id]  
-            campaigntype[:campaignName]             plan[:name]                           if    plan[:name]
-            campaigntype[:budget]                             plan[:budget]                        if    plan[:budget]
-            campaigntype[:regionTarget]                   plan[:region]                         if    plan[:region] 
-            campaigntype[:excludeIp]                        plan[:ip]                                  if    plan[:ip]
-            campaigntype[:negativeWords]               plan[:negative]                      if    plan[:negative]  
-            campaigntype[:exactNegativeWords]     plan[:exact_negative]           if    plan[:exact_negative]
-            campaigntype[:schedule]                          plan[:schedule]                      if    plan[:schedule]
-            campaigntype[:budgetOfflineTime]         plan[:budget_offline_time]  if    plan[:budget_offline_time]
-            campaigntype[:showProb]                        plan[:show_prob]                  if    plan[:show_prob]
-            campaigntype[:device]                               plan[:device]                          if    plan[:device] 
-            campaigntype[:priceRatio]                        plan[:price_ratio]                   if    plan[:price_ratio]
-            campaigntype[:pause]                                plan[:pause]                           if    plan[:pause]
+            campaigntype[:campaignId]                =   plan[:id]                                  if    plan[:id]  
+            campaigntype[:campaignName]         =   plan[:name]                           if    plan[:name]
+            campaigntype[:budget]                         =   plan[:budget]                        if    plan[:budget]
+            campaigntype[:regionTarget]               =   plan[:region]                         if    plan[:region] 
+            campaigntype[:excludeIp]                    =   plan[:ip]                                  if    plan[:ip]
+            campaigntype[:negativeWords]           =   plan[:negative]                      if    plan[:negative]  
+            campaigntype[:exactNegativeWords] =   plan[:exact_negative]           if    plan[:exact_negative]
+            campaigntype[:schedule]                      =   plan[:schedule]                      if    plan[:schedule]
+            campaigntype[:budgetOfflineTime]     =   plan[:budget_offline_time]  if    plan[:budget_offline_time]
+            campaigntype[:showProb]                    =   plan[:show_prob]                  if    plan[:show_prob]
+            campaigntype[:device]                           =   plan[:device]                          if    plan[:device] 
+            campaigntype[:priceRatio]                    =   plan[:price_ratio]                   if    plan[:price_ratio]
+            campaigntype[:pause]                            =   plan[:pause]                           if    plan[:pause]
 
             campaigntypes << campaigntype
           end
