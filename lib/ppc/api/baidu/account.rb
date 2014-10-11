@@ -14,16 +14,16 @@ module PPC
         @ params : account_info_type
         @return : account info_type
         """
-        body = {
-          accountInfoType: {
-            budgetType:                         param[:budget_type]       if    param[:budget_type] 
-            budget:                                 param[:budget]                 if    param[:budget]
-            regionTarget:                       param[:region]                  if    param[:region]
-            excludeIp:                             param[:exclude_ip]          if    param[:exclude_ip]  
-            isDynamicCreative:             param[:isdynamic]           if    param[:isdynamic]
-            dynamicCreativeParam:    param[:creative_param]  if    param[:creative_param]
-          }
-        }
+        infoType = {}
+
+        infoType[:budgetType]                      =    param[:budget_type]       if    param[:budget_type] 
+        infoType[:budget]                               =   param[:budget]                 if    param[:budget]
+        infoType[:regionTarget]                     =   param[:region]                  if    param[:region]
+        infoType[:excludeIp]                          =   param[:exclude_ip]          if    param[:exclude_ip]  
+        infoType[:isDynamicCreative]           =  param[:isdynamic]           if    param[:isdynamic]
+        infoType[:dynamicCreativeParam]  = param[:creative_param]  if    param[:creative_param]
+  
+        body = { accountInfoType: infoType }
         request(auth,Service,'updateAccountInfo', body)['accountInfoType']
       end
 
