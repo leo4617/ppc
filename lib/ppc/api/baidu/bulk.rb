@@ -1,22 +1,11 @@
 module PPC
   module Baidu
-    class BulkException < Exception
-      attr_reader :file_id,:bulk,:exception
-      def initialize(file_id,bulk,exception)
-        @file_id    = file_id
-        @bulk       = bulk
-        @exception  = exception
-      end
-    end
-
-    class Bulk
+    module Bulk
       include ::PPC::Baidu
-      def initialize(params = {})
-        params[:service] = 'BulkJob'
-        super(params)
-      end
+      Service = 'BulkJob'
 
-      def file_id_of_all(params = {})
+      def self.get_all_object( auth,params = {})
+        
         plan_ids = params[:plan_ids]
 
         unless plan_ids.nil?
@@ -33,21 +22,19 @@ module PPC
           includePhraseType:        params[:phrase]       || 0       ,
           extended:                 params[:extended]     || 0
         }
-        response = request('getAllObjects',options)
-
-        body = response[:envelope][:body]
-        raise "no result" if body.nil?
-        body[:get_all_objects_response][:file_id]
+        response = request( auth, Service, 'getAllObjects',options )
+        response[:get_all_objects_response][:file_id]
       end
 
-      def state(id)
+      def self.state( auth, id)
         raise "empty id" if id.nil? or id.empty?
-        request('getFileState',{fileId:id})[:envelope][:body][:get_file_state_response][:is_generated]
+        request(auth, Service, 'getFileState',{fileId:id})[:get_file_state_response][:is_generated]
       end
 
-      def path(id)
-        request('getFilePath',{fileId:id})[:envelope][:body][:get_file_path_response][:file_paths]
+      def self.path( auth, id)
+        request( auth, Service, 'getFilePath',{fileId:id})[:get_file_path_response][:file_paths]
       end
+
     end
   end
 end

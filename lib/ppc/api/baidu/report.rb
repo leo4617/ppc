@@ -3,8 +3,18 @@ module PPC
     module Report
       include ::PPC::Baidu
       Service 'Report'
+    
+      # 需要用到的映射集合
+      Type_map = { 'account' => 2, 'plan'=> 10, 'group'=> 11, 
+                                            'keyword'=> 14, 'creative'=> 12, 'pair'=> 15, 
+                                            'region'=> 3, 'wordid'=> 9 }
+      Level_map = {  'account' => 2, 'plan' => 3, 'group' => 5, 
+                                'creative' => 7, 'keywordid' => 11, 'pair' => 12, 
+                                'wordid' => 6 }
+      Device_map = { 'all' => 0, 'pc' => 1, 'mobile' => 2 }
+      Unit_map = { 'day' => 5, 'week' => 4, 'month' => 3, 'year' => 1, 'hour' => 7 }
 
-      def get_real_time( auth, params, type = :data )
+      def self.get_real_time( auth, params, type = :data )
         params = [ params ] unless params.is_a ? Array
         request = make_realtimetype(params)
         body = { realTimeRequestTypes:  request }
@@ -20,37 +30,75 @@ module PPC
       end
 
 
-      def get_id( auth, params )
+      def self.get_id( auth, params )
         params = [ params ] unless params.is_a ? Array
         request = make_reporttype( params )
-        body = { reportId:  ids }
+        body =  { realTimeRequestTypes:  request }
         request( auth, Service, 'getProfessionalReportId' ,body)['reportId']       
       end
 
-      def get_statue( auth, ids )
+      def self.get_status( auth, ids )
         ids = [ ids ] unless ids.is_a ? Array
         body = { reportId:  ids }
         request( auth, Service, 'getReportState' ,body)['isGenerated']      
       end
 
-      def get_file_url( auth, ids )
+      def self.get_file_url( auth, ids )
         ids = [ ids ] unless ids.is_a ? Array
-        body = { realTimeRequestTypes:  request }
+        body = { reportId:  ids }
         request( auth, Service, 'getReportFileUrl' ,body)['reportFilePath']       
       end
 
       private 
-      def make_realtimetype()
+      def make_realtimerequest( params )
         '''
         make RealTimeRequestType
+        没有封装关键字：attribute，order,statIds
         '''
+        params = [ params ] unless params.is_a ? Array
+        requesttypes = []
+        params.each do  |param|
+          requesttype = {}
+
+          requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
+          requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]  else 14
+          requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level] else  11
+          requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range] else 11
+          requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit]  else 5
+          requesttype[:number]                     =    param[:number]                         if  param[:number]  
+          requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]  else  0
+          requesttype[:startDate]                   startDate
+          requesttype[:endDate]                     endDate
+          requesttypes << requesttype
+        end
+        return requesttypes
       end
 
+
+
       private
-      def make_reporttype()
+      def make_reportrequest()
         '''
         make RepoerRequestType
         '''
+        params = [ params ] unless params.is_a ? Array
+        requesttypes = []
+        params.each do  |param|
+          requesttype = {}
+
+          requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
+          requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]  else 14
+          requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level] else  11
+          requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range] else 11
+          requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit]  else 5
+          requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]  else  0
+          requesttype[:idOnly]                        =    param[:id_only]      ||    false
+          requesttype[:startDate]                   startDate
+          requesttype[:endDate]                     endDate
+          requesttypes << requesttype
+        end
+        return requesttypes
+
       end
 
     end
