@@ -5,40 +5,57 @@ module PPC
         include ::PPC::API::Baidu
         Service = 'Campaign'
 
-        def self.get_all( auth )
-          request( auth, Service, 'getAllCampaign' )['campaignTypes']
+        # introduce request to this namespace
+        def self.request(auth, service, method, params = {} )
+          ::PPC::API::Baidu::request(auth, service, method, params )
         end
 
-        def self.get_all_id( auth )
-          request( auth, Service, 'getAllCampaignId' )['campaignIds']
+        def self.get_all( auth, test = false )
+          response = request( auth, Service, 'getAllCampaign' )
+          return response if test else response['body']['campaignTypes']
         end
 
-        def self.get_by_id( auth, ids )
+        def self.get_all_id( auth, test = false )
+          response = request( auth, Service, 'getAllCampaignId' )
+          return response if test else response['body']['campaignIds']
+        end
+
+        def self.get_by_id( auth, ids, test = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { campaignIds: ids }
-          request( Service, 'getCampaignByCampaignId', body)['campaignTypes']
+
+          response = request( auth, Service, 'getCampaignByCampaignId', body)
+          return response if test else response['body']['campaignTypes']
         end
 
-        def self.add( auth,plans )
-          plans = [ plans ] unless plans.is_a? Array
-          campaigntypes = []
+        def self.add( auth, plans, test = false )
+          campaigntypes = make_campaigntype( plans )
 
-          plans.each do |plan|
-            campaigntypes << {
-              campaignName: plan[:name],
-              negativeWords: plan[:negative],
-              exactNegativeWords: plan[:exact_negative]
-            }
-          end
+          body = { campaignTypes: campaigntypes }
 
-          body = { campaignTypes: campaigntypes}
-          request( auth, Service, 'addCampaign', body)['campaignTypes']
+          response = request( auth, Service, 'addCampaign', body)
+          return response if test else response['body']['campaignTypes']
         end
 
-        def self.update(auth,plans)
-          plans = [plans] unless plan.is_a? Array
-          campaigntypes = []
+        def self.update(auth,plans, test = false )
+          campaigntypes = make_campaigntype( plans )
+          body = { campaignTypes: campaigntypes }
+          response = request( auth, Service, 'updateCampaign', body)
+          return response if test else response['body']['campaignTypes']
+        end
 
+        def self.delete(auth, ids, test = false )
+          ids = [ ids ] unless ids.class == Array
+          body = { campaignIds: ids }
+          response = request( auth, 'Campaign', 'deleteCampaign', body)
+          return response if test else response['body']['result']
+        end
+
+
+        def self.make_campaigntype( plans )
+          plans = [plans] unless plans.is_a? Array
+
+          campaigntypes = []
           plans.each do |plan|
             campaigntype = {}
             
@@ -58,16 +75,9 @@ module PPC
 
             campaigntypes << campaigntype
           end
-          body = { campaignTypes: campaigntypes }
-          request( auth, Service, 'updateCampaign', body)['campaignTypes']
+          return campaigntypes
         end
-
-        def self.delete(ids)
-          ids = [ ids ] unless ids.class == Array
-          body = { campaignIds: ids }
-          request( auth, 'Campaign', 'deleteCampaign', body)['result'] == 1
-        end
-        
+       
       end # Service
     end # baidu
   end # API

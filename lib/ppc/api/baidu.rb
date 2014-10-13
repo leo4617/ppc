@@ -12,7 +12,7 @@ module PPC
   module API
     module Baidu
 
-      def self.request( auth, service, method, params = {}, with_header = false)
+      def self.request( auth, service, method, params = {} )
         '''
         request should reture whole http response including header
         '''

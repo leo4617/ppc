@@ -1,82 +1,48 @@
-describe ::PPC::Baidu::Plan do
-  subject{::PPC::Baidu::Plan.new(
-            debug:true,
-            username:$baidu_username,
-            password:$baidu_password,
-            token:$baidu_token
-  )}
+describe ::PPC::API::Baidu::Plan do
+  auth =  {}
+  auth[:username] = $baidu_username
+  auth[:password] = $baidu_password 
+  auth[:token] = $baidu_token
+
+  Test_plan_id = []
+  
+  def is_successed( response )
+      expect( response['header']['desc']).to eq 'success'
+  end
 
   it "can get all plans" do
-    response = subject.plans
-    expect(response.class).to be Array
-    expect(response.first.class).to be Hash
-    expect(response.first['campaignId']).to be > 0
+    response = ::PPC::API::Baidu::Plan::get_all( auth, true )
+    is_successed( response )
   end
 
+  it "can get all plan id" do 
+    response = ::PPC::API::Baidu::Plan::get_all_id( auth, true )
+    is_successed( response )
+  end 
 
+  it "can add plan" do
+    test_plan = { name: "test_plan", negative: ["test"] }
 
-  it "can get all plan ids" do
-    response = subject.ids()
-    expect(response.class).to be Array
+    response = ::PPC::API::Baidu::Plan::add( auth, test_plan, true )
+    is_successed( response )
+
+    Test_plan_id << response['body']['campaignTypes'][0]['campaignId']
   end
 
-
-  it "can delete one plan by the id" do
-    ids = subject.ids()
-    response = subject.delete(ids.first)
-    expect(response).to be true
+  it "can get plan by id" do
+    response = ::PPC::API::Baidu::Plan::get_by_id( auth, Test_plan_id, true )
+    is_successed( response )
   end
 
-  it "can delete two plans by the ids" do
-    ids = subject.ids()
-    pending if ids.size < 2
-    response = subject.delete(ids[0..1])
-    expect(response).to be true
-  end
-  # it "could download all plan" do
-  #   result = subject.all
-  #   if result
-  #     expect(result.keys).to include :account_file_path
-  #   else
-  #     expect(subject.code).to eq '901162'
-  #   end
-  # end
-  it "enables one plan by id" do
-    id = subject.ids().first
-
-    response = subject.enable(id)
-    expect(response.class).to be Array
-    expect(response.first.class).to be Hash
-    expect(response.first['pause']).to be false
+  it 'can update plan' do
+    update = { id: Test_plan_id[0], name:"test_plan_update"}
+    response = ::PPC::API::Baidu::Plan::update( auth, update, true )
+    is_successed( response )
   end
 
-  it "enables two plans by ids" do
-    id1 = subject.ids()[0]
-    id2 = subject.ids()[1]
-
-    response = subject.enable([id1,id2])
-    expect(response.class).to be Array
-    expect(response.first.class).to be Hash
-    expect(response[0]['pause']).to be false
-    expect(response[1]['pause']).to be false
+  it "can delete plan" do
+    response = ::PPC::API::Baidu::Plan::delete( auth, Test_plan_id, true )
+    is_successed( response )
   end
 
-  it "pauses one plan by id" do
-    id = subject.ids().first
-
-    response = subject.pause(id)
-    expect(response.class).to be Array
-    expect(response.first.class).to be Hash
-    expect(response.first['pause']).to be true
-  end
-
-  it "pauses two plans by ids" do
-    id1 = subject.ids()[0]
-    id2 = subject.ids()[1]
-    response = subject.pause([id1,id2])
-    expect(response.class).to be Array
-    expect(response.first.class).to be Hash
-    expect(response[0]['pause']).to be true
-    expect(response[1]['pause']).to be true
-  end
 end

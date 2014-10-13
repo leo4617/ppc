@@ -1,56 +1,49 @@
-describe ::PPC::Baidu::Group do
-  subject{::PPC::Baidu::Group.new(
-            debug:true,
-            username:$baidu_username,
-            password:$baidu_password,
-            token:$baidu_token
-  )}
+describe ::PPC::API::Baidu::Group do
+  auth =  {}
+  auth[:username] = $baidu_username
+  auth[:password] = $baidu_password 
+  auth[:token] = $baidu_token
 
-  Test_group1 = {plan_id: 8537330, name:"test_group1",maxprice: 500 }
-  Test_group2 = {plan_id: 8537330, name:"test_group2",maxprice: 500 }
-  Test_groups = [ Test_group1, Test_group2 ]
-  $test_group_ids = []
-  $test_plan_ids = []
+  Test_plan_id = []
+  Test_group_id = []
 
-  it " can get all group info " do
-    response = subject.all()
-    response.each{  |campaign|
-      expect( campaign.keys ).to eq ["campaignId", "adgroupIds"] 
-      $test_plan_ids << campaign["campaignId"]
-    }
-  end
-
-  it " can add group " do
-    response = subject.add( Test_groups, true )
+  def is_successed( response )
     expect( response['header']['desc'] ).to eq 'success'
+  end 
 
-    # store test_group _id s
-    response = response['body']['adgroupTypes']
-    response.each{  |group|
-     $test_group_ids << group[ 'adgroupId' ]
-    }
+  it 'can get all group' do 
+    response = ::PPC::API::Baidu::Group::all( auth, true )
+    is_successed( response ) 
+    pair = response['body']['campaignAdgroupIds'][0]
+    Test_plan_id << pair['campaignId']
   end
 
-  it " can update group " do
-    updates = [ { group_id: $test_group_ids[0], maxprice:550 } , 
-                      { group_id: $test_group_ids[1], maxprice:550 } ]
-    response = subject.update( updates, true )
-    expect( response['header']['desc'] ).to eq 'success'
+  it 'can add group' do 
+    group = { name: 'test_group', plan_id:Test_plan_id[0], price:500 }
+    response = ::PPC::API::Baidu::Group::add( auth, group, true )
+    is_successed( response )
+    Test_group_id << response['body']['adgroupTypes'][0]['adgroupId']
+  end
+  
+  it 'can update group' do 
+    group = { id: Test_group_id[0], price:600 }
+    response = ::PPC::API::Baidu::Group::update( auth, group, true )
+    is_successed( response )
   end
 
-  it "can search group by group id" do
-    response = subject.search_by_groupid( $test_group_ids ,  true)
-    expect( response["header"]["desc"] ).to eq "success"
+  it 'can search group by group id' do
+    response = ::PPC::API::Baidu::Group::search_by_group_id( auth, Test_group_id, true )
+    is_successed( response )
   end
 
-  it " can delete group " do
-    response = subject.delete( $test_group_ids )
-    expect( response ).to eq "success"
-  end
+  it 'search by plan id' do 
+    response = ::PPC::API::Baidu::Group::search_by_plan_id( auth, Test_plan_id, true )
+    is_successed( response )
+  end  
 
-  it "can search group by planId" do
-    response = subject.search_by_planid( $test_plan_ids , true)
-    expect( response["header"]["desc"] ).to eq "success"
+  it 'can delete group' do 
+    response = ::PPC::API::Baidu::Group::delete( auth, Test_group_id, true )
+    is_successed( response )
   end
   
 end

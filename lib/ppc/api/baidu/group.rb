@@ -6,77 +6,83 @@ module PPC
         include ::PPC::API::Baidu
         Service = 'Adgroup'
 
-        def self.all(auth)
+        # introduce request to this namespace
+        def self.request(auth, service, method, params = {} )
+          ::PPC::API::Baidu::request(auth, service, method, params )
+        end
+
+        def self.all(auth, test = false )
           """
           @return : Array of campaignAdgroupIds
           """
-          request( auth, Service , "getAllAdgroupId" )["campaignAdgroupIds"]
+          response = request( auth, Service , "getAllAdgroupId" )
+          return response if test else response['body']["campaignAdgroupIds"]
         end
 
-        def self.add( auth, groups )
+        def self.add( auth, groups, test = false )
           """
           @ input : one or list of AdgroupType
           @ output : list of AdgroupType
           """
-          groups = [ groups ] unless groups.is_a? Array
-          adgroupType = []
+          adgrouptypes = make_adgrouptype( groups )
 
-          groups.each{  | group_i |
-            adgroupType << make_adgrouptype( group_i )
-          }
-
-          body = {adgroupTypes: adgroupType}
+          body = {adgroupTypes:  adgrouptypes }
           
-          request( auth, Service, "addAdgroup", body  )['adgroupTypes'] 
+          response = request( auth, Service, "addAdgroup", body  )
+          return response if  test else  response['body']['adgroupTypes'] 
         end
 
-        def self.update( auth, groups )
+        def self.update( auth, groups, test = false )
           """
           @ input : one or list of AdgroupType
           @ output : list of AdgroupType
           """
-          groups = [ groups ] unless groups.is_a? Array
-          adgroupType = []
-
-          groups.each{  | group_i |
-            adgroupType << make_adgrouptype( group_i )
-          }
-
-          body = {adgroupTypes: adgroupType}
+          adgrouptypes = make_adgrouptype( groups )
+          body = {adgroupTypes: adgrouptypes}
           
-          request( auth, Service, "updateAdgroup" )['adgroupTypes']
+          response = request( auth, Service, "updateAdgroup",body )
+          return response if test else  response['body']['adgroupTypes']
         end
 
-        def self.delete( auth, ids )
+        def self.delete( auth, ids, test = false )
           """
           目前没办法返回header
           """
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids }
-          request( auth, Service,"deleteAdgroup", body )[ 'header' ][ 'desc' ]
+
+          response = request( auth, Service,"deleteAdgroup", body )
+          if !test
+            return response[ 'header' ][ 'desc' ] == 'success'
+          else 
+            return response
+          end
         end
 
-        def self.search_by_planid( auth, ids )
+        def self.search_by_plan_id( auth, ids, test = false )
           ids = [ ids ] unless ids.class == Array
           body = { campaignIds: ids }
-          request( auth, Service ,"getAdgroupByCampaignId",  body )["campaignAdgroups"]
+          response = request( auth, Service ,"getAdgroupByCampaignId",  body )
+          return response if test else response['body']["campaignAdgroups"]
         end
 
-        def self.search_by_groupid( auth, ids, test = false )
-          ids = [ ids ] unless idsis_a? Array
+        def self.search_by_group_id( auth, ids, test = false )
+          ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids }
-          responses = request(auth, Service, "getAdgroupByAdgroupId",body )["adgroupTypes"]
+          response = request(auth, Service, "getAdgroupByAdgroupId",body )
+          return response if test else response['body']["adgroupTypes"]
         end
 
         private
-          def make_adgrouptype( params )
+        def self.make_adgrouptype( params )
             params = [ params ] unless params.is_a? Array
             adgrouptypes = []
+
             params.each{  | param | 
               adgrouptype = {}
 
               adgrouptype[:campaignId]                  =   param[:plan_id]                 if    param[:plan_id] 
-              adgrouptype[:adgroupId]                    =   param[:group_id]               if    param[:group_id] 
+              adgrouptype[:adgroupId]                    =   param[:id]                           if    param[:id] 
               adgrouptype[:adgroupName]             =   param[:name]                    if    param[:name] 
               adgrouptype[:maxPrice]                      =   param[:price]                     if    param[:price] 
               adgrouptype[:negativeWords]            =   param[:negative]               if    param[:negative]
@@ -88,7 +94,7 @@ module PPC
               adgrouptypes << adgrouptype
             }
             return adgrouptypes
-          end #make_adgrouptype
+        end #make_adgrouptype
 
       end # class group
     end # class baidu
