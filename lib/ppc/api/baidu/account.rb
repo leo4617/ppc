@@ -2,11 +2,11 @@ module PPC
   module API
     module Baidu
       module Account
-        include ::PPC::API::Baidu
         Service = 'Account'
 
-        def self.info(auth)
-          request(auth,Service,'getAccountInfo')['accountInfoType']
+        def self.info(auth, test = false)
+          response = request(auth,Service,'getAccountInfo', test )
+          return response if test else response['accountInfoType']
         end
 
         def self.update(auth, param = {} )
@@ -26,6 +26,11 @@ module PPC
     
           body = { accountInfoType: infoType }
           request(auth,Service,'updateAccountInfo', body)['accountInfoType']
+        end
+
+        # introduce request to this namespace
+        def self.request(auth, service, method, params = {}, with_header = false)
+          ::PPC::API::Baidu::request(auth, service, method, params, with_header )
         end
 
       end

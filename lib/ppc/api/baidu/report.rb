@@ -3,8 +3,8 @@ module PPC
   module API
     module Baidu
       module Report
-        include ::PPC::Baidu
-        Service 'Report'
+        include ::PPC::API::Baidu
+        Service = 'Report'
       
         # 需要用到的映射集合
         Type_map = { 'account' => 2, 'plan'=> 10, 'group'=> 11, 
@@ -63,14 +63,14 @@ module PPC
             requesttype = {}
 
             requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
-            requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]  else 14
-            requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level] else  11
-            requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range] else 11
-            requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit]  else 5
-            requesttype[:number]                     =    param[:number]                         if  param[:number]  
-            requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]  else  0
-            requesttype[:startDate]                   startDate
-            requesttype[:endDate]                     endDate
+            requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type] 
+            requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level]
+            requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range]
+            requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit] 
+            requesttype[:number]                     =    param[:number]                         if  param[:number]
+            requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]
+            requesttype[:startDate]                  =     startDate
+            requesttype[:endDate]                    =     endDate
             requesttypes << requesttype
           end
           return requesttypes
@@ -89,14 +89,14 @@ module PPC
             requesttype = {}
 
             requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
-            requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]  else 14
-            requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level] else  11
-            requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range] else 11
-            requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit]  else 5
-            requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]  else  0
+            requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]
+            requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level]
+            requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range]
+            requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit]
+            requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]
             requesttype[:idOnly]                        =    param[:id_only]      ||    false
-            requesttype[:startDate]                   startDate
-            requesttype[:endDate]                     endDate
+            requesttype[:startDate]                   =    startDate
+            requesttype[:endDate]                     =    endDate
             requesttypes << requesttype
           end
           return requesttypes

@@ -8,12 +8,14 @@ require 'awesome_print'
 require 'net/http'
 require 'net/https'
 require 'json'
-# require 'savon'
 module PPC
   module API
     module Baidu
 
-      def request( auth, service, method, params = {}, with_header = false)
+      def self.request( auth, service, method, params = {}, with_header = false)
+        '''
+        request should reture whole http response including header
+        '''
         uri = URI("https://api.baidu.com/json/sms/v3/#{service}Service/#{method}")
         http_body = {
           header: {
@@ -35,7 +37,7 @@ module PPC
         response = http.post(uri.path, http_body, http_header)
         response = JSON.parse response.body
 
-        return response if with_header else response['body']
+        # return response if with_header else response['body']
       end
 
       # private

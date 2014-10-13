@@ -1,4 +1,5 @@
 require 'ppc/api'
+require 'ppc/operation'
 module PPC
   VERSION = "1.0.7"
 

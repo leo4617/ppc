@@ -1,3 +1,10 @@
+require 'ppc/operation/account'
+require 'ppc/operation/group'
+require 'ppc/operation/plan'
+require 'ppc/operation/key'
+
+
+
 module PPC
   module Operation
     def initialize(params)
