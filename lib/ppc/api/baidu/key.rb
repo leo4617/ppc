@@ -5,54 +5,48 @@ module PPC
       module Key
         include ::PPC::API::Baidu
         Service = 'Keyword'
+
+        Match_type  = { 'exact' => 1, 'pharse' => 2, 'wide' => 3 }
+        Device          = { 'pc' => 0, 'mobile' => 1, 'all' => 2 }
+        Type              = { 'plan' => 3, 'group' => 5, 'key' => 11 }
         
-        def self.add( auth, keywords )
-          keywords = [ keywords ] unless keywords.is_a? Array
-          keywordtype = [ ]
-      
-          keywords.each{  | key_i |
-            keywordtype << make_keywordtype( key_i ) 
-          }
-
-          body = {keywordtype: keywordtype}
-          response = request( auth, Service, "addKeyword", body )['keywordTypes']
+        def self.add( auth, keywords, test = false )
+          '''
+          '''
+          keywordtypes = make_keywordtype( keywords ) 
+          body = { keywordTypes: keywordtypes }
+          response = request( auth, Service, "addKeyword", body )
+          return response if test else response['body']['keywordTypes']
         end
 
-        def self.update( auth, keywords )
+        def self.update( auth, keywords, test = false  )
           '''
-          不知道以什么作为返回值好
           '''
-          keywords = [ keywords ] unless keywords.is_a? Array
-
-          keywordtype =  []
-          keywords.each{  |keyword|
-            keywordtype << make_keywordtype( key_i ) 
-          }
-
-          body = { keywordTypes: keywordttype }
-          
-          request( auth, Service, "updateKeyword", body )
+          keywordtypes = make_keywordtype( keywords ) 
+          body = { keywordTypes: keywordtypes }
+          response = request( auth, Service, "updateKeyword", body )
+          return response if test else response['body']['keywordTypes']
         end
 
-        def self.delete( ids )
+        def self.delete( auth, ids, test = false )
           """
-          不知道返回什么好
           """
           ids = [ ids ] unless ids.class.is_a? Array
-          body = { ids: ids}
-          request( auth, Service, 'deleteKeyword', body )
+          body = { keywordIds: ids}
+          response = request( auth, Service, 'deleteKeyword', body )
+          return response if test else response['body']['result']
         end
 
-        def self.active( auth, ids )
+        def self.active( auth, ids, test =false )
           """
-          还没决定做不做，不知道输入使用long好还是用对象好。
-          询问下一般用不用这个，一般怎么用。
           """
           ids = [ ids ] unless ids.is_a
-          request( auth, Service, 'activateKeyword', ids)
+          body = { keywordIds: ids }
+          response = request( auth, Service, 'activateKeyword', body)
+          return response if test else response['body']['keywordTypes']
         end
 
-        def self.search_by_group_id( auth, group_ids, return_id = false )
+        def self.search_by_group_id( auth, group_ids, test = false  )
           """
           getKeywordByGroupId
           @input: list of group id
@@ -60,85 +54,55 @@ module PPC
           """
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { adgroupIds: group_ids }
-          request( auth, Service, "getKeywordByAdgroupId", body )
+          response = request( auth, Service, "getKeywordByAdgroupId", body )
         end
 
         # 下面三个操作操作对象包括计划，组和关键字
         # 不知道放在这里合不合适
         def self.get_status( auth, ids, type )
           ids = [ ids ] unless ids.is_a? Array
-          type = case type
-            when  'plan'      then     3 
-            when  'group'   then    5
-            when  'key'       then   11
-            else
-              Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
-          end
-          
-          body = { ids: ids, type: type}
+          body = { ids: ids, type: Type[type]}
           request( auth, Service, 'getKeywordStatus', ids )['keywordStatus']
         end
 
         def self.get_quality( auth, ids, type )
           ids = [ ids ] unless ids.is_a? Array
-
-          type = case type
-            when  'plan'      then     3 
-            when  'group'   then     5
-            when  'key'        then     11
-            else
-              Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
-          end
-          
-          body = { ids: ids, type: type}
+          body = { ids: ids, type: Type[type]}
           request( auth, Service, 'getKeywordQuality', body )['keywordQuality']
         end
 
         def self.get_10quality( auth ,ids, type, device )
           ids = [ ids ] unless ids.is_a? Array
-
-          type = case type
-            when  'plan'      then     3 
-            when  'group'   then     5
-            when  'key'        then     11
-            else
-              Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
-          end
-          
-          device = case device
-            when 'pc'          then    0
-            when 'mobile'  then    1
-            when 'both'      then    2
-            else
-              Exception.new( 'device must among: \'pc\',\'mobile\' and \'both\' ')            
-          end
-
-          body = { ids: ids, type: type, device:device }
+          body = { ids: ids, type: Type[type], device:Device[device] }
           request( auth, Service, 'getKeyword10Quality', body )['keyword10Quality']
         end
 
         private
-        def make_keywordtype( params )
+        def self.make_keywordtype( params )
+          '''
+          '''
           params = [ params ] unless params.is_a? Array
           keywordttypes = []
 
-          params.each{  |param| 
+          params.each do  |param| 
             keywordttype = {}
-              
-            keywordttype[:adgroupId]                     =    param[:id]                          if     param[:id]
-            keywordttype[:campaignId]                   =    param[:plan_id]                if     param[:plan_id]  
-            keywordttype[:adgroupName]              =    param[:name]                   if     param[:name]
-            keywordttype[:maxPrice]                       =    param[:price]                     if    param[:price]
-            keywordttype[:negativeWords]             =    param[:negative]               if    param[:negative]
-            keywordttype[:exactNegativeWords]   =    param[:exact_negative]    if    param[:exact_negative]
-            keywordttype[:matchType]                    =    param[:match_type]          if    param[:match_type] 
-            keywordttype[:phraseType]                   =    param[:phrase_type]        if    param[:phrase_type]
-            keywordttype[:pause]                             =    param[:pause]                    if    param[:pause]
+            
+            match_type = Match_type[ param[:match_type] ] if param[:match_type] else false
+
+            keywordttype[:keywordId]                     =    param[:id]                          if     param[:id]
+            keywordttype[:adgroupId]                     =    param[:group_id]                if     param[:group_id]  
+            keywordttype[:Keyword]                        =    param[:key]                   if     param[:key]
+            keywordttype[:Price]                               =    param[:price]                     if    param[:price]
+            keywordttype[:pcDestinationUrl]            =     param[:pc_destination]         if     param[:pc_destination] 
+            keywordttype[:mobileDestinationUrl]    =     param[:moile_destination]   if     param[:moile_destination]
+            keywordttype[:matchType]                      =     match_type                              if    match_type
+            keywordttype[:phraseType]                     =    param[:phrase_type]              if    param[:phrase_type]
+            keywordttype[:pause]                              =    param[:pause]                          if    param[:pause]
           
             keywordttypes << keywordttype
-          }
+          end
           return keywordttypes
-        end
+        end # make_keywordtype
 
       end # key
     end # Baidu
