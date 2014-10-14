@@ -16,43 +16,69 @@ module PPC
         Device_map = { 'all' => 0, 'pc' => 1, 'mobile' => 2 }
         Unit_map = { 'day' => 5, 'week' => 4, 'month' => 3, 'year' => 1, 'hour' => 7 }
 
-        def self.get_real_time( auth, params, type = :data )
-          params = [ params ] unless params.is_a? Array
-          request = make_realtimetype(params)
+        # introduce request to this namespace
+        def self.request(auth, service, method, params = {} )
+          ::PPC::API::Baidu::request(auth, service, method, params )
+        end
+
+        def self.get_realtime( auth, params, type = 'data', test = false )
+          request = make_realtimerequest( params )[0]
           body = { realTimeRequestTypes:  request }
           response = request( auth, Service, 'getRealTimeData' ,body)
+          if test
+            return response
+          end
 
           response = case type
-            when :data     then    response['realTimeResultTypes']
-            when :query  then   response['realTimeQueryResultTypes']
-            when :pair      then    response['realTimePairResultTypes']
+            when 'data'     then    response['body']['realTimeResultTypes']
+            when 'query'  then   response['body']['realTimeQueryResultTypes']
+            when 'pair'      then    response['body']['realTimePairResultTypes']
           end
-          
           return response                   
         end
 
 
-        def self.get_id( auth, params )
-          params = [ params ] unless params.is_a? Array
-          request = make_reporttype( params )
-          body =  { realTimeRequestTypes:  request }
-          request( auth, Service, 'getProfessionalReportId' ,body)['reportId']       
+        def self.get_id( auth, params, test = false )
+          request = make_reportrequest( params )[0]
+          body =  { reportRequestType:  request }
+          response = request( auth, Service, 'getProfessionalReportId' ,body) 
+          return response if test else response['body']['reportId'] 
         end
 
-        def self.get_status( auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { reportId:  ids }
-          request( auth, Service, 'getReportState' ,body)['isGenerated']      
+        def self.get_status( auth, id, test = false)
+          '''
+          input id should be string
+          '''
+          status = {1=>'Waiting' ,2=>'Opearting' ,3=>'Finished'}
+          body = { reportId:  id }
+          response = request( auth, Service, 'getReportState' ,body)
+          
+          if test
+            return response
+          end
+          return status[ response['body']['isGenerated']  ]
         end
 
-        def self.get_file_url( auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { reportId:  ids }
-          request( auth, Service, 'getReportFileUrl' ,body)['reportFilePath']       
+        def self.get_file_url( auth, id, test = false )
+          body = { reportId:  id }
+          response = request( auth, Service, 'getReportFileUrl' ,body)
+          return response if test else response['body']['reportFilePath']       
+        end
+
+        private
+        def self.get_date()
+         begin
+            startDate = DateTime.parse(params[:start]).iso8601
+            endDate = DateTime.parse(params[:end]).iso8601
+          rescue Exception => e
+            startDate = (Time.now - 2*24*3600).utc.iso8601
+            endDate = (Time.now - 24*3600).utc.iso8601
+          end
+          return startDate,endDate
         end
 
         private 
-        def make_realtimerequest( params )
+        def self.make_realtimerequest( params )
           '''
           make RealTimeRequestType
           没有封装关键字：attribute，order,statIds
@@ -61,6 +87,7 @@ module PPC
           requesttypes = []
           params.each do  |param|
             requesttype = {}
+            startDate, endDate = get_date()
 
             requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
             requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type] 
@@ -76,10 +103,8 @@ module PPC
           return requesttypes
         end
 
-
-
         private
-        def make_reportrequest()
+        def self.make_reportrequest( params )
           '''
           make RepoerRequestType
           '''
@@ -87,6 +112,7 @@ module PPC
           requesttypes = []
           params.each do  |param|
             requesttype = {}
+            startDate, endDate = get_date()
 
             requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
             requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]
