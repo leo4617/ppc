@@ -82,4 +82,5 @@ describe ::PPC::API::Baidu::Plan do
     expect(response[0]['pause']).to be true
     expect(response[1]['pause']).to be true
   end
+  
 end

@@ -9,6 +9,11 @@ module PPC
         Match_type  = { 'exact' => 1, 'pharse' => 2, 'wide' => 3 }
         Device          = { 'pc' => 0, 'mobile' => 1, 'all' => 2 }
         Type              = { 'plan' => 3, 'group' => 5, 'key' => 11 }
+
+        # introduce request to this namespace
+        def self.request(auth, service, method, params = {} )
+          ::PPC::API::Baidu::request(auth, service, method, params )
+        end
         
         def self.add( auth, keywords, test = false )
           '''
@@ -31,7 +36,7 @@ module PPC
         def self.delete( auth, ids, test = false )
           """
           """
-          ids = [ ids ] unless ids.class.is_a? Array
+          ids = [ ids ] unless ids.is_a? Array
           body = { keywordIds: ids}
           response = request( auth, Service, 'deleteKeyword', body )
           return response if test else response['body']['result']
@@ -40,7 +45,7 @@ module PPC
         def self.active( auth, ids, test =false )
           """
           """
-          ids = [ ids ] unless ids.is_a
+          ids = [ ids ] unless ids.is_a? Array
           body = { keywordIds: ids }
           response = request( auth, Service, 'activateKeyword', body)
           return response if test else response['body']['keywordTypes']
@@ -55,26 +60,33 @@ module PPC
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { adgroupIds: group_ids }
           response = request( auth, Service, "getKeywordByAdgroupId", body )
+          return response if test else response['body']['groupKeywordIds']
         end
 
         # 下面三个操作操作对象包括计划，组和关键字
         # 不知道放在这里合不合适
-        def self.get_status( auth, ids, type )
+        def self.get_status( auth, ids, type, test = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type]}
-          request( auth, Service, 'getKeywordStatus', ids )['keywordStatus']
+          response = request( auth, Service, 'getKeywordStatus', body )
+          return response if test else response['body']['keywordStatus']
         end
 
-        def self.get_quality( auth, ids, type )
+        def self.get_quality( auth, ids, type, test  = false )
+          '''
+          这里百度开发文档和实际返回类型的关键字不同
+          '''
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type]}
-          request( auth, Service, 'getKeywordQuality', body )['keywordQuality']
+          response = request( auth, Service, 'getKeywordQuality', body )
+          return response if test else response['body']['qualities']
         end
 
-        def self.get_10quality( auth ,ids, type, device )
+        def self.get_10quality( auth ,ids, type, device, test = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type], device:Device[device] }
-          request( auth, Service, 'getKeyword10Quality', body )['keyword10Quality']
+          response = request( auth, Service, 'getKeyword10Quality', body )
+          return response if test else response['body']['keyword10Quality']
         end
 
         private
@@ -87,11 +99,12 @@ module PPC
           params.each do  |param| 
             keywordttype = {}
             
-            match_type = Match_type[ param[:match_type] ] if param[:match_type] else false
+            match_type = false
+            match_type = Match_type[ param[:match_type] ] if param[:match_type] 
 
             keywordttype[:keywordId]                     =    param[:id]                          if     param[:id]
             keywordttype[:adgroupId]                     =    param[:group_id]                if     param[:group_id]  
-            keywordttype[:Keyword]                        =    param[:key]                   if     param[:key]
+            keywordttype[:keyword]                        =    param[:key]                   if     param[:key]
             keywordttype[:Price]                               =    param[:price]                     if    param[:price]
             keywordttype[:pcDestinationUrl]            =     param[:pc_destination]         if     param[:pc_destination] 
             keywordttype[:mobileDestinationUrl]    =     param[:moile_destination]   if     param[:moile_destination]

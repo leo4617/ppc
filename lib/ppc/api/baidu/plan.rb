@@ -10,12 +10,12 @@ module PPC
           ::PPC::API::Baidu::request(auth, service, method, params )
         end
 
-        def self.get_all( auth, test = false )
+        def self.all( auth, test = false )
           response = request( auth, Service, 'getAllCampaign' )
           return response if test else response['body']['campaignTypes']
         end
 
-        def self.get_all_id( auth, test = false )
+        def self.all_id( auth, test = false )
           response = request( auth, Service, 'getAllCampaignId' )
           return response if test else response['body']['campaignIds']
         end

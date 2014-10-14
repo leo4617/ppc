@@ -7,10 +7,6 @@ describe ::PPC::API::Baidu::Group do
   Test_plan_id = []
   Test_group_id = []
 
-  def is_successed( response )
-    expect( response['header']['desc'] ).to eq 'success'
-  end 
-
   it 'can get all group' do 
     response = ::PPC::API::Baidu::Group::all( auth, true )
     is_successed( response ) 

@@ -5,27 +5,21 @@ describe ::PPC::API::Baidu::Plan do
   auth[:token] = $baidu_token
 
   Test_plan_id = []
-  
-  def is_successed( response )
-      expect( response['header']['desc']).to eq 'success'
-  end
 
   it "can get all plans" do
-    response = ::PPC::API::Baidu::Plan::get_all( auth, true )
+    response = ::PPC::API::Baidu::Plan::all( auth, true )
     is_successed( response )
   end
 
   it "can get all plan id" do 
-    response = ::PPC::API::Baidu::Plan::get_all_id( auth, true )
+    response = ::PPC::API::Baidu::Plan::all_id( auth, true )
     is_successed( response )
   end 
 
   it "can add plan" do
     test_plan = { name: "test_plan", negative: ["test"] }
-
     response = ::PPC::API::Baidu::Plan::add( auth, test_plan, true )
     is_successed( response )
-
     Test_plan_id << response['body']['campaignTypes'][0]['campaignId']
   end
 
