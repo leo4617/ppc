@@ -42,7 +42,7 @@ module PPC
           return response if test else response['body']['result']
         end
 
-        def self.active( auth, ids, test =false )
+        def self.activate( auth, ids, test =false )
           """
           """
           ids = [ ids ] unless ids.is_a? Array

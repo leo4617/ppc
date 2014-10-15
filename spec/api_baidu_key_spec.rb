@@ -26,8 +26,8 @@ describe ::PPC::API::Baidu::Key do
     is_successed( response )
   end
 
-  it 'can active keyword' do
-    response = ::PPC::API::Baidu::Key::active( auth, Test_keyword_id, true )
+  it 'can activate keyword' do
+    response = ::PPC::API::Baidu::Key::activate( auth, Test_keyword_id, true )
     is_successed( response )
   end
 
