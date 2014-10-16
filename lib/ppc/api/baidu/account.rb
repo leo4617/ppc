@@ -6,7 +6,7 @@ module PPC
 
         def self.info(auth, test = false)
           response = request(auth,Service,'getAccountInfo'  )
-          return response if test else process( response, 'accountInfoType'){ |x|reverse_info_type(x) }
+          return process( response, 'accountInfoType', test ){ |x|reverse_info_type(x) }
         end
 
         def self.update(auth, param = {}, test = false)
@@ -18,7 +18,7 @@ module PPC
           infoType = make_info_type( param )
           body = { accountInfoType: infoType }
           response = request(auth,Service,'updateAccountInfo', body)
-          return response if test else process( response, 'accountInfoType' ){ |x|reverse_info_type(x) }
+          return process( response, 'accountInfoType', test ){ |x|reverse_info_type(x) }
         end
 
         private 

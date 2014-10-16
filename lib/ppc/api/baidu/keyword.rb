@@ -8,11 +8,6 @@ module PPC
         Match_type  = { 'exact' => 1, 'pharse' => 2, 'wide' => 3 }
         Device          = { 'pc' => 0, 'mobile' => 1, 'all' => 2 }
         Type              = { 'plan' => 3, 'group' => 5, 'keyword' => 11 }
-
-        # introduce request to this namespace
-        def self.request(auth, service, method, params = {} )
-          ::PPC::API::Baidu::request(auth, service, method, params )
-        end
         
         def self.add( auth, keywords, test = false )
           '''
@@ -20,7 +15,8 @@ module PPC
           keywordtypes = make_keywordtype( keywords ) 
           body = { keywordTypes: keywordtypes }
           response = request( auth, Service, "addKeyword", body )
-          return response if test else process(response, 'keywordTypes'){|x| reverse_keywordtype(x)  }
+          return process(response, 'keywordTypes', test){|x| reverse_keywordtype(x)  }
+        end
 
         def self.update( auth, keywords, test = false  )
           '''
@@ -28,7 +24,7 @@ module PPC
           keywordtypes = make_keywordtype( keywords ) 
           body = { keywordTypes: keywordtypes }
           response = request( auth, Service, "updateKeyword", body )
-          return response if test else process(response, 'keywordTypes'){|x| reverse_keywordtype(x)  }
+          return process(response, 'keywordTypes', test){|x| reverse_keywordtype(x)  }
         end
 
         def self.delete( auth, ids, test = false )
@@ -37,7 +33,7 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { keywordIds: ids}
           response = request( auth, Service, 'deleteKeyword', body )
-          return response if test else process(response, 'result'){|x| x }
+          return process(response, 'result', test){|x| x }
         end
 
         def self.activate( auth, ids, test =false )
@@ -46,7 +42,7 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { keywordIds: ids }
           response = request( auth, Service, 'activateKeyword', body)
-          return response if test else process(response, 'keywordTypes'){|x| reverse_keywordtype(x)  }
+          return process(response, 'keywordTypes', test){|x| reverse_keywordtype(x)  }
         end
 
         def self.search_by_group_id( auth, group_ids, test = false  )
@@ -58,7 +54,7 @@ module PPC
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { adgroupIds: group_ids }
           response = request( auth, Service, "getKeywordByAdgroupId", body )
-          return response if test else process(response, 'groupKeywordIds'){|x| x }
+          return process(response, 'groupKeywordIds', test){|x| x }
         end
 
         # 下面三个操作操作对象包括计划，组和关键字
@@ -67,7 +63,7 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type]}
           response = request( auth, Service, 'getKeywordStatus', body )
-          return response if test else process(response, 'keywordStatus'){|x| x }
+          return process(response, 'keywordStatus', test){|x| x }
         end
 
         def self.get_quality( auth, ids, type, test  = false )
@@ -77,14 +73,14 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type]}
           response = request( auth, Service, 'getKeywordQuality', body )
-          return response if test else process(response, 'qualities'){|x| x }
+          return process(response, 'qualities', test){|x| x }
         end
 
         def self.get_10quality( auth ,ids, type, device, test = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type], device:Device[device] }
           response = request( auth, Service, 'getKeyword10Quality', body )
-          return response if test else process(response, 'keyword10Quality'){|x| x }
+          return process(response, 'keyword10Quality', test){|x| x }
         end
 
         private
@@ -103,7 +99,7 @@ module PPC
             keywordttype[:keywordId]                     =    param[:id]                          if     param[:id]
             keywordttype[:adgroupId]                     =    param[:group_id]                if     param[:group_id]  
             keywordttype[:keyword]                        =    param[:keyword]                   if     param[:keyword]
-            keywordttype[:Price]                               =    param[:price]                     if    param[:price]
+            keywordttype[:price]                               =    param[:price]                     if    param[:price]
             keywordttype[:pcDestinationUrl]            =     param[:pc_destination]         if     param[:pc_destination] 
             keywordttype[:mobileDestinationUrl]    =     param[:mobile_destination]   if     param[:mobile_destination]
             keywordttype[:matchType]                      =     match_type                              if    match_type
@@ -115,14 +111,15 @@ module PPC
           return keywordttypes
         end # make_keywordtype
 
-        private def self.reverse_keywordtype( keywordttypes )
+        private 
+        def self.reverse_keywordtype( keywordttypes )
           keyword_apis = []
           keywordttypes.each do |keywordttype|
             keyword_api = {}
             keyword_api[:id]                                   = keywordttype['keywordId']  if keywordttype['keywordId']
             keyword_api[:group_id]                       = keywordttype['adgroupId']  if keywordttype['adgroupId']
             keyword_api[:keyword]                       = keywordttype['keyword']  if keywordttype['keyword']
-            keyword_api[:price]                              = keywordttype['Price']  if keywordttype['Price']
+            keyword_api[:price]                              = keywordttype['price']  if keywordttype['price']
             keyword_api[:pc_destination]             = keywordttype['pcDestinationUrl']  if keywordttype['pcDestinationUrl']
             keyword_api[:mobile_destination]    = keywordttype['mobileDestinationUrl']  if keywordttype['mobileDestinationUrl']
             keyword_api[:match_type]                  = keywordttype['matchType']  if keywordttype['matchType']

@@ -41,25 +41,24 @@ module PPC
         # return response if with_header else response['body']
       end
 
-      def self.process( response, key = '',  &func )
+      def self.process( response, key , test = false ,  &func)
         '''
         Process Http response. If operation successes, return value of given keys.
         You can process the result using function &func, or do nothing by passing 
         block {|x|x}
         
         If operation fails, return \'failures\' and response body if there is some messages
-        @ input: 
-        --------------------
-        @output:
         '''
-        if response['header']['desc'] == 'success'
+        if test 
+          return response 
+        elsif response['header']['desc'] == 'success'
           return func[ response['body'][ key ] ]
-        end
-
-        if response['body']
-          return response['header']['failures'], response['body']
         else
-          return response['header']['failures']
+          result = {}
+          result[:desc] = response['header']['desc']
+          result[:faliure] = response['header']['failures']
+          result[:info] = func[ response['body'][ key ] ]
+          return result
         end
       end # process
 
