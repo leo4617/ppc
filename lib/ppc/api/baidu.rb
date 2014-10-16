@@ -2,7 +2,7 @@ require 'ppc/api/baidu/account'
 require 'ppc/api/baidu/plan'
 require 'ppc/api/baidu/bulk'
 require 'ppc/api/baidu/group'
-require 'ppc/api/baidu/key'
+require 'ppc/api/baidu/keyword'
 require 'ppc/api/baidu/report'
 require 'ppc/api/baidu/creative'
 require 'awesome_print'
@@ -11,11 +11,11 @@ require 'net/https'
 require 'json'
 module PPC
   module API
-    module Baidu
+    class Baidu
 
       def self.request( auth, service, method, params = {} )
         '''
-        request should reture whole http response including header
+        request should return whole http response including header
         '''
         uri = URI("https://api.baidu.com/json/sms/v3/#{service}Service/#{method}")
         http_body = {
@@ -41,34 +41,28 @@ module PPC
         # return response if with_header else response['body']
       end
 
-      # private
-      # def process_response(response)
-      #   body = response[:envelope]
-      #   print_debug(body,'response.envelope') if @debug
-      #   @header = body[:header]
-      #   res_header = header[:res_header]
+      def self.process( response, key = '',  &func )
+        '''
+        Process Http response. If operation successes, return value of given keys.
+        You can process the result using function &func, or do nothing by passing 
+        block {|x|x}
+        
+        If operation fails, return \'failures\' and response body if there is some messages
+        @ input: 
+        --------------------
+        @output:
+        '''
+        if response['header']['desc'] == 'success'
+          return func[ response['body'][ key ] ]
+        end
 
-      #   @oprs     = res_header[:oprs]
-      #   @oprtime  = res_header[:oprtime]
-      #   @quota    = res_header[:quota]
-      #   @rquota   = res_header[:rquota]
-      #   @status   = res_header[:status]
+        if response['body']
+          return response['header']['failures'], response['body']
+        else
+          return response['header']['failures']
+        end
+      end # process
 
-      #   @desc     = res_header[:desc]
-      #   case @desc
-      #   when 'success'
-      #   when 'failure'
-      #     failures  = res_header[:failures]
-      #     @code     = failures[:code]
-      #     @message  = failures[:message]
-      #   when 'system failure'
-      #     failures  = res_header[:failures]
-      #     @code     = failures[:code]
-      #     @message  = failures[:message]
-      #   else
-      #     raise "unknown desc from baidu: #{@desc}"
-      #   end
-      # end 
-    end
-  end
-end
+      end # Baidu
+  end # API
+end # PPC

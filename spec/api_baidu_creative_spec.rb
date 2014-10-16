@@ -61,7 +61,7 @@ describe ::PPC::API::Baidu::Creative do
   end
 
   it 'can delete creative' do 
-    response = ::PPC::API::Baidu::Creative::delete( auth, [3238653141], true )
+    response = ::PPC::API::Baidu::Creative::delete( auth, Test_creative_id, true )
     is_successed( response )
   end
 

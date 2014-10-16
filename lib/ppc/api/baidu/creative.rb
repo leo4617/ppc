@@ -1,9 +1,8 @@
 # -*- coding:utf-8 -*-
 module PPC
   module API
-    module Baidu
-      module Creative
-        include ::PPC::API::Baidu
+    class Baidu
+      class Creative< Baidu
         Service = 'Creative'
 
         # introduce request to this namespace
@@ -14,7 +13,7 @@ module PPC
         def self.add( auth, creatives, test = false )
           body = { creativeTypes: make_creativetype( creatives ) }
           response = request( auth, Service, 'addCreative', body )
-          return response if test else response['body']['creativeTypes']
+          return response if test else process( response, 'creativeTypes' )
         end
 
         def self.update( auth, creatives, test = false )
@@ -23,21 +22,21 @@ module PPC
           '''
           body = { creativeTypes: make_creativetype( creatives ) }
           response = request( auth, Service, 'addCreative', body )
-          return response if test else response['body']['creativeTypes']
+          return response if test else process( response, 'creativeTypes' )
         end
 
         def self.delete( auth, ids, test = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { creativeIds: ids }
           response = request( auth, Service, 'deleteCreative', body )
-          return response if test else response['body']['result']
+          return response if test else process( response, 'result' )
         end
 
         def self.activate( auth, ids, test = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { creativeIds: ids }
           response = request( auth, Service, 'activateCreative', body )
-          return response if test else response['body']['creativeTypes']
+          return response if test else process( response, 'creativeTypes' )
         end
 
         def self.status( auth, ids, type, test = false )
@@ -53,7 +52,7 @@ module PPC
 
           body = { ids: ids, type: type }
           response = request( auth, Service, 'getCreativeStatus', body )
-          return response if test else response['body']['CreativeStatus']
+          return response if test else process( response, 'CreativeStatus' )
         end
 
         def self.search_id_by_group_id( auth, ids,  getTemp = 0, test = false )
@@ -63,21 +62,21 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCreativeIdByAdgroupId', body )
-          return response if test else response['body']['groupCreativeIds']
+          return response if test else process( response, 'groupCreativeIds' )
         end
 
         def self.search_by_group_id( auth, ids,  getTemp = 0, test = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCreativeByAdgroupId', body )
-          return response if test else response['body']['groupCreatives']
+          return response if test else process( response, 'groupCreatives' )
         end
 
         def self.search_by_creative_id( auth, ids,  getTemp = 0, test = false  )
           ids = [ ids ] unless ids.is_a? Array
           body = { creativeIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCreativeByCreativeId', body )
-          return response if test else response['body']['creativeTypes']
+          return response if test else process( response, 'result' )['creativeTypes']
         end
 
         private 

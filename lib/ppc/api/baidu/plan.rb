@@ -1,8 +1,7 @@
 module PPC
   module API
-    module Baidu
-      module Plan
-        include ::PPC::API::Baidu
+    class Baidu
+      class Plan< Baidu
         Service = 'Campaign'
 
         # introduce request to this namespace

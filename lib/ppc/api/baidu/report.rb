@@ -1,9 +1,8 @@
 # -*- coding:utf-8 -*-
 module PPC
   module API
-    module Baidu
-      module Report
-        include ::PPC::API::Baidu
+    class Baidu
+      class Report< Baidu
         Service = 'Report'
       
         # 需要用到的映射集合

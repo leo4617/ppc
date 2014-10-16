@@ -1,9 +1,8 @@
 # -*- coding:utf-8  -*-
 module PPC
   module API
-    module Baidu
-      module Group
-        include ::PPC::API::Baidu
+    class Baidu
+      class Group< Baidu
         Service = 'Adgroup'
 
         # introduce request to this namespace
