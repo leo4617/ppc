@@ -24,7 +24,7 @@ describe ::PPC::API::Baidu::Plan do
   end
 
   it "can get plan by id" do
-    response = ::PPC::API::Baidu::Plan::get_by_id( auth, Test_plan_id, true )
+    response = ::PPC::API::Baidu::Plan::get( auth, Test_plan_id, true )
     is_successed( response )
   end
 

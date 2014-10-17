@@ -5,6 +5,18 @@ module PPC
       class Group< Baidu
         Service = 'Adgroup'
 
+        @map =[
+                        [:plan_id, :campaignId],
+                        [:id, :adgroupId],
+                        [:name, :adgroupName],
+                        [:price, :maxPrice],
+                        [:negative, :negativeWords],
+                        [:exact_negative, :exactNegativeWords],
+                        [:pause, :pause],
+                        [:status, :status],
+                        [:reserved, :reserved]
+                      ]
+
         # introduce request to this namespace
         def self.request(auth, service, method, params = {} )
           ::PPC::API::Baidu::request(auth, service, method, params )
@@ -15,14 +27,14 @@ module PPC
           @return : Array of campaignAdgroupIds
           """
           response = request( auth, Service , "getAllAdgroupId" )
-          process( response, 'campaignAdgroupIds', test ){}
+          process( response, 'campaignAdgroupIds', test ){ |x| x }
         end
 
         def self.get( auth, ids, test = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids }
           response = request(auth, Service, "getAdgroupByAdgroupId",body )
-          process( response, 'adgroupTypes', test ){}
+          process( response, 'adgroupTypes', test ){ |x| reverse_type(x) }
         end
 
         def self.add( auth, groups, test = false )
@@ -30,12 +42,12 @@ module PPC
           @ input : one or list of AdgroupType
           @ output : list of AdgroupType
           """
-          adgrouptypes = make_adgrouptype( groups )
+          adgrouptypes = make_type( groups )
 
           body = {adgroupTypes:  adgrouptypes }
           
           response = request( auth, Service, "addAdgroup", body  )
-          process( response, 'adgroupTypes', test ){} 
+          process( response, 'adgroupTypes', test ){ |x| reverse_type(x) }
         end
 
         def self.update( auth, groups, test = false )
@@ -43,11 +55,11 @@ module PPC
           @ input : one or list of AdgroupType
           @ output : list of AdgroupType
           """
-          adgrouptypes = make_adgrouptype( groups )
+          adgrouptypes = make_type( groups )
           body = {adgroupTypes: adgrouptypes}
           
           response = request( auth, Service, "updateAdgroup",body )
-          process( response, 'adgroupTypes', test ){}
+          process( response, 'adgroupTypes', test ){ |x| reverse_type(x) }
         end
 
         def self.delete( auth, ids, test = false )
@@ -77,36 +89,31 @@ module PPC
           ids = [ ids ] unless ids.class == Array
           body = { campaignIds: ids }
           response = request( auth, Service ,"getAdgroupByCampaignId",  body )
-          process( response, 'campaignAdgroups', test ){ |x| x}
+          process( response, 'campaignAdgroups', test ){ |x| x }
         end
 
-        private
-        def self.make_adgrouptype( params )
-            params = [ params ] unless params.is_a? Array
-            adgrouptypes = []
+        # private
+        # def self.make_adgrouptype( params )
+        #     params = [ params ] unless params.is_a? Array
+        #     adgrouptypes = []
 
-            params.each{  | param | 
-              adgrouptype = {}
+        #     params.each{  | param | 
+        #       adgrouptype = {}
 
-              adgrouptype[:campaignId]                  =   param[:plan_id]                 if    param[:plan_id] 
-              adgrouptype[:adgroupId]                    =   param[:id]                           if    param[:id] 
-              adgrouptype[:adgroupName]             =   param[:name]                    if    param[:name] 
-              adgrouptype[:maxPrice]                      =   param[:price]                     if    param[:price] 
-              adgrouptype[:negativeWords]            =   param[:negative]               if    param[:negative]
-              adgrouptype[:exactNegativeWords]  =   param[:exact_negative]    if    param[:exact_negative] 
-              adgrouptype[:pause]                            =   param[:pause]                    if    param[:pause] 
-              adgrouptype[:status]                            =   param[:status]                    if    param[:status] 
-              adgrouptype[:reserved]                       =   param[:reserved]               if    param[:reserved] 
+        #       adgrouptype[:campaignId]                  =   param[:plan_id]                 if    param[:plan_id] 
+        #       adgrouptype[:adgroupId]                    =   param[:id]                           if    param[:id] 
+        #       adgrouptype[:adgroupName]             =   param[:name]                    if    param[:name] 
+        #       adgrouptype[:maxPrice]                      =   param[:price]                     if    param[:price] 
+        #       adgrouptype[:negativeWords]            =   param[:negative]               if    param[:negative]
+        #       adgrouptype[:exactNegativeWords]  =   param[:exact_negative]    if    param[:exact_negative] 
+        #       adgrouptype[:pause]                            =   param[:pause]                    if    param[:pause] 
+        #       adgrouptype[:status]                            =   param[:status]                    if    param[:status] 
+        #       adgrouptype[:reserved]                       =   param[:reserved]               if    param[:reserved] 
               
-              adgrouptypes << adgrouptype
-            }
-            return adgrouptypes
-        end #make_adgrouptype
-
-        def self.reverse_adgrouptype( types )
-        
-
-        end
+        #       adgrouptypes << adgrouptype
+        #     }
+        #     return adgrouptypes
+        # end #make_adgrouptype
 
       end # class group
     end # class baidu

@@ -4,7 +4,7 @@ describe ::PPC::API::Baidu::Keyword do
   auth[:password] = $baidu_password 
   auth[:token] = $baidu_token
 
-  Test_group_id = ::PPC::API::Baidu::Group::all( auth )[0]['adgroupIds'][0]
+  Test_group_id = ::PPC::API::Baidu::Group::ids( auth )[0]['adgroupIds'][0]
   Test_plan_id = ::PPC::API::Baidu::Plan::all( auth )[0]['campaignId']
   Test_keyword_id = []
 

@@ -6,25 +6,38 @@ module PPC
         Service = 'Keyword'
 
         Match_type  = { 'exact' => 1, 'pharse' => 2, 'wide' => 3 }
+        Match_type_r  = { 1 => 'exact', 2=> 'pharse' , 3 => 'wide' }
+        
         Device          = { 'pc' => 0, 'mobile' => 1, 'all' => 2 }
         Type              = { 'plan' => 3, 'group' => 5, 'keyword' => 11 }
         
+        @map  = [
+                            [:id,:keywordId],
+                            [:group_id,:adgroupId],
+                            [:keyword,:keyword],
+                            [:price,:price],
+                            [:pc_destination,:pcDestinationUrl],
+                            [:mobile_destination,:mobileDestinationUrl],
+                            [:match_type,:matchType],
+                            [:phrase_type,:phraseType]
+                        ]
+
         def self.add( auth, keywords, test = false )
           '''
           '''
-          keywordtypes = make_keywordtype( keywords ) 
+          keywordtypes = make_type( keywords ) 
           body = { keywordTypes: keywordtypes }
           response = request( auth, Service, "addKeyword", body )
-          return process(response, 'keywordTypes', test){|x| reverse_keywordtype(x)  }
+          return process(response, 'keywordTypes', test){|x| reverse_type(x)  }
         end
 
         def self.update( auth, keywords, test = false  )
           '''
           '''
-          keywordtypes = make_keywordtype( keywords ) 
+          keywordtypes = make_type( keywords ) 
           body = { keywordTypes: keywordtypes }
           response = request( auth, Service, "updateKeyword", body )
-          return process(response, 'keywordTypes', test){|x| reverse_keywordtype(x)  }
+          return process(response, 'keywordTypes', test){|x| reverse_type(x)  }
         end
 
         def self.delete( auth, ids, test = false )
@@ -42,7 +55,7 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { keywordIds: ids }
           response = request( auth, Service, 'activateKeyword', body)
-          return process(response, 'keywordTypes', test){|x| reverse_keywordtype(x)  }
+          return process(response, 'keywordTypes', test){|x| reverse_type(x)  }
         end
 
         def self.search_by_group_id( auth, group_ids, test = false  )
@@ -87,51 +100,46 @@ module PPC
           return process(response, 'keyword10Quality', test){|x| x }
         end
 
-        private
-        def self.make_keywordtype( params )
-          '''
-          '''
+        # Override
+       def self.make_type( params, map = @map)
           params = [ params ] unless params.is_a? Array
-          keywordttypes = []
-
-          params.each do  |param| 
-            keywordttype = {}
-            
-            match_type = false
-            match_type = Match_type[ param[:match_type] ] if param[:match_type] 
-
-            keywordttype[:keywordId]                     =    param[:id]                          if     param[:id]
-            keywordttype[:adgroupId]                     =    param[:group_id]                if     param[:group_id]  
-            keywordttype[:keyword]                        =    param[:keyword]                   if     param[:keyword]
-            keywordttype[:price]                               =    param[:price]                     if    param[:price]
-            keywordttype[:pcDestinationUrl]            =     param[:pc_destination]         if     param[:pc_destination] 
-            keywordttype[:mobileDestinationUrl]    =     param[:mobile_destination]   if     param[:mobile_destination]
-            keywordttype[:matchType]                      =     match_type                              if    match_type
-            keywordttype[:phraseType]                     =    param[:phrase_type]              if    param[:phrase_type]
-            keywordttype[:pause]                              =    param[:pause]                          if    param[:pause]
-          
-            keywordttypes << keywordttype
+          types = []
+          params.each do |param|
+            type = {}
+              map.each do |key|
+                # 增加对matchtype的自动转换
+                if key[0] == :match_type
+                   value = param[ key[0] ]
+                  type[ key[1] ] = Match_type[ value ] if value                 
+                else
+                  value = param[ key[0] ]
+                  type[ key[1] ] = value if value
+                end
+              end
+            types << type
           end
-          return keywordttypes
-        end # make_keywordtype
+          return types
+        end
 
-        private 
-        def self.reverse_keywordtype( keywordttypes )
-          keyword_apis = []
-          keywordttypes.each do |keywordttype|
-            keyword_api = {}
-            keyword_api[:id]                                   = keywordttype['keywordId']  if keywordttype['keywordId']
-            keyword_api[:group_id]                       = keywordttype['adgroupId']  if keywordttype['adgroupId']
-            keyword_api[:keyword]                       = keywordttype['keyword']  if keywordttype['keyword']
-            keyword_api[:price]                              = keywordttype['price']  if keywordttype['price']
-            keyword_api[:pc_destination]             = keywordttype['pcDestinationUrl']  if keywordttype['pcDestinationUrl']
-            keyword_api[:mobile_destination]    = keywordttype['mobileDestinationUrl']  if keywordttype['mobileDestinationUrl']
-            keyword_api[:match_type]                  = keywordttype['matchType']  if keywordttype['matchType']
-            keyword_api[:phrase_type]                 = keywordttype['phraseType']  if keywordttype['phraseType']
-            keyword_api[:pause]                            = keywordttype['pause']  if keywordttype['pause']
-            keyword_apis << keyword_api
-          end
-          reutrn keyword_apis
+        # Overwrite
+        def self.reverse_type( types, map = @map )
+          types = [ types ] unless types.is_a? Array
+          params = []
+          types.each do |type|
+            param = {}
+             # 增加对matchtype的自动转换
+              map.each do |key|
+                if key[0] == :match_type
+                   value = type[ key[1].to_s ]
+                  param[ key[0] ] = Match_type_r[ value ] if value                 
+                else
+                  value = type[ key[0] ]
+                  param[ key[0] ] = value if value
+                end
+              end # map.each
+            params << param
+          end # types.each
+          return params
         end
 
       end # keyword

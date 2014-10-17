@@ -8,7 +8,7 @@ describe ::PPC::API::Baidu::Group do
   Test_group_id = []
 
   it 'can get all group' do 
-    response = ::PPC::API::Baidu::Group::all( auth, true )
+    response = ::PPC::API::Baidu::Group::ids( auth, true )
     is_successed( response ) 
     pair = response['body']['campaignAdgroupIds'][0]
     Test_plan_id << pair['campaignId']
