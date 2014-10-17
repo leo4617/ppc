@@ -12,7 +12,7 @@ describe ::PPC::API::Baidu::Plan do
   end
 
   it "can get all plan id" do 
-    response = ::PPC::API::Baidu::Plan::all_id( auth, true )
+    response = ::PPC::API::Baidu::Plan::ids( auth, true )
     is_successed( response )
   end 
 

@@ -59,24 +59,28 @@ module PPC
 
         # 下面三个操作操作对象包括计划，组和关键字
         # 不知道放在这里合不合适
-        def self.get_status( auth, ids, type, test = false )
+        def self.status( auth, ids, type, test = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type]}
           response = request( auth, Service, 'getKeywordStatus', body )
           return process(response, 'keywordStatus', test){|x| x }
         end
 
-        def self.get_quality( auth, ids, type, test  = false )
-          '''
-          这里百度开发文档和实际返回类型的关键字不同
-          '''
-          ids = [ ids ] unless ids.is_a? Array
-          body = { ids: ids, type: Type[type]}
-          response = request( auth, Service, 'getKeywordQuality', body )
-          return process(response, 'qualities', test){|x| x }
-        end
+        # 质量度评价标准即将被抛弃，此处失效
+        # def self.quality( auth, ids, type, test  = false )
+        #   '''
+        #   这里百度开发文档和实际返回类型的关键字不同
+        #   '''
+        #   ids = [ ids ] unless ids.is_a? Array
+        #   body = { ids: ids, type: Type[type]}
+        #   response = request( auth, Service, 'getKeywordQuality', body )
+        #   return process(response, 'qualities', test){|x| x }
+        # end
 
-        def self.get_10quality( auth ,ids, type, device, test = false )
+        def self.quality( auth ,ids, type, device, test = false )
+          '''
+          Return 10Quanlity *Not the old Quality* of given ketword id
+          '''
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type], device:Device[device] }
           response = request( auth, Service, 'getKeyword10Quality', body )

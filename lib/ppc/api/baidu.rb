@@ -13,6 +13,8 @@ module PPC
   module API
     class Baidu
 
+      @map = nil
+
       def self.request( auth, service, method, params = {} )
         '''
         request should return whole http response including header
@@ -47,7 +49,10 @@ module PPC
         You can process the result using function &func, or do nothing by passing 
         block {|x|x}
         
-        If operation fails, return \'failures\' and response body if there is some messages
+        If operation success, return value of given key( processed ) in body.
+
+        If opeartion fail, reutrn a hash, stored the desc, failure, and the result
+       key( processed )  ]
         '''
         if test 
           return response 
@@ -57,10 +62,73 @@ module PPC
           result = {}
           result[:desc] = response['header']['desc']
           result[:faliure] = response['header']['failures']
-          result[:info] = func[ response['body'][ key ] ]
+          result[:value] = func[ response['body'][ key ] ]
           return result
         end
       end # process
+
+      def self.make_type( params, map = @map)
+        '''
+        tranfesr ppc api to search engine api
+        @ input
+          params : list of hash complying with PPC gem api  
+          map : list of pairs(lists) of symbol complying with following api
+          map = [ 
+                        [ ppc_key, api_key ],
+                        [ ppc_key, api_key ],
+                        [ ppc_key, api_key ],
+                                        ...
+                        ]
+          Ex: 
+          baidu_group_map = [ [ :id, :adgroupId],
+                                                  [ :price, :maxPrice],
+                                                          ...                 ]
+        ===================
+        @ output:
+        : types : list of hash that complying with search engine api
+        '''
+        params = [ params ] unless params.is_a? Array
+
+        types = []
+        params.each do |param|
+          type = {}
+
+            map.each do |key|
+              value = param[ key[0] ]
+              type[ key[1] ] = value if value
+            end
+
+          types << type
+        end
+        return types
+      end
+
+      def self.reverse_type( types, map = @map )
+        '''
+        transfer search engine api to ppc api
+        @ input
+          types : list of hash that complying with search engine api
+          map : list of pairs(lists) of symbol, for more details please 
+                      read docs of make_type()
+        ===================
+        @ output:
+          params : list of hash complying with PPC gem api  
+        '''
+        types = [ types ] unless types.is_a? Array
+
+        params = []
+        types.each do |type|
+          param = {}
+          
+            map.each do |key|
+                value = type[ key[1].to_s ]
+                param[ key[0] ] = value if value
+            end
+
+          params << param
+        end
+        return params
+      end
 
       end # Baidu
   end # API

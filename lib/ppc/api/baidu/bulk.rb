@@ -1,7 +1,7 @@
 module PPC
   module API
     class Baidu
-      module Bulk
+      class Bulk < Baidu
         Service = 'BulkJob'
 
         def self.get_all_object( auth,params = {})

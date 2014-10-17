@@ -46,7 +46,7 @@ describe ::PPC::API::Baidu::Creative do
   end
 
   it 'can search id by group id' do
-    response = ::PPC::API::Baidu::Creative::search_id_by_group_id( auth, Test_group_id, 0, true )
+    response = ::PPC::API::Baidu::Creative::get_by_group_id( auth, Test_group_id, 0, true )
     is_successed( response )
   end
 
@@ -56,7 +56,7 @@ describe ::PPC::API::Baidu::Creative do
   end
 
   it 'can search creative by creative id' do
-    response = ::PPC::API::Baidu::Creative::search_by_creative_id( auth, Test_creative_id, 0, true )
+    response = ::PPC::API::Baidu::Creative::get( auth, Test_creative_id, 0, true )
     is_successed( response )
   end
 

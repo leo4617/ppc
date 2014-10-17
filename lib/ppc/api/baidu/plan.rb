@@ -4,50 +4,43 @@ module PPC
       class Plan< Baidu
         Service = 'Campaign'
 
-        # introduce request to this namespace
-        def self.request(auth, service, method, params = {} )
-          ::PPC::API::Baidu::request(auth, service, method, params )
-        end
-
         def self.all( auth, test = false )
           response = request( auth, Service, 'getAllCampaign' )
-          return response if test else response['body']['campaignTypes']
+          process( response, 'campaignTypes' , test ){ |x| reverse_campaigntype(x) }
         end
 
-        def self.all_id( auth, test = false )
+        def self.ids( auth, test = false )
           response = request( auth, Service, 'getAllCampaignId' )
-          return response if test else response['body']['campaignIds']
+          process( response, 'campaignIds' , test ){ |x| x }
         end
 
-        def self.get_by_id( auth, ids, test = false )
+        def self.get( auth, ids, test = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { campaignIds: ids }
 
           response = request( auth, Service, 'getCampaignByCampaignId', body)
-          return response if test else response['body']['campaignTypes']
+          process( response, 'campaignTypes' , test ){ |x| reverse_campaigntype(x) }
         end
 
         def self.add( auth, plans, test = false )
           campaigntypes = make_campaigntype( plans )
-
           body = { campaignTypes: campaigntypes }
-
           response = request( auth, Service, 'addCampaign', body)
-          return response if test else response['body']['campaignTypes']
+          process( response, 'campaignTypes' , test ){ |x| reverse_campaigntype(x) }
         end
 
         def self.update(auth,plans, test = false )
           campaigntypes = make_campaigntype( plans )
           body = { campaignTypes: campaigntypes }
           response = request( auth, Service, 'updateCampaign', body)
-          return response if test else response['body']['campaignTypes']
+          process( response, 'campaignTypes' , test ){ |x| reverse_campaigntype(x) }
         end
 
         def self.delete(auth, ids, test = false )
           ids = [ ids ] unless ids.class == Array
           body = { campaignIds: ids }
           response = request( auth, 'Campaign', 'deleteCampaign', body)
-          return response if test else response['body']['result']
+          process( response, 'result' , test ){ |x| x }
         end
 
 
@@ -75,6 +68,31 @@ module PPC
             campaigntypes << campaigntype
           end
           return campaigntypes
+        end
+
+        private 
+        def reverse_campaigntype( types )
+          types = [ types ] unless types.is_a Array
+          plans = []
+
+          types.each do |type|
+            plan = {}
+            plan[:id]                                  =    type['campaignId']                   if     type['campaignId']
+            plan[:name]                           =     type['campaignName']           if     type['campaignName']
+            plan[:budget]                         =    type['budget']                            if    type['budget'] 
+            plan[:region]                          =    type['regionTarget']                  if    type['regionTarget']
+            plan[:ip]                                  =     type['excludeIp']                      if    type['excludeIp'] 
+            plan[:negative]                      =     type['negativeWords']             if    type['negativeWords']
+            plan[:exact_negative]           =     type['exactNegativeWords']  if     type['exactNegativeWords']
+            plan[:schedule]                      =    type['schedule']                        if    type['schedule'] 
+            plan[:budget_offline_time]  =     type['budgetOfflineTime']     if    type['budgetOfflineTime']
+            plan[:show_prob]                  =     type['showProb']                     if    type['showProb']   
+            plan[:device]                           =     type['device']                           if    type['device']
+            plan[:price_ratio]                    =    type['priceRatio']                     if    type['priceRatio'] 
+            plan[:status]                            =    type['status']                            if    type['status']
+            plans << plan
+          end
+          return plans
         end
        
       end # Service

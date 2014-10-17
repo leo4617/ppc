@@ -24,4 +24,33 @@ describe ::PPC::API::Baidu do
     expect( response.keys ).to eq Expected_success_result
   end
 
+  # params for make_type and reverse_type test
+    test_map = 
+  [
+    [ :id , :campaignId],
+    [ :name , :campaignName],
+    [ :exclude_ip, :excludeIp],
+    [ :exact_negative , :exactNegativeWords],
+  ]
+
+  test_type = {  }
+  test_type['campaignId'] = 123
+  test_type['campaignName'] = 'test_plan'
+  test_type['excludeIp'] = [321,5432,52,1]
+  test_type['exactNegativeWords'] = ['wu','liaode']
+
+  test_param = { }
+  test_param[ :id] = 123
+  test_param[ :name] = 'testplan'
+  test_param[ :exclude_ip] =  [321,5432,52,1]
+  test_param[ :exact_negative] = ['wu','liaode']
+
+  expected_type = [{:campaignId=>123, :campaignName=>"testplan", :excludeIp=>[321, 5432, 52, 1], :exactNegativeWords=>["wu", "liaode"]}]
+  expexted_params = [{:id=>123, :name=>"test_plan", :exclude_ip=>[321, 5432, 52, 1], :exact_negative=>["wu", "liaode"]}]
+
+  it 'can make and reverse type' do
+    expect( ::PPC::API::Baidu::make_type( test_param , test_map) ).to eq expected_type
+    expect( ::PPC::API::Baidu::reverse_type(test_type, test_map) ).to eq expexted_params
+  end
+
 end

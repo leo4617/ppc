@@ -32,25 +32,25 @@ describe ::PPC::API::Baidu::Keyword do
   end
 
   it 'can get status' do
-    response1 = ::PPC::API::Baidu::Keyword::get_status( auth, Test_group_id, 'group', true )
-    response2 = ::PPC::API::Baidu::Keyword::get_status( auth, Test_keyword_id, 'keyword', true )
-    response3 = ::PPC::API::Baidu::Keyword::get_status( auth, Test_plan_id, 'plan', true )
+    response1 = ::PPC::API::Baidu::Keyword::status( auth, Test_group_id, 'group', true )
+    response2 = ::PPC::API::Baidu::Keyword::status( auth, Test_keyword_id, 'keyword', true )
+    response3 = ::PPC::API::Baidu::Keyword::status( auth, Test_plan_id, 'plan', true )
     is_successed( response1 ) 
     is_successed( response2 ) 
     is_successed( response3 ) 
   end
 
-  it 'can get quality' do
-    response1 = ::PPC::API::Baidu::Keyword::get_quality( auth, Test_group_id, 'group', true )
-    response2 = ::PPC::API::Baidu::Keyword::get_quality( auth, Test_keyword_id, 'keyword', true )
-    response3 = ::PPC::API::Baidu::Keyword::get_quality( auth, Test_plan_id, 'plan', true )
-    is_successed( response1 ) 
-    is_successed( response2 ) 
-    is_successed( response3 ) 
-  end
+  # it 'can get quality' do
+  #   response1 = ::PPC::API::Baidu::Keyword::quality( auth, Test_group_id, 'group', true )
+  #   response2 = ::PPC::API::Baidu::Keyword::quality( auth, Test_keyword_id, 'keyword', true )
+  #   response3 = ::PPC::API::Baidu::Keyword::quality( auth, Test_plan_id, 'plan', true )
+  #   is_successed( response1 ) 
+  #   is_successed( response2 ) 
+  #   is_successed( response3 ) 
+  # end
 
-  it 'can get 10 quality' do
-    response = ::PPC::API::Baidu::Keyword::get_10quality( auth, Test_keyword_id, 'keyword', 'pc',true )
+  it 'can get 10-quality' do
+    response = ::PPC::API::Baidu::Keyword::quality( auth, Test_keyword_id, 'keyword', 'pc',true )
     is_successed( response )    
   end
 

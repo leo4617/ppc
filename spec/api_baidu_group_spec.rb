@@ -28,7 +28,7 @@ describe ::PPC::API::Baidu::Group do
   end
 
   it 'can search group by group id' do
-    response = ::PPC::API::Baidu::Group::search_by_group_id( auth, Test_group_id, true )
+    response = ::PPC::API::Baidu::Group::get( auth, Test_group_id, true )
     is_successed( response )
   end
 

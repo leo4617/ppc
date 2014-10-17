@@ -5,15 +5,22 @@ module PPC
       class Creative< Baidu
         Service = 'Creative'
 
-        # introduce request to this namespace
-        def self.request(auth, service, method, params = {} )
-          ::PPC::API::Baidu::request(auth, service, method, params )
-        end
-
         def self.add( auth, creatives, test = false )
           body = { creativeTypes: make_creativetype( creatives ) }
           response = request( auth, Service, 'addCreative', body )
           return response if test else process( response, 'creativeTypes' )
+        end
+
+        def self.get( auth, ids,  getTemp = 0, test = false  )
+          '''
+          \'getCreativeByCreativeId\'
+          @ input : creative ids
+          @ output: creative informations
+          '''
+          ids = [ ids ] unless ids.is_a? Array
+          body = { creativeIds: ids, getTemp: getTemp }
+          response = request( auth, Service, 'getCreativeByCreativeId', body )
+          return response if test else process( response, 'result' )['creativeTypes']
         end
 
         def self.update( auth, creatives, test = false )
@@ -55,9 +62,11 @@ module PPC
           return response if test else process( response, 'CreativeStatus' )
         end
 
-        def self.search_id_by_group_id( auth, ids,  getTemp = 0, test = false )
+        def self.get_by_group_id( auth, ids,  getTemp = 0, test = false )
           '''
-          getTemp 
+          \'getCreativeIdByAdgroupId\'
+          @ input: group ids
+          @ output:  groupCreativeIds
           '''
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids, getTemp: getTemp }
@@ -70,13 +79,6 @@ module PPC
           body = { adgroupIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCreativeByAdgroupId', body )
           return response if test else process( response, 'groupCreatives' )
-        end
-
-        def self.search_by_creative_id( auth, ids,  getTemp = 0, test = false  )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { creativeIds: ids, getTemp: getTemp }
-          response = request( auth, Service, 'getCreativeByCreativeId', body )
-          return response if test else process( response, 'result' )['creativeTypes']
         end
 
         private 

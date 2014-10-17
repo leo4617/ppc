@@ -10,12 +10,19 @@ module PPC
           ::PPC::API::Baidu::request(auth, service, method, params )
         end
 
-        def self.all(auth, test = false )
+        def self.ids(auth, test = false )
           """
           @return : Array of campaignAdgroupIds
           """
           response = request( auth, Service , "getAllAdgroupId" )
-          return response if test else response['body']["campaignAdgroupIds"]
+          process( response, 'campaignAdgroupIds', test ){}
+        end
+
+        def self.get( auth, ids, test = false )
+          ids = [ ids ] unless ids.is_a? Array
+          body = { adgroupIds: ids }
+          response = request(auth, Service, "getAdgroupByAdgroupId",body )
+          process( response, 'adgroupTypes', test ){}
         end
 
         def self.add( auth, groups, test = false )
@@ -28,7 +35,7 @@ module PPC
           body = {adgroupTypes:  adgrouptypes }
           
           response = request( auth, Service, "addAdgroup", body  )
-          return response if  test else  response['body']['adgroupTypes'] 
+          process( response, 'adgroupTypes', test ){} 
         end
 
         def self.update( auth, groups, test = false )
@@ -40,36 +47,37 @@ module PPC
           body = {adgroupTypes: adgrouptypes}
           
           response = request( auth, Service, "updateAdgroup",body )
-          return response if test else  response['body']['adgroupTypes']
+          process( response, 'adgroupTypes', test ){}
         end
 
         def self.delete( auth, ids, test = false )
           """
-          目前没办法返回header
+          奇怪的返回模式，没有任何信息
           """
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids }
-
           response = request( auth, Service,"deleteAdgroup", body )
-          if !test
-            return response[ 'header' ][ 'desc' ] == 'success'
-          else 
-            return response
+          
+          # 只能将process方法修改下放到这里
+          if test 
+            return response 
+          elsif response['header']['desc'] == 'success'
+            return ture
+          else
+            result = {}
+            result[:desc] = response['header']['desc']
+            result[:faliure] = response['header']['failures']
+            result[:value] = ''
+            return result
           end
+
         end
 
         def self.search_by_plan_id( auth, ids, test = false )
           ids = [ ids ] unless ids.class == Array
           body = { campaignIds: ids }
           response = request( auth, Service ,"getAdgroupByCampaignId",  body )
-          return response if test else response['body']["campaignAdgroups"]
-        end
-
-        def self.search_by_group_id( auth, ids, test = false )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { adgroupIds: ids }
-          response = request(auth, Service, "getAdgroupByAdgroupId",body )
-          return response if test else response['body']["adgroupTypes"]
+          process( response, 'campaignAdgroups', test ){ |x| x}
         end
 
         private
@@ -94,6 +102,11 @@ module PPC
             }
             return adgrouptypes
         end #make_adgrouptype
+
+        def self.reverse_adgrouptype( types )
+        
+
+        end
 
       end # class group
     end # class baidu
