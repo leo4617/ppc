@@ -27,12 +27,7 @@ module PPC
         call('plan').add(@auth,plans)
       end
 
-      def update_plan(id,plan)
-        plan[:id] = id
-        call('plan').update(@auth,plan)
-      end
-
-      def update_plans(plans)
+      def update_plan(plans)
         call('plan').update(@auth,plans)
       end
 

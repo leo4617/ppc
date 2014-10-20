@@ -18,7 +18,7 @@ module PPC
     end
 
     def call(service)
-      Object.const_get "::PPC::API::#{@se.capitalize}::#{service.capitalize}"
+      eval "::PPC::API::#{@se.capitalize}::#{service.capitalize}"
     end
 
     def download(params = {})
