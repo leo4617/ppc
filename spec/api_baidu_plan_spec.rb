@@ -17,7 +17,7 @@ describe ::PPC::API::Baidu::Plan do
   end 
 
   it "can add plan" do
-    test_plan = { name: "test_plan", negative: ["test"] }
+    test_plan = { name: "test_plan1", negative: ["test"] }
     response = ::PPC::API::Baidu::Plan::add( auth, test_plan, true )
     is_successed( response )
     Test_plan_id << response['body']['campaignTypes'][0]['campaignId']

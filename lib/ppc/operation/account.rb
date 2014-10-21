@@ -4,13 +4,16 @@ module PPC
       include ::PPC::Operation
 
       def info
-        call('account').info(@auth)
+        info = call('account').info(@auth)
+        @id = info[:result][0][:id] if @id == nil
+        return info
       end
 
       def update(account)
-        call('account').info(@auth,account)
+        call('account').update(@auth,account)
       end
 
+      # plan methods
       def plans
         call('plan').all(@auth)
       end
@@ -31,22 +34,29 @@ module PPC
         call('plan').update(@auth,plans)
       end
 
-      def delete_plans(ids)
+      def delete_plan(ids)
         call('plan').delete(@auth,ids)
       end
 
-      def group_ids
-        call('group').all
+      # group methods
+      def add_group(group)
+        call('group').add(@auth,group)
       end
 
-      def update_group(id,group)
-        group[:id] = id
+      def update_group(group)
         call('group').update(@auth,group)
       end
 
-      def update_groups(groups)
-        call('groups').update(@auth,groups)
+      def delete_group(ids)
+        call('group').delete(@auth,ids)
       end
+
+      def get_group(ids)
+        call('group').get(@auth,ids)
+      end
+
+      # keyword method
+
     end
   end
 end

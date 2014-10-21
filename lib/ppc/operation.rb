@@ -7,6 +7,9 @@ require 'ppc/operation/key'
 
 module PPC
   module Operation
+
+    attr_accessor :id
+    
     def initialize(params)
       @id   = params[:id]
       @se   = params[:se]
@@ -66,7 +69,7 @@ module PPC
         #   raise "unknown desc from baidu: #{@desc}"
         # end
         raise BulkException.new(file_id,bulk)
-      end
+      end  
 
       return false
     end

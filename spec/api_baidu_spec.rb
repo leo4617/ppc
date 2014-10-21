@@ -20,8 +20,12 @@ describe ::PPC::API::Baidu do
   Expected_failure_result = ["code", "message", "position", "content"] 
 
   it 'can process response' do
-    response = ::PPC::API::Baidu::process( response, 'accountInfoType' ){|x| ::PPC::API::Baidu::Account::reverse_info_type(x)}
-    expect( response.keys ).to eq Expected_success_result
+    response = ::PPC::API::Baidu::process( response, 'accountInfoType' ){|x| ::PPC::API::Baidu::Account::reverse_type(x)}
+    
+    p "HAHA"*12
+    p response
+
+    expect( response[:result][0].keys ).to eq Expected_success_result
   end
 
   # params for make_type and reverse_type test

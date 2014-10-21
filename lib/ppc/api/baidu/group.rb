@@ -17,11 +17,6 @@ module PPC
                         [:reserved, :reserved]
                       ]
 
-        # introduce request to this namespace
-        def self.request(auth, service, method, params = {} )
-          ::PPC::API::Baidu::request(auth, service, method, params )
-        end
-
         def self.ids(auth, test = false )
           """
           @return : Array of campaignAdgroupIds
@@ -89,31 +84,39 @@ module PPC
           ids = [ ids ] unless ids.class == Array
           body = { campaignIds: ids }
           response = request( auth, Service ,"getAdgroupByCampaignId",  body )
-          process( response, 'campaignAdgroups', test ){ |x| x }
+          process( response, 'campaignAdgroups', test ){ |x| make_planGroups( x ) }
         end
 
-        # private
-        # def self.make_adgrouptype( params )
-        #     params = [ params ] unless params.is_a? Array
-        #     adgrouptypes = []
+        def self.search_id_by_plan_id( auth, ids, test = false )
+          ids = [ ids ] unless ids.class == Array
+          body = { campaignIds: ids }
+          response = request( auth, Service ,"getAdgroupIdByCampaignId",  body )
+          process( response, 'campaignAdgroupIds', test ){ |x| make_planGroupIds( x ) }
+        end
 
-        #     params.each{  | param | 
-        #       adgrouptype = {}
+        private
+        def self.make_planGroupIds( campaignAdgroupIds )
+          planGroupIds = []
+          campaignAdgroupIds.each do |campaignAdgroupId|
+            planGroupId = { }
+            planGroupId[:plan_id] = campaignAdgroupId['campaignId']
+            planGroupId[:group_ids] = campaignAdgroupId['adgroupIds']
+            planGroupIds << planGroupId
+          end
+          return planGroupIds
+        end
 
-        #       adgrouptype[:campaignId]                  =   param[:plan_id]                 if    param[:plan_id] 
-        #       adgrouptype[:adgroupId]                    =   param[:id]                           if    param[:id] 
-        #       adgrouptype[:adgroupName]             =   param[:name]                    if    param[:name] 
-        #       adgrouptype[:maxPrice]                      =   param[:price]                     if    param[:price] 
-        #       adgrouptype[:negativeWords]            =   param[:negative]               if    param[:negative]
-        #       adgrouptype[:exactNegativeWords]  =   param[:exact_negative]    if    param[:exact_negative] 
-        #       adgrouptype[:pause]                            =   param[:pause]                    if    param[:pause] 
-        #       adgrouptype[:status]                            =   param[:status]                    if    param[:status] 
-        #       adgrouptype[:reserved]                       =   param[:reserved]               if    param[:reserved] 
-              
-        #       adgrouptypes << adgrouptype
-        #     }
-        #     return adgrouptypes
-        # end #make_adgrouptype
+        private
+        def self.make_planGroups( campaignAdgroups )
+          planGroups = []
+          campaignAdgroups.each do |campaignAdgroup|
+            planGroup = {}
+            planGroup[:plan_id] = campaignAdgroup['campaignId']
+            planGroup[:groups] = reverse_type( campaignAdgroup['adgroupTypes'] )
+            planGroups << planGroup
+          end
+          return planGroups
+        end
 
       end # class group
     end # class baidu

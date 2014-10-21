@@ -4,8 +4,8 @@ describe ::PPC::API::Baidu::Creative do
   auth[:password] = $baidu_password 
   auth[:token] = $baidu_token
 
-  Test_group_id = ::PPC::API::Baidu::Group::all( auth )[0]['adgroupIds'][0]
-  Test_plan_id = ::PPC::API::Baidu::Plan::all( auth )[0]['campaignId']
+  Test_group_id = ::PPC::API::Baidu::Group::all( auth )[:result][0]['adgroupIds'][0]
+  Test_plan_id = ::PPC::API::Baidu::Plan::all( auth )[:result][0]['campaignId']
   Test_creative_id = []
 
  it 'can add creative' do

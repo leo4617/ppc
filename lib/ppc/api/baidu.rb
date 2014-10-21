@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 require 'ppc/api/baidu/account'
 require 'ppc/api/baidu/plan'
 require 'ppc/api/baidu/bulk'
@@ -48,23 +49,19 @@ module PPC
         Process Http response. If operation successes, return value of given keys.
         You can process the result using function &func, or do nothing by passing 
         block {|x|x}
-        
-        If operation success, return value of given key( processed ) in body.
-
-        If opeartion fail, reutrn a hash, stored the desc, failure, and the result
-       key( processed )  ]
+        =========================== 
+        @Output: resultType{ desc: boolean, failure: Array,  result: Array }
+        failure is the failures part of response\'s header
+        result is the processed response body.
         '''
-        if test 
-          return response 
-        elsif response['header']['desc'] == 'success'
-          return func[ response['body'][ key ] ]
-        else
-          result = {}
-          result[:desc] = response['header']['desc']
-          result[:faliure] = response['header']['failures']
-          result[:value] = func[ response['body'][ key ] ]
-          return result
-        end
+        # 保留test功能以对旧spec代码实现兼容
+        return response if test
+
+        result = {}
+        result[:desc] = response['header']['desc']=='success'? true : false
+        result[:failure] = response['header']['failures']
+        result[:result] = func[ response['body'][key] ]
+        return result
       end # process
 
       def self.make_type( params, map = @map)

@@ -31,6 +31,11 @@ describe ::PPC::API::Baidu::Group do
     response = ::PPC::API::Baidu::Group::get( auth, Test_group_id, true )
     is_successed( response )
   end
+  
+  it 'can search group id by group id' do
+    response = ::PPC::API::Baidu::Group::search_id_by_plan_id( auth, Test_plan_id, true )
+    is_successed( response )
+  end
 
   it 'search by plan id' do 
     response = ::PPC::API::Baidu::Group::search_by_plan_id( auth, Test_plan_id, true )
