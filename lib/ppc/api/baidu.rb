@@ -58,7 +58,7 @@ module PPC
         return response if test
 
         result = {}
-        result[:desc] = response['header']['desc']=='success'? true : false
+        result[:succ] = response['header']['desc']=='success'? true : false
         result[:failure] = response['header']['failures']
         result[:result] = func[ response['body'][key] ]
         return result

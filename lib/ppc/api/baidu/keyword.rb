@@ -22,6 +22,17 @@ module PPC
                             [:phrase_type,:phraseType]
                         ]
 
+        # 后面改成info方法
+        def self.get( auth, ids, test = false )
+          '''
+          getKeywordByKeywordId
+          '''
+          ids = [ ids ] unless ids.is_a? Array
+          body = { keywordIds: ids}
+          response = request( auth, Service, 'getKeywordByKeywordId', body )
+          return process(response, 'keywordTypes', test){|x| reverse_type( x ) }
+        end
+
         def self.add( auth, keywords, test = false )
           '''
           '''
@@ -67,7 +78,14 @@ module PPC
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { adgroupIds: group_ids }
           response = request( auth, Service, "getKeywordByAdgroupId", body )
-          return process(response, 'groupKeywordIds', test){|x| x }
+          return process(response, 'groupKeywords', test){|x| make_groupKeywords( x ) }
+        end
+
+        def self.search_id_by_group_id( auth, group_ids, test = false  )
+          group_ids = [ group_ids ] unless group_ids.is_a? Array
+          body = { adgroupIds: group_ids }
+          response = request( auth, Service, "getKeywordIdByAdgroupId", body )
+          return process(response, 'groupKeywordIds', test){|x| make_groupKeywordIds( x ) }
         end
 
         # 下面三个操作操作对象包括计划，组和关键字
@@ -76,19 +94,8 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type]}
           response = request( auth, Service, 'getKeywordStatus', body )
-          return process(response, 'keywordStatus', test){|x| x }
+          return process(response, 'keywordStatus', test){|x| reverse_type( x ) }
         end
-
-        # 质量度评价标准即将被抛弃，此处失效
-        # def self.quality( auth, ids, type, test  = false )
-        #   '''
-        #   这里百度开发文档和实际返回类型的关键字不同
-        #   '''
-        #   ids = [ ids ] unless ids.is_a? Array
-        #   body = { ids: ids, type: Type[type]}
-        #   response = request( auth, Service, 'getKeywordQuality', body )
-        #   return process(response, 'qualities', test){|x| x }
-        # end
 
         def self.quality( auth ,ids, type, device, test = false )
           '''
@@ -98,6 +105,30 @@ module PPC
           body = { ids: ids, type: Type[type], device:Device[device] }
           response = request( auth, Service, 'getKeyword10Quality', body )
           return process(response, 'keyword10Quality', test){|x| x }
+        end
+
+        private
+        def self.make_groupKeywordIds( groupKeywordIds )
+          group_keyword_ids = []
+          groupKeywordIds.each do |groupKeywordId|
+            group_keyword_id = { }
+            group_keyword_id[:group_id] = groupKeywordId['adgroupIds']
+            group_keyword_id[:keyword_ids] = groupKeywordId['keywordIds']
+            group_keyword_ids << group_keyword_id
+          end
+          return group_keyword_ids
+        end
+
+        private
+        def self.make_groupKeywords( groupKeywords )
+          group_keywords = []
+          groupKeywords.each do |groupKeyword|
+            group_keyword = {}
+            group_keyword[:group_id] = groupKeyword['adgroupId']
+            group_keyword[:keywords] = reverse_type( groupKeyword['keywordTypes'] )
+            group_keywords << group_keyword
+          end
+          return group_keywords
         end
 
         # Override
@@ -133,7 +164,7 @@ module PPC
                    value = type[ key[1].to_s ]
                   param[ key[0] ] = Match_type_r[ value ] if value                 
                 else
-                  value = type[ key[0] ]
+                  value = type[ key[1].to_s ]
                   param[ key[0] ] = value if value
                 end
               end # map.each

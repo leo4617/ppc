@@ -22,7 +22,7 @@ module PPC
           @return : Array of campaignAdgroupIds
           """
           response = request( auth, Service , "getAllAdgroupId" )
-          process( response, 'campaignAdgroupIds', test ){ |x| x }
+          process( response, 'campaignAdgroupIds', test ){ |x| make_planGroupIds( x ) }
         end
 
         def self.get( auth, ids, test = false )
@@ -59,25 +59,12 @@ module PPC
 
         def self.delete( auth, ids, test = false )
           """
-          奇怪的返回模式，没有任何信息
+          delete group body has no message
           """
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids }
           response = request( auth, Service,"deleteAdgroup", body )
-          
-          # 只能将process方法修改下放到这里
-          if test 
-            return response 
-          elsif response['header']['desc'] == 'success'
-            return ture
-          else
-            result = {}
-            result[:desc] = response['header']['desc']
-            result[:faliure] = response['header']['failures']
-            result[:value] = ''
-            return result
-          end
-
+          process( response, 'nil', test ){ |x|  x  }
         end
 
         def self.search_by_plan_id( auth, ids, test = false )

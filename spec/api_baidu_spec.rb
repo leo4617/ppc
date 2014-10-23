@@ -47,7 +47,7 @@ describe ::PPC::API::Baidu do
   test_param[ :id] = 123
   test_param[ :name] = 'testplan'
   test_param[ :exclude_ip] =  [321,5432,52,1]
-  test_param[ :exact_negative] = ['wu','liaode']
+  test_param[ :exact_negative] = ['test','plan']
 
   expected_type = [{:campaignId=>123, :campaignName=>"testplan", :excludeIp=>[321, 5432, 52, 1], :exactNegativeWords=>["wu", "liaode"]}]
   expexted_params = [{:id=>123, :name=>"test_plan", :exclude_ip=>[321, 5432, 52, 1], :exact_negative=>["wu", "liaode"]}]

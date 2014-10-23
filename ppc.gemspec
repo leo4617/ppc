@@ -5,8 +5,8 @@ require 'ppc'
 Gem::Specification.new do |spec|
   spec.name          = "ppc"
   spec.version       = PPC::VERSION
-  spec.authors       = ["charles"]
-  spec.email         = ["charles.liu@corp.elong.com"]
+  spec.authors       = ["Chienli Ma, 刘梦晨， 刘明"]
+  spec.email         = ["maqianlie@gmail.com, liuyu_tc@163.com, seoaqua@qq.com"]
   spec.summary       = %q{ppc api for  baidu qihu sogou}
   spec.description   = %q{ppc api for  baidu qihu sogou}
   spec.homepage      = "http://github.com/seoaqua/ppc"

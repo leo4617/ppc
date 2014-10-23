@@ -7,14 +7,15 @@ describe ::PPC::API::Baidu::Creative do
   Test_group_id = ::PPC::API::Baidu::Group::all( auth )[:result][0]['adgroupIds'][0]
   Test_plan_id = ::PPC::API::Baidu::Plan::all( auth )[:result][0]['campaignId']
   Test_creative_id = []
+  Test_domain = $baidu_domain
 
  it 'can add creative' do
     creative = { group_id: Test_group_id, 
-                        title: 'ElongTest', preference:1, 
+                        title: 'Test', preference:1, 
                         description1:'this is rest',
                         description2:'also is a test',
-                        pc_destination:'www.elong.com',
-                        pc_display:'www.elong.com' }
+                        pc_destination:Test_domain,
+                        pc_display:Test_domain }
 
     response = ::PPC::API::Baidu::Creative::add( auth, creative, true )
     is_successed( response )

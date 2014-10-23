@@ -8,20 +8,22 @@ describe ::PPC::API::Baidu::Keyword do
   Test_plan_id = ::PPC::API::Baidu::Plan::all( auth )[:result][0]['campaignId']
   Test_keyword_id = []
 
+  Test_domain = @baidu_domain
+
   it 'can search keyword by group id' do
     response = ::PPC::API::Baidu::Keyword::search_by_group_id( auth, Test_group_id, true )
     is_successed( response )
   end
 
   it 'can add keyword' do
-    keyword = { group_id: Test_group_id, keyword: 'ElongTest', match_type:'exact' }
+    keyword = { group_id: Test_group_id, keyword: 'Test', match_type:'exact' }
     response = ::PPC::API::Baidu::Keyword::add( auth, keyword, true )
     is_successed( response )
     Test_keyword_id << response['body']['keywordTypes'][0]['keywordId']
   end
 
   it 'can update keyword' do
-    update = { id:Test_keyword_id[0],  pc_destination:'www.elong.com',pause:true} 
+    update = { id:Test_keyword_id[0],  pc_destination: Test_domain, pause:true} 
     response = ::PPC::API::Baidu::Keyword::update( auth, update, true )
     is_successed( response )
   end

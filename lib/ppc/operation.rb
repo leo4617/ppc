@@ -1,10 +1,3 @@
-require 'ppc/operation/account'
-require 'ppc/operation/group'
-require 'ppc/operation/plan'
-require 'ppc/operation/key'
-
-
-
 module PPC
   module Operation
 
@@ -48,30 +41,121 @@ module PPC
         puts "#{file_id} is ready" if @debug
         return bulk.path(file_id)
       rescue
-        # @header   = bulk.header
-        # @oprs     = bulk.oprs
-        # @oprtime  = bulk.oprtime
-        # @quota    = bulk.quota
-        # @rquota   = bulk.rquota
-        # @status   = bulk.status
-
-        # @desc     = bulk.desc
-
-        # case @desc
-        # when 'success'
-        # when 'failure'
-        #   @code     = bulk.code
-        #   @message  = bulk.message
-        # when 'system failure'
-        #   @code     = bulk.code
-        #   @message  = bulk.message
-        # else
-        #   raise "unknown desc from baidu: #{@desc}"
-        # end
         raise BulkException.new(file_id,bulk)
       end  
 
       return false
     end
-  end
-end
+
+    # ++++++++ #
+    # Lazy Code #
+    # ++++++++ #
+
+    # auxilary fucntion
+    def get_obj( ids, service )
+        '''
+        Return service object. 
+        Providing single id, return single object.
+        Providing multiple ids, return Array of objects
+        '''
+        class_obj =  eval "::PPC::Opeartion::#{service.capitalize}"
+        param = @auth
+        param[:se] = @se
+        objs = []
+
+        ids.each do |id|
+          param[:id] = id
+          objs << class_obj.new( param )
+        end
+
+        return objs[0] if objs.length == 1 else objs 
+    end
+
+    # +++++ Plan opeartion funcitons +++++ #
+    module Plan_operation
+      def get_plan( ids )
+        ::PPC::Opeartion::get_obj( ids, 'plan')
+      end
+
+      def add_plan( plans )
+        call('plan').add(@auth,plans)
+      end
+
+      def update_plan( plans )
+        call('plan').update(@auth,plans)
+      end
+
+      def delete_plan( ids )
+        call('plan').delete(@auth,ids)
+      end
+    end
+
+    # +++++ Group opeartion funcitons +++++ #
+    module Group_operation
+      def get_group( ids )
+        ::PPC::Opeartion::get_obj( ids, 'group')
+      end
+
+      def add_group( groups )
+        call('group').add(@auth,groups )
+      end
+
+      def update_group( groups )
+        call('group').update( @auth, groups )
+      end
+
+      def delete_group( ids )
+        call('group').delete( @auth, ids )
+      end
+    end
+
+    # +++++ Keyword opeartion funcitons +++++ #
+    module Keyword_operation
+      def get_keyword( ids )
+        ::PPC::Opeartion::get_obj( ids, 'keyword')
+      end
+      
+      def add_keyword( keywords )
+        call('keyword').add( @auth, keywords )
+      end
+
+      def update_keyword( keywords)
+        call('keyword').update( @auth, keywords )
+      end
+
+      def delete_keyword( ids )
+         call('keyword').delete( @auth, ids )
+      end
+    end
+
+    # +++++ Creative opeartion funcitons +++++ #
+    module Creative_operation
+      def get_creative( ids )
+        ::PPC::Opeartion::get_obj( ids, 'creative')
+      end
+      
+      def add_creative( creatives )
+        call('creative').add( @auth, creatives )
+      end
+
+      def update_creative( creatives )
+        call('creative').update( @auth, creatives )
+      end
+
+      def delete_creative( ids )
+        call('creative').delete( @auth, ids )
+      end
+    end
+
+  end # Opeartion
+end # PPC
+
+# requires are moved to the end of the file
+# because if we load files before defining the 
+# module ::PPC::Operation. Errors of 'uninitialized constance'
+# will occur
+require 'ppc/operation/account'
+require 'ppc/operation/group'
+require 'ppc/operation/plan'
+require 'ppc/operation/keyword'
+require 'ppc/operation/creative'

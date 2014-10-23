@@ -76,7 +76,7 @@ module PPC
           process( response, 'CreativeStatus', test ){ |x| x }
         end
 
-        def self.get_by_group_id( auth, ids,  getTemp = 0, test = false )
+        def self.search_id_by_group_id( auth, ids,  getTemp = 0, test = false )
           '''
           \'getCreativeIdByAdgroupId\'
           @ input: group ids
@@ -85,38 +85,39 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCreativeIdByAdgroupId', body )
-          process( response, 'groupCreativeIds', test ){ |x| x }
+          process( response, 'groupCreativeIds', test ){ |x| make_groupCreativeIds( x ) }
         end
 
         def self.search_by_group_id( auth, ids,  getTemp = 0, test = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCreativeByAdgroupId', body )
-          process( response, 'groupCreatives', test ){ |x| x }
+          process( response, 'groupCreatives', test ){ |x| make_groupCreatives( x ) }
         end
 
-        # private 
-        # def self.make_creativetype( params )
-        #   params = [ params ] unless params.is_a? Array
-        #   creativetypes = []
-        #   params.each{  |param| 
-        #     creativetype = {}
-        #     creativetype[:creativeId]                       =    param[:id]                                 if    param[:id] 
-        #     creativetype[:adgroupId]                      =     param[:group_id]                    if     param[:group_id] 
-        #     creativetype[:title]                                  =     param[:title]                            if     param[:title]  
-        #     creativetype[:description1]                   =     param[:description1]            if     param[:description1]  
-        #     creativetype[:description2]                   =     param[:description2]            if     param[:description2]
-        #     creativetype[:pcDestinationUrl]           =     param[:pc_destination]         if     param[:pc_destination] 
-        #     creativetype[:pcDisplayUrl]                   =     param[:pc_display]                if     param[:pc_display]   
-        #     creativetype[:mobileDestinationUrl]   =     param[:moile_destination]   if     param[:moile_destination]
-        #     creativetype[:mobileDisplayUrl]           =     param[:mobile_display]        if     param[:mobile_display]  
-        #     creativetype[:pause]                               =     param[:pause]                        if     param[:pause]    
-        #     creativetype[:devicePreference]           =     param[:preference]              if     param[:preference] 
-            
-        #     creativetypes << creativetype
-        #   }
-        #   return creativetypes
-        # end
+        private
+        def self.make_groupCreativeIds( groupCreativeIds )
+          group_creative_ids = []
+          groupCreativeIds.each do |groupCreativeId|
+            group_creative_id = { }
+            group_creative_id[:group_id] = groupCreativeId['adgroupIds']
+            group_creative_id[:creative_ids] = groupCreativeId['creativeIds']
+            group_creative_ids << group_creative_id
+          end
+          return group_creative_ids
+        end
+
+        private
+        def self.make_groupCreatives( groupCreatives )
+          group_creatives = []
+          groupCreative.each do |groupKeyword|
+            group_creative = {}
+            group_creative[:group_id] = groupCreative['adgroupId']
+            group_creative[:keywords] = reverse_type( groupCreative['keywordTypes'] )
+            group_creatives << group_creative
+          end
+          return group_creatives
+        end
 
       end
     end

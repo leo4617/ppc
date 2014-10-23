@@ -1,3 +1,4 @@
+require 'ppc/operation'
 module PPC
   module Operation
     class Account
@@ -22,40 +23,17 @@ module PPC
         call('plan').ids(@auth)
       end
 
-      def get_plan(ids)
-        call('plan').get(@auth,ids)
-      end
+      # plan operation
+      include ::PPC::Operation::Plan_operation
 
-      def add_plan(plans)
-        call('plan').add(@auth,plans)
-      end
+      # group opeartion
+      include ::PPC::Operation::Group_operation
 
-      def update_plan(plans)
-        call('plan').update(@auth,plans)
-      end
+      # keyword opeartion
+      include ::PPC::Operation::Keyword_operation
 
-      def delete_plan(ids)
-        call('plan').delete(@auth,ids)
-      end
-
-      # group methods
-      def add_group(group)
-        call('group').add(@auth,group)
-      end
-
-      def update_group(group)
-        call('group').update(@auth,group)
-      end
-
-      def delete_group(ids)
-        call('group').delete(@auth,ids)
-      end
-
-      def get_group(ids)
-        call('group').get(@auth,ids)
-      end
-
-      # keyword method
+      # creative opeartion
+      include ::PPC::Operation::Creative_operation
 
     end
   end
