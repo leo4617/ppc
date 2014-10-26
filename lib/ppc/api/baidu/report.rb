@@ -15,16 +15,11 @@ module PPC
         Device_map = { 'all' => 0, 'pc' => 1, 'mobile' => 2 }
         Unit_map = { 'day' => 5, 'week' => 4, 'month' => 3, 'year' => 1, 'hour' => 7 }
 
-        # introduce request to this namespace
-        def self.request(auth, service, method, params = {} )
-          ::PPC::API::Baidu::request(auth, service, method, params )
-        end
-
-        def self.get_realtime( auth, params, type = 'data', test = false )
+        def self.get_realtime( auth, params, type = 'data', debug = false )
           request = make_realtimerequest( params )[0]
           body = { realTimeRequestTypes:  request }
           response = request( auth, Service, 'getRealTimeData' ,body)
-          if test
+          if debug
             return response
           end
 
@@ -37,31 +32,27 @@ module PPC
         end
 
 
-        def self.get_id( auth, params, test = false )
+        def self.get_id( auth, params, debug = false )
           request = make_reportrequest( params )[0]
           body =  { reportRequestType:  request }
           response = request( auth, Service, 'getProfessionalReportId' ,body) 
-          return response if test else response['body']['reportId'] 
+          process( response, 'reportId', debug ){ |x| x }
         end
 
-        def self.get_status( auth, id, test = false)
+        def self.get_status( auth, id, debug = false)
           '''
           input id should be string
           '''
           status = {1=>'Waiting' ,2=>'Opearting' ,3=>'Finished'}
           body = { reportId:  id }
           response = request( auth, Service, 'getReportState' ,body)
-          
-          if test
-            return response
-          end
-          return status[ response['body']['isGenerated']  ]
+          process( response, 'isGenerated', debug ){ |x| status[x] }
         end
 
-        def self.get_file_url( auth, id, test = false )
+        def self.get_file_url( auth, id, debug = false )
           body = { reportId:  id }
           response = request( auth, Service, 'getReportFileUrl' ,body)
-          return response if test else response['body']['reportFilePath']       
+          process( response, 'reportFilePath', debug ){ |x| x }       
         end
 
         private
