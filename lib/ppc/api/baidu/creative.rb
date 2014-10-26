@@ -19,13 +19,13 @@ module PPC
                         [:preference,:devicePreference] 
                       ]
 
-        def self.add( auth, creatives, test = false )
+        def self.add( auth, creatives, debug = false )
           body = { creativeTypes: make_type( creatives ) }
           response = request( auth, Service, 'addCreative', body )
-          process( response, 'creativeTypes', test ){ |x| reverse_type(x) }
+          process( response, 'creativeTypes', debug ){ |x| reverse_type(x) }
         end
 
-        def self.get( auth, ids,  getTemp = 0, test = false  )
+        def self.get( auth, ids,  getTemp = 0, debug = false  )
           '''
           \'getCreativeByCreativeId\'
           @ input : creative ids
@@ -34,33 +34,33 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { creativeIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCreativeByCreativeId', body )
-          process( response, 'creativeTypes', test ){ |x| reverse_type(x) }
+          process( response, 'creativeTypes', debug ){ |x| reverse_type(x) }
         end
 
-        def self.update( auth, creatives, test = false )
+        def self.update( auth, creatives, debug = false )
           '''
           根据实际使用情况，更新的时候creative title为必填选
           '''
           body = { creativeTypes: make_type( creatives ) }
           response = request( auth, Service, 'addCreative', body )
-          process( response, 'creativeTypes', test ){ |x| reverse_type(x) }
+          process( response, 'creativeTypes', debug ){ |x| reverse_type(x) }
         end
 
-        def self.delete( auth, ids, test = false )
+        def self.delete( auth, ids, debug = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { creativeIds: ids }
           response = request( auth, Service, 'deleteCreative', body )
-          process( response, 'result', test ){ |x| x }
+          process( response, 'result', debug ){ |x| x }
         end
 
-        def self.activate( auth, ids, test = false )
+        def self.activate( auth, ids, debug = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { creativeIds: ids }
           response = request( auth, Service, 'activateCreative', body )
-          process( response, 'creativeTypes', test ){ |x| reverse_type(x) }
+          process( response, 'creativeTypes', debug ){ |x| reverse_type(x) }
         end
 
-        def self.status( auth, ids, type, test = false )
+        def self.status( auth, ids, type, debug = false )
           ids = [ ids ] unless ids.is_a? Array
           
           type = case type
@@ -73,10 +73,10 @@ module PPC
 
           body = { ids: ids, type: type }
           response = request( auth, Service, 'getCreativeStatus', body )
-          process( response, 'CreativeStatus', test ){ |x| x }
+          process( response, 'CreativeStatus', debug ){ |x| x }
         end
 
-        def self.search_id_by_group_id( auth, ids,  getTemp = 0, test = false )
+        def self.search_id_by_group_id( auth, ids,  getTemp = 0, debug = false )
           '''
           \'getCreativeIdByAdgroupId\'
           @ input: group ids
@@ -85,14 +85,14 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCreativeIdByAdgroupId', body )
-          process( response, 'groupCreativeIds', test ){ |x| make_groupCreativeIds( x ) }
+          process( response, 'groupCreativeIds', debug ){ |x| make_groupCreativeIds( x ) }
         end
 
-        def self.search_by_group_id( auth, ids,  getTemp = 0, test = false )
+        def self.search_by_group_id( auth, ids,  getTemp = 0, debug = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCreativeByAdgroupId', body )
-          process( response, 'groupCreatives', test ){ |x| make_groupCreatives( x ) }
+          process( response, 'groupCreatives', debug ){ |x| make_groupCreatives( x ) }
         end
 
         private

@@ -17,9 +17,11 @@ describe ::PPC::API::Baidu::Creative do
                         pc_destination:Test_domain,
                         pc_display:Test_domain }
 
-    response = ::PPC::API::Baidu::Creative::add( auth, creative, true )
-    is_successed( response )
-    Test_creative_id << response['body']['creativeTypes'][0]['creativeId']
+    response = ::PPC::API::Baidu::Creative::add( auth, creative )
+    is_success( response )
+    p "HAHAHAAHAH Creative"
+    p response
+    Test_creative_id << response[:result][0][:id]
   end
 
   # # 此测试未能通过，总是会出现莫名其妙的错误。
@@ -33,37 +35,37 @@ describe ::PPC::API::Baidu::Creative do
   # end
 
   it 'can activate creative' do
-    response = ::PPC::API::Baidu::Creative::activate( auth, Test_creative_id, true )
-    is_successed( response )
+    response = ::PPC::API::Baidu::Creative::activate( auth, Test_creative_id )
+    is_success( response )
   end
 
   it 'can get status' do
-    response1 = ::PPC::API::Baidu::Creative::status( auth, Test_group_id, 'group', true )
-    response2 = ::PPC::API::Baidu::Creative::status( auth, Test_creative_id, 'creative', true )
-    response3 = ::PPC::API::Baidu::Creative::status( auth, Test_plan_id, 'plan', true )
-    is_successed( response1 ) 
-    is_successed( response2 ) 
-    is_successed( response3 ) 
+    response1 = ::PPC::API::Baidu::Creative::status( auth, Test_group_id, 'group' )
+    response2 = ::PPC::API::Baidu::Creative::status( auth, Test_creative_id, 'creative' )
+    response3 = ::PPC::API::Baidu::Creative::status( auth, Test_plan_id, 'plan' )
+    is_success( response1 ) 
+    is_success( response2 ) 
+    is_success( response3 ) 
   end
 
   it 'can search id by group id' do
-    response = ::PPC::API::Baidu::Creative::get_by_group_id( auth, Test_group_id, 0, true )
-    is_successed( response )
+    response = ::PPC::API::Baidu::Creative::get_by_group_id( auth, Test_group_id, 0 )
+    is_success( response )
   end
 
   it 'can search creative by group id' do
-    response = ::PPC::API::Baidu::Creative::search_by_group_id( auth, Test_group_id, 0, true )
-    is_successed( response )
+    response = ::PPC::API::Baidu::Creative::search_by_group_id( auth, Test_group_id, 0 )
+    is_success( response )
   end
 
   it 'can search creative by creative id' do
-    response = ::PPC::API::Baidu::Creative::get( auth, Test_creative_id, 0, true )
-    is_successed( response )
+    response = ::PPC::API::Baidu::Creative::get( auth, Test_creative_id, 0 )
+    is_success( response )
   end
 
   it 'can delete creative' do 
-    response = ::PPC::API::Baidu::Creative::delete( auth, Test_creative_id, true )
-    is_successed( response )
+    response = ::PPC::API::Baidu::Creative::delete( auth, Test_creative_id )
+    is_success( response )
   end
 
 end

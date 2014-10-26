@@ -8,25 +8,25 @@ describe ::PPC::API::Baidu::Report do
 
   it 'can get real time report' do
     param = { type: 'plan', level:'plan',range:'plan',unit:'week',device:'all' }
-    response = ::PPC::API::Baidu::Report::get_realtime( auth, param, 'data', true)
-    is_successed( response )
+    response = ::PPC::API::Baidu::Report::get_realtime( auth, param, 'data' )
+    is_success( response )
   end
 
   it 'can get professional report id' do
     param = { type: 'plan', level:'plan',range:'plan',unit:'week',device:'all' }
-    response = ::PPC::API::Baidu::Report::get_id( auth, param, true)
-    is_successed( response )
-    Test_report_id << response['body']['reportId']
+    response = ::PPC::API::Baidu::Report::get_id( auth, param )
+    is_success( response )
+    Test_report_id << response[:result]['reportId']
   end
 
   it 'can get professional report status' do
-    response = ::PPC::API::Baidu::Report::get_status( auth, Test_report_id[0], true)
-    is_successed( response )
+    response = ::PPC::API::Baidu::Report::get_status( auth, Test_report_id[0] )
+    is_success( response )
   end
 
   it 'can get professional report download URL' do
-    response = ::PPC::API::Baidu::Report::get_file_url( auth, Test_report_id[0], true)
-    is_successed( response )
+    response = ::PPC::API::Baidu::Report::get_file_url( auth, Test_report_id[0] )
+    is_success( response )
   end
 
 end

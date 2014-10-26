@@ -23,53 +23,53 @@ module PPC
                         ]
 
         # 后面改成info方法
-        def self.get( auth, ids, test = false )
+        def self.get( auth, ids, debug = false )
           '''
           getKeywordByKeywordId
           '''
           ids = [ ids ] unless ids.is_a? Array
           body = { keywordIds: ids}
           response = request( auth, Service, 'getKeywordByKeywordId', body )
-          return process(response, 'keywordTypes', test){|x| reverse_type( x ) }
+          return process(response, 'keywordTypes', debug){|x| reverse_type( x ) }
         end
 
-        def self.add( auth, keywords, test = false )
+        def self.add( auth, keywords, debug = false )
           '''
           '''
           keywordtypes = make_type( keywords ) 
           body = { keywordTypes: keywordtypes }
           response = request( auth, Service, "addKeyword", body )
-          return process(response, 'keywordTypes', test){|x| reverse_type(x)  }
+          return process(response, 'keywordTypes', debug){|x| reverse_type(x)  }
         end
 
-        def self.update( auth, keywords, test = false  )
+        def self.update( auth, keywords, debug = false  )
           '''
           '''
           keywordtypes = make_type( keywords ) 
           body = { keywordTypes: keywordtypes }
           response = request( auth, Service, "updateKeyword", body )
-          return process(response, 'keywordTypes', test){|x| reverse_type(x)  }
+          return process(response, 'keywordTypes', debug){|x| reverse_type(x)  }
         end
 
-        def self.delete( auth, ids, test = false )
+        def self.delete( auth, ids, debug = false )
           """
           """
           ids = [ ids ] unless ids.is_a? Array
           body = { keywordIds: ids}
           response = request( auth, Service, 'deleteKeyword', body )
-          return process(response, 'result', test){|x| x }
+          return process(response, 'result', debug){|x| x }
         end
 
-        def self.activate( auth, ids, test =false )
+        def self.activate( auth, ids, debug =false )
           """
           """
           ids = [ ids ] unless ids.is_a? Array
           body = { keywordIds: ids }
           response = request( auth, Service, 'activateKeyword', body)
-          return process(response, 'keywordTypes', test){|x| reverse_type(x)  }
+          return process(response, 'keywordTypes', debug){|x| reverse_type(x)  }
         end
 
-        def self.search_by_group_id( auth, group_ids, test = false  )
+        def self.search_by_group_id( auth, group_ids, debug = false  )
           """
           getKeywordByGroupIds
           @input: list of group id
@@ -78,33 +78,33 @@ module PPC
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { adgroupIds: group_ids }
           response = request( auth, Service, "getKeywordByAdgroupId", body )
-          return process(response, 'groupKeywords', test){|x| make_groupKeywords( x ) }
+          return process(response, 'groupKeywords', debug){|x| make_groupKeywords( x ) }
         end
 
-        def self.search_id_by_group_id( auth, group_ids, test = false  )
+        def self.search_id_by_group_id( auth, group_ids, debug = false  )
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { adgroupIds: group_ids }
           response = request( auth, Service, "getKeywordIdByAdgroupId", body )
-          return process(response, 'groupKeywordIds', test){|x| make_groupKeywordIds( x ) }
+          return process(response, 'groupKeywordIds', debug){|x| make_groupKeywordIds( x ) }
         end
 
         # 下面三个操作操作对象包括计划，组和关键字
         # 不知道放在这里合不合适
-        def self.status( auth, ids, type, test = false )
+        def self.status( auth, ids, type, debug = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type]}
           response = request( auth, Service, 'getKeywordStatus', body )
-          return process(response, 'keywordStatus', test){|x| reverse_type( x ) }
+          return process(response, 'keywordStatus', debug){|x| reverse_type( x ) }
         end
 
-        def self.quality( auth ,ids, type, device, test = false )
+        def self.quality( auth ,ids, type, device, debug = false )
           '''
           Return 10Quanlity *Not the old Quality* of given ketword id
           '''
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type], device:Device[device] }
           response = request( auth, Service, 'getKeyword10Quality', body )
-          return process(response, 'keyword10Quality', test){|x| x }
+          return process(response, 'keyword10Quality', debug){|x| x }
         end
 
         private

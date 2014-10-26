@@ -44,7 +44,7 @@ module PPC
         # return response if with_header else response['body']
       end
 
-      def self.process( response, key , test = false ,  &func)
+      def self.process( response, key , debug = false ,  &func)
         '''
         Process Http response. If operation successes, return value of given keys.
         You can process the result using function &func, or do nothing by passing 
@@ -54,8 +54,8 @@ module PPC
         failure is the failures part of response\'s header
         result is the processed response body.
         '''
-        # 保留test功能以对旧spec代码实现兼容
-        return response if test
+        # 保留 debug 功能
+        return response if debug
 
         result = {}
         result[:succ] = response['header']['desc']=='success'? true : false
