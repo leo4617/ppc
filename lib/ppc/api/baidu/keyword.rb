@@ -22,6 +22,20 @@ module PPC
                             [:phrase_type,:phraseType]
                         ]
 
+        @quality10_map = [
+                                          [ :id, :id ],
+                                          [ :group_id, :adgroupId ],
+                                          [ :plan_id, :Campaigned ],
+                                          [ :pc_quality, :pcQuality ],
+                                          [ :pc_reliable, :pcReliable ],
+                                          [ :pc_reason, :pcReason ],
+                                          [ :pc_scale, :pcScale ],
+                                          [ :mobile_quality, :mobileQuality ],
+                                          [ :mobile_reliable, :mobileReliable ],
+                                          [ :mobile_reason, :mobileReason ],
+                                          [ :mobile_scale, :mobileScale ]
+                                        ]
+
         # 后面改成info方法
         def self.get( auth, ids, debug = false )
           '''
@@ -104,7 +118,7 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type], device:Device[device] }
           response = request( auth, Service, 'getKeyword10Quality', body )
-          return process(response, 'keyword10Quality', debug){|x| x }
+          return process(response, 'keyword10Quality', debug){|x| reverse_type( x, @quality10_map ) }
         end
 
         private

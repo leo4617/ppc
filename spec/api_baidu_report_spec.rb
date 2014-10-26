@@ -16,7 +16,7 @@ describe ::PPC::API::Baidu::Report do
     param = { type: 'plan', level:'plan',range:'plan',unit:'week',device:'all' }
     response = ::PPC::API::Baidu::Report::get_id( auth, param )
     is_success( response )
-    Test_report_id << response[:result]['reportId']
+    Test_report_id << response[:result]
   end
 
   it 'can get professional report status' do
