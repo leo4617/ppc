@@ -80,6 +80,8 @@ end
 
 
 require 'ppc'
+
+$baidu_domain = ''
 $baidu_username = ''
 $baidu_password = ''
 $baidu_token = ''
@@ -89,3 +91,8 @@ $qihu_token = ''
 $sogou_username = ''
 $sogou_password = ''
 $sogou_token = ''
+
+def is_success( result )
+  expect( result[:succ] ).to eq true
+end
+
