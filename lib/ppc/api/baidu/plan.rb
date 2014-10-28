@@ -55,7 +55,7 @@ module PPC
         def self.delete(auth, ids, debug = false )
           ids = [ ids ] unless ids.class == Array
           body = { campaignIds: ids }
-          response = request( auth, 'Campaign', 'deleteCampaign', body)
+          response = request( auth, Service, 'deleteCampaign', body)
           process( response, 'result' , debug ){ |x| x }
         end
        
