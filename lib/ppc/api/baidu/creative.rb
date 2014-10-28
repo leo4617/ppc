@@ -110,10 +110,10 @@ module PPC
         private
         def self.make_groupCreatives( groupCreatives )
           group_creatives = []
-          groupCreative.each do |groupKeyword|
+          groupCreative.each do |groupCreative |
             group_creative = {}
             group_creative[:group_id] = groupCreative['adgroupId']
-            group_creative[:keywords] = reverse_type( groupCreative['keywordTypes'] )
+            group_creative[:creatives] = reverse_type( groupCreative['creativeTypes'] )
             group_creatives << group_creative
           end
           return group_creatives
