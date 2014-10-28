@@ -6,20 +6,20 @@ module PPC
         Service = 'CpcGrp'
 
         @map =[
-                        [:plan_id, :campaignId],
-                        [:id, :adgroupId],
-                        [:name, :adgroupName],
+                        [:plan_id, :cpcPlanId],
+                        [:id, :cpcGrpId],
+                        [:name, :cpcGrpName],
                         [:price, :maxPrice],
                         [:negative, :negativeWords],
                         [:exact_negative, :exactNegativeWords],
                         [:pause, :pause],
                         [:status, :status],
-                        [:reserved, :reserved]
+                        [:opt, :opt]
                       ]
 
         def self.ids(auth, debug = false )
           """
-          @return : Array of campaignAdgroupIds
+          @return : Array of cpcPlanGrpIdTypes
           """
           response = request( auth, Service , "getAllCpcGrpId" )
           process( response, 'cpcPlanGrpIdTypes', debug ){ |x| make_planGroupIds( x ) }
@@ -82,24 +82,24 @@ module PPC
         end
 
         private
-        def self.make_planGroupIds( campaignAdgroupIds )
+        def self.make_planGroupIds( cpcPlanGrpIdTypes )
           planGroupIds = []
-          campaignAdgroupIds.each do |campaignAdgroupId|
+          cpcPlanGrpIdTypes.each do |cpcPlanGrpIdType|
             planGroupId = { }
-            planGroupId[:plan_id] = campaignAdgroupId['campaignId']
-            planGroupId[:group_ids] = campaignAdgroupId['adgroupIds']
+            planGroupId[:plan_id] = cpcPlanGrpIdType[:cpc_plan_id]
+            planGroupId[:group_ids] = cpcPlanGrpIdType[:cpc_grp_ids]
             planGroupIds << planGroupId
           end
           return planGroupIds
         end
 
         private
-        def self.make_planGroups( campaignAdgroups )
+        def self.make_planGroups( cpcPlanGrpTypes )
           planGroups = []
-          campaignAdgroups.each do |campaignAdgroup|
+          cpcPlanGrpTypes.each do |cpcPlanGrpType|
             planGroup = {}
-            planGroup[:plan_id] = campaignAdgroup['campaignId']
-            planGroup[:groups] = reverse_type( campaignAdgroup['adgroupTypes'] )
+            planGroup[:plan_id] = cpcPlanGrpType[:cpc_plan_id]
+            planGroup[:groups] = reverse_type( cpcPlanGrpType[:pc_grp_type] )
             planGroups << planGroup
           end
           return planGroups

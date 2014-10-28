@@ -1,7 +1,7 @@
 module PPC
   module API
-    class Baidu
-      class Account< Baidu
+    class Sogou
+      class Account< Sogou
         Service = 'Account'
 
         @map = [
