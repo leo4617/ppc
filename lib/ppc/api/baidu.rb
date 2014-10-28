@@ -92,7 +92,7 @@ module PPC
 
             map.each do |key|
               value = param[ key[0] ]
-              type[ key[1] ] = value if value
+              type[ key[1] ] = value if value != nil
             end
 
           types << type
@@ -119,7 +119,7 @@ module PPC
           
             map.each do |key|
                 value = type[ key[1].to_s ]
-                param[ key[0] ] = value if value
+                param[ key[0] ] = value if value != nil
             end
 
           params << param
