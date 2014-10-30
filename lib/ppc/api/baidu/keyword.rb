@@ -19,7 +19,9 @@ module PPC
                             [:pc_destination,:pcDestinationUrl],
                             [:mobile_destination,:mobileDestinationUrl],
                             [:match_type,:matchType],
-                            [:phrase_type,:phraseType]
+                            [:phrase_type,:phraseType],
+                            [:status,:status],
+                            [:pause,:pause]
                         ]
 
         @quality10_map = [
