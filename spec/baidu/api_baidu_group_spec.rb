@@ -4,18 +4,16 @@ describe ::PPC::API::Baidu::Group do
   auth[:password] = $baidu_password 
   auth[:token] = $baidu_token
 
-  test_plan_id = []
+  test_plan_id = ::PPC::API::Baidu::Plan.ids(auth)[:result][0]
   test_group_id = []
 
   it 'can get all group' do 
     response = ::PPC::API::Baidu::Group::ids( auth )
-    is_successed( response ) 
-    pair = response['body']['campaignAdgroupIds'][0]
-    test_plan_id << pair['campaignId']
+    is_success( response ) 
   end
 
   it 'can add group' do 
-    group = { name: 'test_group', plan_id:test_plan_id[0], price:500 }
+    group = { name: 'test_group', plan_id:test_plan_id, price:500 }
     response = ::PPC::API::Baidu::Group::add( auth, group )
     is_success( response )
     test_group_id << response[:result][0][:id]
