@@ -15,14 +15,14 @@ module PPC
     class Baidu
 
       @map = nil
-      @debug = false
+      @@debug = false
 
-      def debug_on
-        @debug = true
+      def self.debug_on
+        @@debug = true
       end
 
-      def debug_off
-        @debug = false
+      def self.debug_off
+        @@debug = false
       end
 
       def self.request( auth, service, method, params = {} )
@@ -45,7 +45,7 @@ module PPC
 
         http = Net::HTTP.new(uri.host, 443)
         # 是否显示http通信输出
-        http.set_debug_output( $stdout ) if @debug
+        http.set_debug_output( $stdout ) if @@debug
         http.use_ssl = true
 
         response = http.post(uri.path, http_body, http_header)

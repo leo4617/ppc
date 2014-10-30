@@ -3,7 +3,7 @@ describe ::PPC::API::Baidu::Account do
   auth[:username] = $baidu_username
   auth[:password] = $baidu_password 
   auth[:token] = $baidu_token
-  
+
   it 'can get account info' do
       result = ::PPC::API::Baidu::Account::info( auth )
       is_success( result )

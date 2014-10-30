@@ -42,7 +42,7 @@ module PPC
           根据实际使用情况，更新的时候creative title为必填选
           '''
           body = { creativeTypes: make_type( creatives ) }
-          response = request( auth, Service, 'addCreative', body )
+          response = request( auth, Service, 'updateCreative', body )
           process( response, 'creativeTypes', debug ){ |x| reverse_type(x) }
         end
 
@@ -110,7 +110,7 @@ module PPC
         private
         def self.make_groupCreatives( groupCreatives )
           group_creatives = []
-          groupCreative.each do |groupCreative |
+          groupCreatives.each do |groupCreative |
             group_creative = {}
             group_creative[:group_id] = groupCreative['adgroupId']
             group_creative[:creatives] = reverse_type( groupCreative['creativeTypes'] )

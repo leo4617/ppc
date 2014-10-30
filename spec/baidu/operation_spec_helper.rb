@@ -20,8 +20,6 @@ shared_examples "it can operate sub_objects" do
     method_name = "add_"+object_name
     result = subject.send( method_name.to_sym, add_info )
     is_success( result )
-    p "HAHAHAAAHA"*12
-    p result
     object_id = result[:result][0][:id]
   end
 

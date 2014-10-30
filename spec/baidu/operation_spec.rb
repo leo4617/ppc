@@ -1,4 +1,4 @@
-require 'operation_spec_helper'
+require 'baidu/operation_spec_helper'
 
   Auth =  {}
   Auth[:username] = $baidu_username
@@ -36,7 +36,10 @@ describe ::PPC::Operation::Account do
                                           description2:'also is a test',
                                           pc_destination:$baidu_domain,
                                           pc_display:$baidu_domain },
-                                      {title:'OperationTestCreative', description1:'what the fuck'})
+                                      {title:'OperationTestCreative', 
+                                        description1:'this is a updated test',
+                                        pc_destination:$baidu_domain,
+                                        mobil_destination:$baidu_domain})
 end
 
 describe ::PPC::Operation::Plan do
