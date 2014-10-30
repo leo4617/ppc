@@ -35,7 +35,8 @@ module PPC
         }
 
         http = Net::HTTP.new(uri.host, 443)
-        http.set_debug_output $stderr
+        # 是否显示http通信输出
+        http.set_debug_output $stdout
         http.use_ssl = true
 
         response = http.post(uri.path, http_body, http_header)

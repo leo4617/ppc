@@ -50,31 +50,6 @@ module PPC
           return startDate,endDate
         end
 
-        private 
-        def self.make_realtimerequest( params )
-          '''
-          make RealTimeRequestType
-          没有封装关键字：attribute，order,statIds
-          '''
-          params = [ params ] unless params.is_a? Array
-          requesttypes = []
-          params.each do  |param|
-            requesttype = {}
-            startDate, endDate = get_date()
-
-            requesttype[:performanceData]   =     param[:fields]  && %w(cost cpc click impression ctr) || %w(click)
-            requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type] 
-            requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level]
-            requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range]
-            requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit] 
-            requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]
-            requesttype[:startDate]                  =     startDate
-            requesttype[:endDate]                    =     endDate
-            requesttypes << requesttype
-          end
-          return requesttypes
-        end
-
         private
         def self.make_reportrequest( params )
           '''
@@ -86,15 +61,15 @@ module PPC
             requesttype = {}
             startDate, endDate = get_date()
 
-            requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
-            requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]
+            requesttype[:performanceData]    =     param[:fields]  && %w(cost cpc click impression ctr) || %w(click)
+            requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type] 
             requesttype[:levelOfDetails]          =     Level_map[  param[:level] ]        if param[:level]
-            requesttype[:statRange]                 =     Level_map[ param[:range] ]       if param[:range]
-            requesttype[:unitOfTime]               =     Unit_map[ param[:unit] ]           if param[:unit]
-            requesttype[:device]                        =    Device_map[ param[:device] ]  if param[:device]
-            requesttype[:idOnly]                        =    param[:id_only]      ||    false
-            requesttype[:startDate]                   =    startDate
-            requesttype[:endDate]                     =    endDate
+            requesttype[:statRange]                =     Level_map[ param[:range] ]       if param[:range]
+            requesttype[:unitOfTime]              =     Unit_map[ param[:unit] ]           if param[:unit] 
+            requesttype[:platform]                  =    Device_map[ param[:device] ]    if param[:device]
+            requesttype[:idOnly]                    =     param[:id_only]                           if param[:id_only]!=nil
+            requesttype[:startDate] = param[:startDate]==nil ? startDate :param[:startDate]
+            requesttype[:endDate] = param[:endDate]==nil ? endDate :param[:endDate]
             requesttypes << requesttype
           end
           return requesttypes
