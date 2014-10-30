@@ -15,7 +15,7 @@ module PPC
         Device_map = { 'all' => 0, 'pc' => 1, 'mobile' => 2 }
         Unit_map = { 'day' => 5, 'week' => 4, 'month' => 3, 'year' => 1, 'hour' => 7 }
 
-<<<<<<< HEAD
+
         # 少用，而且百度说明文档不清楚，实际操作不可行，失效
         # def self.get_realtime( auth, params, type = 'data', debug = false )
         #   request = make_realtimerequest( params )[0]
@@ -24,16 +24,6 @@ module PPC
         #   if debug
         #     return response
         #   end
-=======
-        def self.get_realtime( auth, params, type = 'data', debug = false )
-          request = make_realtimerequest( params )[0]
-          body = { realTimeRequestTypes:  request }
-          response = request( auth, Service, 'getRealTimeData' ,body)
-          if debug
-            return response
-          end
->>>>>>> 4a00421517647bde99febdbd50bac7af3f068520
-
         #   response = case type
         #     when 'data'     then    response['body']['realTimeResultTypes']
         #     when 'query'  then   response['body']['realTimeQueryResultTypes']

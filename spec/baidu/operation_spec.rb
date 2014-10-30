@@ -6,8 +6,8 @@ require 'baidu/operation_spec_helper'
   Auth[:token] = $baidu_token
   Auth[:se] = 'baidu'
   preparation = ::PPC::API::Baidu::Group::ids( Auth )
-  Test_plan_id = preparation[:result][0][:plan_id]
-  Test_group_id = preparation[:result][0][:group_ids][0]
+  test_plan_id = preparation[:result][0][:plan_id]
+  test_group_id = preparation[:result][0][:group_ids][0]
 
 
 describe ::PPC::Operation::Account do
@@ -22,15 +22,15 @@ describe ::PPC::Operation::Account do
                                       {name:'updated_operation_test_plan'})
 
   it_should_behave_like( "it can operate sub_objects", 'group', 
-                                      {name:'test_operation_group',plan_id:Test_plan_id, price:500},
+                                      {name:'test_operation_group',plan_id:test_plan_id, price:500},
                                       {name:'updated_operation_test_group'} )  
 
   it_should_behave_like( "it can operate sub_objects", 'keyword', 
-                                      { keyword:'testKeyword', group_id:Test_group_id, match_type:'exact'},
+                                      { keyword:'testKeyword', group_id:test_group_id, match_type:'exact'},
                                       { match_type:'wide'})
 
   it_should_behave_like( "it can operate sub_objects", 'creative', 
-                                       { group_id: Test_group_id, 
+                                       { group_id: test_group_id, 
                                           title: 'OperationTestCreative', preference:1, 
                                           description1:'this is rest',
                                           description2:'also is a test',
@@ -45,7 +45,7 @@ end
 describe ::PPC::Operation::Plan do
   # get test subject
   subject{
-    ::PPC::Operation::Plan.new( Auth.merge({id:Test_plan_id}) )
+    ::PPC::Operation::Plan.new( Auth.merge({id:test_plan_id}) )
   }
 
   it_should_behave_like( "it can operate itself", {budget:2000})
@@ -58,12 +58,12 @@ end
 describe ::PPC::Operation::Group do
   # get test subject
   subject{
-    ::PPC::Operation::Group.new( Auth.merge({id:Test_group_id}) )
+    ::PPC::Operation::Group.new( Auth.merge({id:test_group_id}) )
   }
 
   it_should_behave_like( "it can operate itself", {price:200})
   it_should_behave_like( "it can operate sub_objects", 'keyword', 
-                                      { keyword:'testKeyword', group_id:Test_group_id, match_type:'exact'},
+                                      { keyword:'testKeyword', group_id:test_group_id, match_type:'exact'},
                                       { match_type:'wide'})
   it_should_behave_like( "it can get all sub_objects", 'keyword')
 end

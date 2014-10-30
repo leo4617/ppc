@@ -91,11 +91,6 @@ $sogou_username = ''
 $sogou_password = ''
 $sogou_token = ''
 
-# auxilary fuction
-def is_successed( response )
-  expect( response['headr']['desc'] ).to eq 'success'
-end 
-
 def is_success( result )
   expect( result[:succ] ).to eq true
 end
