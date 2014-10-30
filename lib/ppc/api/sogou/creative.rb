@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
 module PPC
   module API
-    class Baidu
-      class Creative< Baidu
+    class Sogou
+      class Creative< Sogou
         Service = 'Creative'
 
         @map =[

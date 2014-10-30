@@ -1,16 +1,33 @@
 require 'savon'
 
-
+require 'ppc/api/sogou/account'
+require 'ppc/api/sogou/plan'
+require 'ppc/api/sogou/group'
+require 'ppc/api/sogou/keyword'
+require 'ppc/api/sogou/report'
+require 'ppc/api/sogou/creative'
 
 module PPC
   module API
     class Sogou
-    
-      def self.request( auth, service = @service, method, params )
+
+      @map = nil
+      @@debug = false
+
+      def self.debug_on
+        @@debug = true
+      end
+
+      def self.debug_off
+        @@debug = false
+      end
+
+      def self.request( auth, service, method, params = {})
         '''
         ps. in savon3, .to_hash method will turn CamelXML to snake hash
         preprocess response, extract 
         '''
+
         service = service + "Service"
         client = Savon.new( "http://api.agent.sogou.com:8080/sem/sms/v1/#{service}?wsdl" )
         operation = client.operation( service, service, method )
@@ -23,17 +40,24 @@ module PPC
                               }
                                         }
         operation.body = {  (method+'Request').to_sym => params }
-
-        result = operation.call.to_hash[:envelop]
+        # debug print
+        debug_print( operation ) if @@debug
+        result = operation.call.hash[:envelope]
 
         #extract header and body
         response = { }
         response[:header] = result[:header][:res_header]
         response[:body] = result[:body][ (method + "Response").snake_case.to_sym ]
+        # debug print
+        p response if @@debug
         return response
       end
 
-      def process( response, key, debug = false, &func )
+      def self.debug_print( operation )
+        p '{:header=>' + operation.header.to_s + ',  :body=>' + operation.body.to_s + '}'
+      end
+
+      def self.process( response, key, debug = false, &func )
         '''
         @input
         : type key : string
@@ -43,7 +67,7 @@ module PPC
         return response if debug
 
         result = {}
-        result[:succ] = response[:header][desc]=='success'? true : false
+        result[:succ] = response[:header][:desc]=='success'? true : false
         result[:failure] = response[:header][:failures]
         result[:result] = func[ response[:body][ key.snake_case.to_sym ] ]
         return result
@@ -51,7 +75,7 @@ module PPC
 
      def self.make_type( params, map = @map)
         '''
-        For more info visit ::PPC::API::Baidu:make_type
+        For more info visit ::PPC::API::sogou:make_type
         '''
         params = [ params ] unless params.is_a? Array
 
@@ -71,7 +95,8 @@ module PPC
 
       def self.reverse_type( types, map = @map )
         '''
-        For more info visit ::PPC::API::Baidu:reverse_type
+        For more info visit ::PPC::API::sogou:reverse_type
+        Here, the camel key will be turn into snake key
         '''
         types = [ types ] unless types.is_a? Array
 
@@ -80,8 +105,8 @@ module PPC
           param = {}
           
             map.each do |key|
-                # do not to transfer to string
-                value = type[ key[1] ]
+                # 这里做两次转换并不是十分高效的方法，考虑maintain两张map
+                value = type[ key[1].to_s.snake_case.to_sym ]
                 param[ key[0] ] = value if value != nil
             end
 

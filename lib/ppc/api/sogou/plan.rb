@@ -29,7 +29,7 @@ module PPC
 
         def self.ids( auth, debug = false )
           response = request( auth, Service, 'getAllCpcPlanId' )
-          process( response, 'cpcPlanIdType' , debug ){ |x| x }
+          process( response, 'cpcPlanIds' , debug ){ |x| x }
         end
 
         def self.get( auth, ids, debug = false )
