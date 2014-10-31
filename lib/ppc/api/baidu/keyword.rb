@@ -106,6 +106,7 @@ module PPC
 
         # 下面三个操作操作对象包括计划，组和关键字
         # 不知道放在这里合不合适
+        # quality and status 比较复杂，日后重写
         def self.status( auth, ids, type, debug = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type]}

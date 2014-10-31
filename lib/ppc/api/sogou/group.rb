@@ -22,7 +22,8 @@ module PPC
           @return : Array of cpcPlanGrpIdTypes
           """
           response = request( auth, Service , "getAllCpcGrpId" )
-          process( response, 'cpcPlanGrpIdTypes', debug ){ |x| make_planGroupIds( x ) }
+          #此处返回值与key与开发文档不同
+          process( response, 'cpcPlanGrpIds', debug ){ |x| make_planGroupIds( x ) }
         end
 
         def self.get( auth, ids, debug = false )
@@ -54,7 +55,7 @@ module PPC
           body = {cpcGrpTypes: cpcGrpTypes}
           
           response = request( auth, Service, "updateCpcGrp",body )
-          process( response, 'adgroupTypes', debug ){ |x| reverse_type(x) }
+          process( response, 'cpcGrpTypes', debug ){ |x| reverse_type(x) }
         end
 
         def self.delete( auth, ids, debug = false )
@@ -71,18 +72,20 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { cpcPlanIds: ids }
           response = request( auth, Service ,"getCpcGrpByCpcPlanId",  body )
-          process( response, 'cpcPlanGrpTypes', debug ){ |x| make_planGroups( x ) }
+          # 此处key与开发文档不同
+          process( response, 'cpcPlanGrps', debug ){ |x| make_planGroups( x ) }
         end
 
         def self.search_id_by_plan_id( auth, ids, debug = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { cpcPlanIds: ids }
           response = request( auth, Service ,"getCpcGrpIdByCpcPlanId",  body )
-          process( response, 'cpcPlanGrpIdTypes', debug ){ |x| make_planGroupIds( x ) }
+          process( response, 'cpcPlanGrpIds', debug ){ |x| make_planGroupIds( x ) }
         end
 
         private
         def self.make_planGroupIds( cpcPlanGrpIdTypes )
+          cpcPlanGrpIdTypes = [cpcPlanGrpIdTypes] unless cpcPlanGrpIdTypes.is_a? Array
           planGroupIds = []
           cpcPlanGrpIdTypes.each do |cpcPlanGrpIdType|
             planGroupId = { }
@@ -95,11 +98,13 @@ module PPC
 
         private
         def self.make_planGroups( cpcPlanGrpTypes )
+          # 多加一行change成array
+          cpcPlanGrpTypes = [cpcPlanGrpTypes] unless cpcPlanGrpTypes.is_a? Array
           planGroups = []
           cpcPlanGrpTypes.each do |cpcPlanGrpType|
             planGroup = {}
             planGroup[:plan_id] = cpcPlanGrpType[:cpc_plan_id]
-            planGroup[:groups] = reverse_type( cpcPlanGrpType[:pc_grp_type] )
+            planGroup[:groups] = reverse_type( cpcPlanGrpType[:cpc_grp_types] )
             planGroups << planGroup
           end
           return planGroups

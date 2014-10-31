@@ -24,7 +24,7 @@ module PPC
 
       def self.request( auth, service, method, params = {})
         '''
-        ps. in savon3, .to_hash method will turn CamelXML to snake hash
+        ps. in savon3, .hash method will turn CamelXML to snake hash
         preprocess response, extract 
         '''
 

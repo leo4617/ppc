@@ -30,7 +30,7 @@ describe ::PPC::API::Baidu::Group do
     is_success( response )
   end
   
-  it 'can search group id by group id' do
+  it 'can search group id by plan id' do
     response = ::PPC::API::Baidu::Group::search_id_by_plan_id( auth, test_plan_id )
     is_success( response )
   end

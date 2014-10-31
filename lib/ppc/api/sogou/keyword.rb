@@ -3,14 +3,11 @@ module PPC
   module API
     class Sogou
       class Keyword< Sogou
-        Service = 'Keyword'
+        Service = 'Cpc'
 
         Match_type  = { 'exact' => 0, 'wide' => 1 }
         Match_type_r  = { 0 => 'exact', 1 => 'wide' }
-        
-        # Device          = { 'pc' => 0, 'mobile' => 1, 'all' => 2 }
-        # Type              = { 'plan' => 3, 'group' => 5, 'keyword' => 11 }
-        
+                
         @map  = [
                             [:id,:cpcId],
                             [:group_id,:cpcGrpId],
@@ -23,20 +20,6 @@ module PPC
                             [:status,:status],
                             [:quality,:cpcQuality]
                         ]
-
-        # @quality10_map = [
-        #                                   [ :id, :id ],
-        #                                   [ :group_id, :adgroupId ],
-        #                                   [ :plan_id, :Campaigned ],
-        #                                   [ :pc_quality, :pcQuality ],
-        #                                   [ :pc_reliable, :pcReliable ],
-        #                                   [ :pc_reason, :pcReason ],
-        #                                   [ :pc_scale, :pcScale ],
-        #                                   [ :mobile_quality, :mobileQuality ],
-        #                                   [ :mobile_reliable, :mobileReliable ],
-        #                                   [ :mobile_reason, :mobileReason ],
-        #                                   [ :mobile_scale, :mobileScale ]
-        #                                 ]
 
         # 后面改成info方法
         def self.get( auth, ids, debug = false )
@@ -64,6 +47,7 @@ module PPC
           cpcTypes = make_type( keywords ) 
           body = { cpcTypes: cpcTypes }
           response = request( auth, Service, "updateCpc", body )
+          p response
           return process(response, 'cpcTypes', debug){|x| reverse_type(x)  }
         end
 
@@ -85,36 +69,62 @@ module PPC
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { cpcGrpIds: group_ids }
           response = request( auth, Service, "getCpcByCpcGrpId", body )
-          return process(response, 'cpcGrpCpcTypes', debug){|x| make_groupKeywords( x ) }
+          return process(response, 'cpcGrpCpcs', debug){|x| make_groupKeywords( x ) }
         end
 
         def self.search_id_by_group_id( auth, group_ids, debug = false  )
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { cpcGrpIds: group_ids }
           response = request( auth, Service, "getCpcIdeaByCpcGrpId", body )
-          return process(response, 'cpcGrpCpcIdTypes', debug){|x| make_groupKeywordIds( x ) }
+          return process(response, 'cpcGrpCpcIds', debug){|x| make_groupKeywordIds( x ) }
         end
 
         # sogou的keyword服务不提供质量度
-        # def self.status( auth, ids, type, debug = false )
-        #   ids = [ ids ] unless ids.is_a? Array
-        #   body = { ids: ids, type: Type[type]}
-        #   response = request( auth, Service, 'getKeywordStatus', body )
-        #   return process(response, 'keywordStatus', debug){|x| reverse_type( x ) }
-        # end
+        def self.status( auth, ids, type, debug = false )
+          '''
+          Return [ { id: id, status: status} ... ]
+          '''
+          ids = [ ids ] unless ids.is_a? Array
+          body = { ids: ids, type: Type[type]}
+          
+          info_result = get( ids )
+          result = {}
+          result[:succ] = info_result[:succ]
+          result[:failure] = info_result[:failure]
+          # extract status informantion
+          status = []
+          info_result[:result].each do |cpc_type|
+            status << { id:cpc_type[:id], status:cpc_type[:status]}
+          end
+          result[:result] = status
+          
+          return result
+        end
 
-        # def self.quality( auth ,ids, type, device, debug = false )
-        #   '''
-        #   Return 10Quanlity *Not the old Quality* of given ketword id
-        #   '''
-        #   ids = [ ids ] unless ids.is_a? Array
-        #   body = { ids: ids, type: Type[type], device:Device[device] }
-        #   response = request( auth, Service, 'getKeyword10Quality', body )
-        #   return process(response, 'keyword10Quality', debug){|x| reverse_type( x, @quality10_map ) }
-        # end
+        def self.quality( auth ,ids, type, device, debug = false )
+          '''
+          Return [ { id: id, quality: quality} ... ]
+          '''
+          ids = [ ids ] unless ids.is_a? Array
+          body = { ids: ids, type: Type[type]}
+          
+          info_result = get( ids )
+          result = {}
+          result[:succ] = info_result[:succ]
+          result[:failure] = info_result[:failure]
+          # extract status informantion
+          quality = []
+          info_result[:result].each do |cpc_type|
+            quality << { id:cpc_type[:id], quality:cpc_type[:quality]}
+          end
+          result[:result] = quality
+          
+          return result
+        end
 
         private
         def self.make_groupKeywordIds( cpcGrpCpcIdTypes )
+          cpcGrpCpcIdTypes = [cpcGrpCpcIdTypes] unless cpcGrpCpcIdTypes.is_a? Array
           group_keyword_ids = []
           cpcGrpCpcIdTypes.each do |cpcGrpCpcIdType|
             group_keyword_id = { }
@@ -127,11 +137,12 @@ module PPC
 
         private
         def self.make_groupKeywords( cpcGrpCpcTypes )
+          cpcGrpCpcTypes = [cpcGrpCpcTypes] unless cpcGrpCpcTypes.is_a? Array 
           group_keywords = []
           cpcGrpCpcTypes.each do |cpcGrpCpcType|
             group_keyword = {}
             group_keyword[:group_id] = cpcGrpCpcType[:cpc_grp_id]
-            group_keyword[:keywords] = reverse_type( cpcGrpCpcTypes[:cpc_types] )
+            group_keyword[:keywords] = reverse_type( cpcGrpCpcType[:cpc_types] )
             group_keywords << group_keyword
           end
           return group_keywords
@@ -167,10 +178,10 @@ module PPC
              # 增加对matchtype的自动转换
               map.each do |key|
                 if key[0] == :match_type
-                   value = type[ key[1].to_s ]
+                   value = type[ key[1].to_s.snake_case.to_sym]
                   param[ key[0] ] = Match_type_r[ value ] if value                 
                 else
-                  value = type[ key[1].to_s ]
+                  value = type[ key[1].to_s.snake_case.to_sym ]
                   param[ key[0] ] = value if value
                 end
               end # map.each
