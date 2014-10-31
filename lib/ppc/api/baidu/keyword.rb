@@ -106,12 +106,22 @@ module PPC
 
         # 下面三个操作操作对象包括计划，组和关键字
         # 不知道放在这里合不合适
-        # quality and status 比较复杂，日后重写
         def self.status( auth, ids, type, debug = false )
+          '''
+          Return [{ id: id, status: status } ... ]
+          '''
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, type: Type[type]}
           response = request( auth, Service, 'getKeywordStatus', body )
-          return process(response, 'keywordStatus', debug){|x| reverse_type( x ) }
+          return process(response, 'keywordStatus', debug){  |statusTypes| 
+            statusTypes = [statusTypes] unless statusTypes.is_a? Array
+            status =[]
+
+            statusTypes.each do |statusType|
+              status << { id: statusType['id'], status: statusType['status'] }
+            end
+            return status
+           }
         end
 
         def self.quality( auth ,ids, type, device, debug = false )
