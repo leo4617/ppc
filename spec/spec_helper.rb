@@ -95,4 +95,3 @@ def is_success( result )
   expect( result[:succ] ).to eq true
 end
 
-::PPC::API::Sogou.debug_on

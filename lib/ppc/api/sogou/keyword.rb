@@ -85,20 +85,18 @@ module PPC
           Return [ { id: id, status: status} ... ]
           '''
           ids = [ ids ] unless ids.is_a? Array
-          body = { ids: ids, type: Type[type]}
-          
-          info_result = get( ids )
-          result = {}
-          result[:succ] = info_result[:succ]
-          result[:failure] = info_result[:failure]
-          # extract status informantion
-          status = []
-          info_result[:result].each do |cpc_type|
-            status << { id:cpc_type[:id], status:cpc_type[:status]}
-          end
-          result[:result] = status
-          
-          return result
+          body = { cpcIds: ids}
+          response = request( auth, Service, 'getCpcByCpcId', body )
+          return process(response, 'cpcTypes', debug){  |cpcTypes| 
+            cpcTypes = [cpcTypes] unless cpcTypes.is_a? Array
+            status = []
+           
+            cpcTypes.each do |cpcType|
+              status << { id: cpcType[:cpc_id], status: cpcType[:status] }
+            end
+
+            return status
+          }
         end
 
         def self.quality( auth ,ids, type, device, debug = false )
@@ -106,20 +104,19 @@ module PPC
           Return [ { id: id, quality: quality} ... ]
           '''
           ids = [ ids ] unless ids.is_a? Array
-          body = { ids: ids, type: Type[type]}
+          body = { cpcIds: ids}
+          response = request( auth, Service, 'getCpcByCpcId', body )
           
-          info_result = get( ids )
-          result = {}
-          result[:succ] = info_result[:succ]
-          result[:failure] = info_result[:failure]
-          # extract status informantion
-          quality = []
-          info_result[:result].each do |cpc_type|
-            quality << { id:cpc_type[:id], quality:cpc_type[:quality]}
-          end
-          result[:result] = quality
-          
-          return result
+          return process(response, 'cpcTypes', debug){  |cpcTypes|  
+            cpcTypes = [cpcTypes] unless cpcTypes.is_a? Array
+            quality = []
+            
+            cpcTypes.each do |cpcType|
+              quality << { id: cpcType[:cpc_id], quality: cpcType[:cpc_quality] }
+            end
+            
+            return quality 
+          }
         end
 
         private

@@ -1,5 +1,4 @@
 require 'savon'
-
 require 'ppc/api/sogou/account'
 require 'ppc/api/sogou/plan'
 require 'ppc/api/sogou/group'
