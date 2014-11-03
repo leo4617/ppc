@@ -3,7 +3,7 @@ module PPC
   module API
     class Sogou
       class Creative< Sogou
-        Service = 'Creative'
+        Service = 'CpcIdea'
 
         @map =[
                         [:id,:cpcIdeaId],
@@ -18,6 +18,12 @@ module PPC
                         [:pause,:pause],
                         [:status,:status] 
                       ]
+
+        @status_map = [
+                                    [:id,:cpcIdeaId],
+                                    [:status,:status]
+                                  ]
+
 
         def self.add( auth, creatives, debug = false )
           body = { cpcIdeaTypes: make_type( creatives ) }
@@ -53,6 +59,13 @@ module PPC
           process( response, 'nil', debug ){ |x| x }
         end
 
+        def self.status( auth, ids, getTemp = 0,  debug = false )
+          ids = [ ids ] unless ids.is_a? Array
+          body = { cpcIdeaIds: ids, getTemp: getTemp }
+          response = request( auth, Service, 'getCpcIdeaByCpcIdeaId', body )
+          process( response, 'cpcIdeaTypes', debug ){ |x| reverse_type(x, @status_map) }
+        end
+
         def self.search_id_by_group_id( auth, ids,  getTemp = 0, debug = false )
           '''
           \'getCreativeIdByAdgroupId\'
@@ -62,18 +75,19 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { cpcGrpIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCpcIdeaIdByCpcGrpId', body )
-          process( response, 'cpcGrpIdeaIdTypes', debug ){ |x| make_groupCreativeIds( x ) }
+          process( response, 'cpcGrpIdeaIds', debug ){ |x| make_groupCreativeIds( x ) }
         end
 
         def self.search_by_group_id( auth, ids,  getTemp = 0, debug = false )
           ids = [ ids ] unless ids.is_a? Array
           body = { cpcGrpIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCpcIdeaByCpcGrpId', body )
-          process( response, 'cpcGrpIdeaTypes', debug ){ |x| make_groupCreatives( x ) }
+          process( response, 'cpcGrpIdeas', debug ){ |x| make_groupCreatives( x ) }
         end
 
         private
         def self.make_groupCreativeIds( cpcGrpIdeaIdTypes )
+          cpcGrpIdeaIdTypes = [cpcGrpIdeaIdTypes] unless cpcGrpIdeaIdTypes.is_a? Array
           group_creative_ids = []
           cpcGrpIdeaIdTypes.each do |cpcGrpIdeaIdType|
             group_creative_id = { }
@@ -86,6 +100,7 @@ module PPC
 
         private
         def self.make_groupCreatives( cpcGrpIdeaTypes )
+          cpcGrpIdeaTypes = [cpcGrpIdeaTypes] unless cpcGrpIdeaTypes.is_a? Array
           group_creatives = []
           cpcGrpIdeaTypes.each do |cpcGrpIdeaType|
             group_creative = {}

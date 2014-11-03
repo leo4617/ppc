@@ -87,10 +87,11 @@ $baidu_token = ''
 $qihu_username = ''
 $qihu_password = ''
 $qihu_token = ''
+
 $sogou_username = ''
 $sogou_password = ''
 $sogou_token = ''
-
+$sogou_domain = ''
 def is_success( result )
   expect( result[:succ] ).to eq true
 end

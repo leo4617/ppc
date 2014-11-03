@@ -20,6 +20,15 @@ module PPC
                             [:status,:status],
                             [:quality,:cpcQuality]
                         ]
+        @quality_map = [
+                                      [:id,:cpcId],
+                                      [:quality,:cpcQuality]
+                                    ]
+
+        @status_map = [
+                                    [:id,:cpcId],
+                                    [:status,:status]
+                                  ]
 
         # 后面改成info方法
         def self.get( auth, ids, debug = false )
@@ -29,7 +38,7 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { cpcIds: ids}
           response = request( auth, Service, 'getCpcByCpcId', body )
-          return process(response, 'cpcTypes', debug){|x| reverse_type( x ) }
+          process(response, 'cpcTypes', debug){|x| reverse_type( x ) }
         end
 
         def self.add( auth, keywords, debug = false )
@@ -38,7 +47,7 @@ module PPC
           cpcTypes = make_type( keywords ) 
           body = { cpcTypes: cpcTypes }
           response = request( auth, Service, "addCpc", body )
-          return process(response, 'cpcTypes', debug){|x| reverse_type(x)  }
+          process(response, 'cpcTypes', debug){|x| reverse_type(x)  }
         end
 
         def self.update( auth, keywords, debug = false  )
@@ -47,8 +56,7 @@ module PPC
           cpcTypes = make_type( keywords ) 
           body = { cpcTypes: cpcTypes }
           response = request( auth, Service, "updateCpc", body )
-          p response
-          return process(response, 'cpcTypes', debug){|x| reverse_type(x)  }
+          process(response, 'cpcTypes', debug){|x| reverse_type(x)  }
         end
 
         def self.delete( auth, ids, debug = false )
@@ -57,7 +65,7 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { cpcIds: ids}
           response = request( auth, Service, 'deleteCpc', body )
-          return process(response, 'nil', debug){|x| x }
+          process(response, 'nil', debug){|x| x }
         end
 
         def self.search_by_group_id( auth, group_ids, debug = false  )
@@ -69,54 +77,36 @@ module PPC
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { cpcGrpIds: group_ids }
           response = request( auth, Service, "getCpcByCpcGrpId", body )
-          return process(response, 'cpcGrpCpcs', debug){|x| make_groupKeywords( x ) }
+          process(response, 'cpcGrpCpcs', debug){|x| make_groupKeywords( x ) }
         end
 
         def self.search_id_by_group_id( auth, group_ids, debug = false  )
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { cpcGrpIds: group_ids }
           response = request( auth, Service, "getCpcIdeaByCpcGrpId", body )
-          return process(response, 'cpcGrpCpcIds', debug){|x| make_groupKeywordIds( x ) }
+          process(response, 'cpcGrpCpcIds', debug){|x| make_groupKeywordIds( x ) }
         end
 
         # sogou的keyword服务不提供质量度
-        def self.status( auth, ids, type, debug = false )
+        def self.status( auth, ids, debug = false )
           '''
           Return [ { id: id, status: status} ... ]
           '''
           ids = [ ids ] unless ids.is_a? Array
           body = { cpcIds: ids}
           response = request( auth, Service, 'getCpcByCpcId', body )
-          return process(response, 'cpcTypes', debug){  |cpcTypes| 
-            cpcTypes = [cpcTypes] unless cpcTypes.is_a? Array
-            status = []
-           
-            cpcTypes.each do |cpcType|
-              status << { id: cpcType[:cpc_id], status: cpcType[:status] }
-            end
-
-            return status
-          }
+          
+          process(response, 'cpcTypes', debug){  |x|  reverse_type(x, @status_map) }
         end
 
-        def self.quality( auth ,ids, type, device, debug = false )
+        def self.quality( auth ,ids, debug = false )
           '''
           Return [ { id: id, quality: quality} ... ]
           '''
           ids = [ ids ] unless ids.is_a? Array
           body = { cpcIds: ids}
-          response = request( auth, Service, 'getCpcByCpcId', body )
-          
-          return process(response, 'cpcTypes', debug){  |cpcTypes|  
-            cpcTypes = [cpcTypes] unless cpcTypes.is_a? Array
-            quality = []
-            
-            cpcTypes.each do |cpcType|
-              quality << { id: cpcType[:cpc_id], quality: cpcType[:cpc_quality] }
-            end
-            
-            return quality 
-          }
+          response = request( auth, Service, 'getCpcByCpcId', { cpcIds: ids} )
+          process(response, 'cpcTypes', debug){  |x| reverse_type(x, @quality_map) }
         end
 
         private
