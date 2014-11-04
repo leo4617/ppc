@@ -25,11 +25,9 @@ module PPC
         end
 
         def self.get( ids )
-          ids = [ids] unless ids.is_a? Array
-          ids_str = []
-          ids.each{ |x| ids_str << x.to_s }
-          body = { 'idList' => JSON.generate( ids_str )}
-          response = request( auth, Service, 'update', body  )
+          ids = ids_to_string( ids )
+          body = { 'idList' => JSON.generate( ids )}
+          response = request( auth, Service, 'getInfoByIdList', body  )
           process( response, 'group_getInfoByIdList_response' ){ |x| reverse_type( x['groupList']['item'] }
         end
 
@@ -38,10 +36,11 @@ module PPC
           process( response, 'group_deleteById_response' ){ |x| x }
         end
       
-        def self.search_id_by_plan_id( ids )
+        def self.search_id_by_plan_id( id )
           response = request( auth, Service, 'getIdListByCampaignId', { 'campaignId' => id.to_s })
           process( response, 'getIdListByCampaignId' ){ |x| x['groupIdList']['item'] }
         end
+
       end
     end
   end

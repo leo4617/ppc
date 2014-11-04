@@ -17,19 +17,27 @@ module PPC
         response.parsed_response
       end
 
-      def process( response, key, debug = false, &func )
-        content = response[ key ]
+      def process( response, key, failure_key = '', &func )
+        response_key = response.keys[0]
+        content = response[ response_key ]
         result = { }
         if content.keys.include? 'failures'
           result[:succ] = false
           result[:failure] = content['failures']['item']
           result[:result] = nil
         else
-          result[:result] = func[ content ]
           result[:succ] = true
-          result[:failure] = nil
+          result[:result] = func[ key==''? content : content[ key ] ]
+          result[:failure] = failure_key == ''? nil : content[ failure_key ]
         end
         return result
+      end
+
+      def ids_to_string( ids )
+        ids = ids unless ids.is_a? Array
+        ids_str = []
+        ids.each{ |x| ids_str << x.to_s }
+        ids_str
       end
 
     end
