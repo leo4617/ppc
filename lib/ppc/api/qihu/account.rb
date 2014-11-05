@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+require 'json'
 module PPC
   module API
     class Qihu
@@ -12,7 +13,7 @@ module PPC
                         [ :company, :companyName],
                         [ :industry1, :industry1],
                         [ :industry2, :industry2],
-                        [ :balance :balance],
+                        [ :balance, :balance],
                         [ :budget, :budget],
                         [ :resources, :resources],
                         [ :open_domains, :allowDomain]
@@ -20,7 +21,7 @@ module PPC
         
         def self.info( auth )
           response = request( auth, Service, 'getInfo' )
-          process( response, 'account_getInfo_response' ){ |x| reverse _type( x )}
+          process( response, '' ){ |x| reverse_type( x )[0]}
         end
 
         def self.update( auth, params )
@@ -42,25 +43,26 @@ module PPC
 
         def self.get_exclude_ip( auth )
           response = request( auth, Service, 'getExcludeIp' )
-          process( response, 'account_getExcludeIp_response' ){ |x| x['excludeIpList']}
+          process( response, 'excludeIpList' ){ |x| x['item'] }
         end
 
-        def ids( auth )
+        def self.ids( auth )
           response = request( auth, Service, 'getCampaignIdList' )
-          process( response, 'account_getCampaignIdList_response' ){ |x| x['item'] }
+          process( response, 'campaignIdList' ){ |x| x['item'] }
         end 
 
         private
         def self.update_budget( auth, budget )
           response = request( auth, Service, 'updateBudget', { budget:budget })
-          process( response, 'account_updateBudget_response' ){ | x | x }
+          process( response, 'affectedRecords' ){ | x | x.to_i==1?'success':'failure' }
         end
 
         private
         def self.update_exclude_ip( auth, ips )
           ips = [ips] unless ips.is_a? Array
+          ips = ips.to_json
           response = request( auth, Service, 'updateExcludeIp', { excludeIpList: ips } )
-          process( response, 'account_updateExcludeIp_response' ){ | x | x }
+          process( response, 'excludeIpList' ){ | x | x }
         end
 
       end
