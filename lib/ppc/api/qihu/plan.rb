@@ -6,45 +6,42 @@ module PPC
         Service = 'campaign'
 
         @map = [
-                        [:id, :id]
-                        [:name,:name  ],
-                        [:budget, :budget  ],
-                        [:region, :region  ],
-                        [:schedule, :schedule ],
-                        [:startDate, :startDate ],
-                        [:endDate, :endDate  ],
+                        [:id, :id],
+                        [:name,:name],
+                        [:budget, :budget],
+                        [:region, :region],
+                        [:schedule, :schedule],
+                        [:startDate, :startDate],
+                        [:endDate, :endDate ],
                         [:status,:status], 
-                        [:extend_ad_type,:extendAdType],
+                        [:extend_ad_type,:extendAdType]
                       ]
 
-        def self.get( ids )
+        def self.get( auth, ids )
           '''
           :Type ids: ( Array of ) String or integer
           '''
-          ids = [ids] unless ids.is_a? Array
-          # change ids to string
-          ids_str = []
-          ids.each{ |x| ids_str <<  x.to_s }
-
-          body = { ' idList' => JSON.generate( ids_str ) }
+          ids = to_json_string( ids )    
+          body = { ' idList' =>  ids  }
           response = request( auth, Service, 'getInfoByIdList', body )
-          process( response, 'campaign_getInfoById_response' ){ |x| reverse_type( x['campaignList']['item'] }
+          process( response, 'campaignList' ){ |x| reverse_type( x['item'] ) }
         end
         
-        def self.add( plan )
+        def self.add( auth, plan )
           response = request( auth, Service, 'add', make_type( plan )[0])
-          process( response, 'campaign_add_response' ){ |x| x['id'] }
+          process( response, 'id' ){ |x| x }
         end
 
-        def self.update( plan ) 
+        def self.update( auth, plan ) 
            response = request( auth, Service, 'update', make_type( plan )[0])
-           process( response, 'campaign_update_response' ){ |x| x['id'] }
+           process( response, 'id' ){ |x| x }
         end
 
-        def self.delete( id )
-          response = request( auth, Service, 'deleteById', id )
+        def self.delete( auth, id )
+          response = request( auth, Service, 'deleteById', { id: id } )
           process( response, 'campaign_deleteById_response' ){ |x|  x }
         end
+
       end
     end
   end

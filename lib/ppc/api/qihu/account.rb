@@ -59,8 +59,7 @@ module PPC
 
         private
         def self.update_exclude_ip( auth, ips )
-          ips = [ips] unless ips.is_a? Array
-          ips = ips.to_json
+          ips = to_json_string( ips )
           response = request( auth, Service, 'updateExcludeIp', { excludeIpList: ips } )
           process( response, 'excludeIpList' ){ | x | x }
         end

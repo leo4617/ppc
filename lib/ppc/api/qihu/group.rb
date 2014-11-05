@@ -7,38 +7,41 @@ module PPC
 
         @map = [
                         [:id, :id ],
+                        [:plan_id, :campaignId],
                         [:status, :status ],
                         [:name, :name ],
                         [:price, :price ],
                         # negateive为json格式，make_type要定制
-                        [:negative, :negativeWords ]
+                        [:negative, :negativeWords ],
+                        [:add_time, :addTime],
+                        [:update_time, :updateTime]
                       ]
 
-        def self.add( gourp )
-          response = request( auth, Service, 'add', make_type( group ))
-          process( response, 'group_add_response' ){ |x| x ['id'] }
+        def self.add( auth, group )
+          response = request( auth, Service, 'add', make_type( group )[0] )
+          process( response, 'id' ){ |x| x  }
         end
         
-        def sel.update( group )
-          response = request( auth, Service, 'update', make_type( group ))
-          process( response, 'group_update_response' ){ |x| x ['id'] }
+        def self.update( auth, group )
+          response = request( auth, Service, 'update', make_type( group )[0]  )
+          process( response, 'id' ){ |x| x  }
         end
 
-        def self.get( ids )
-          ids = ids_to_string( ids )
-          body = { 'idList' => JSON.generate( ids )}
+        def self.get( auth, ids )
+          ids = to_json_string( ids )
+          body = { 'idList' => ids }
           response = request( auth, Service, 'getInfoByIdList', body  )
-          process( response, 'group_getInfoByIdList_response' ){ |x| reverse_type( x['groupList']['item'] }
+          process( response, 'groupList' ){ |x| reverse_type( x['item'] ) }
         end
 
-        def self.delete( id )
-          response = request( auth, Service, 'deleteById', body  )
-          process( response, 'group_deleteById_response' ){ |x| x }
+        def self.delete( auth, id )
+          response = request( auth, Service, 'deleteById', { id: id}  )
+          process( response, 'affectedRecords' ){ |x| x == '1' }
         end
       
-        def self.search_id_by_plan_id( id )
+        def self.search_id_by_plan_id( auth, id )
           response = request( auth, Service, 'getIdListByCampaignId', { 'campaignId' => id.to_s })
-          process( response, 'getIdListByCampaignId' ){ |x| x['groupIdList']['item'] }
+          process( response, 'groupIdList' ){ |x| x['item'] }
         end
 
       end

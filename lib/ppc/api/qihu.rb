@@ -1,6 +1,9 @@
 # -*- coding:utf-8 -*-
 require 'ppc/api/qihu/account'
+require 'ppc/api/qihu/plan'
+require 'ppc/api/qihu/group'
 require 'httparty'
+require 'json'
 
 module PPC
   module API
@@ -41,11 +44,14 @@ module PPC
         return result
       end
 
-      def ids_to_string( ids )
-        ids = ids unless ids.is_a? Array
+      def self.to_json_string( ids )
+        '''
+        convert list of string/int to list of json string
+        '''
+        ids = [ids] unless ids.is_a? Array
         ids_str = []
         ids.each{ |x| ids_str << x.to_s }
-        ids_str
+        ids_str.to_json
       end
 
       def self.make_type( params, map = @map)
