@@ -17,11 +17,6 @@ module PPC
                         [:extend_ad_type,:extendAdType]
                       ]
 
-        # move getCampaignId to plan module for operation call
-        def self.ids( auth )
-          response = request( auth, 'account', 'getCampaignIdList' )
-          process( response, 'campaignIdList' ){ |x| x['item'] }
-        end 
 
         def self.get( auth, ids )
           '''
@@ -31,6 +26,18 @@ module PPC
           body = { ' idList' =>  ids  }
           response = request( auth, Service, 'getInfoByIdList', body )
           process( response, 'campaignList' ){ |x| reverse_type( x['item'] ) }
+        end
+
+        # move getCampaignId to plan module for operation call
+        def self.ids( auth )
+          response = request( auth, 'account', 'getCampaignIdList' )
+          process( response, 'campaignIdList' ){ |x| to_id_list( x['item'])}
+        end 
+
+        # combine two original method to provice new method
+        def self.all( auth )
+          plan_ids = ids( auth )
+          get( auth, plan_ids )
         end
         
         # 奇虎计划API不提供批量服务

@@ -14,6 +14,7 @@ module PPC
                          [:pc_destination, :destinationUrl],
                          [:pc_display, :displayUrl]
                       ]
+
         @status_map = [ 
                                     [:id,:id], 
                                     [:quality,:qualityScore],
@@ -40,11 +41,29 @@ module PPC
           process( response, 'affectedRecords', 'failCreativeIds' ){ |x| x }        
         end
 
+         # 对update的再封装实现activate方法,未测试
+        def self.activate( auth, ids )
+          creatives = []
+          ids.each{ |id| creatives << { id: id, status:'enable'} }
+          update( auth, creatives )
+        end       
+
         def self.delete( auth, ids )
           ids = to_json_string( ids )
           body = { 'idList' => ids }
           response = request( auth, Service, 'deleteByIdList', body )
           process( response, 'affectedRecords' ){ |x|x }     
+        end
+
+        def self.status( auth, ids )
+          body = { idList: to_json_string( ids ) }
+          response = request( auth, Service, 'getStatusByIdList', body )
+          process( response, 'creativeList' ){ |x| reverse_type( x['item'], @status_map ) }     
+        end
+
+        # quality 本质上和 status 在一个方法里面
+        def self.quality( auth, ids )
+          status( auth, ids)
         end
 
         def self.search_id_by_group_id( auth, id, status = nil)
@@ -56,14 +75,10 @@ module PPC
           process( response, 'creativeIdList' ){ |x|  to_id_list( x['item'] )  }     
         end
 
-        def self.status( auth, ids )
-          body = { idList: to_json_string( ids ) }
-          response = request( auth, Service, 'getStatusByIdList', body )
-          process( response, 'creativeList' ){ |x| reverse_type( x['item'], @status_map ) }     
-        end
-
-        def self.getChangedIdList
-          # unimplemented
+        # combine two methods to provide another mether
+        def self.search_by_group_id( auth, id )
+          creative_ids = search_id_by_group_id( auth, id )
+          get( auth , creative_ids )
         end
 
       end

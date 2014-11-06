@@ -25,7 +25,28 @@ module PPC
         end
 
         def self.update( auth, params )
-          # response = resquest( auth, Service, '')
+          '''
+          对奇虎两个update的在封装。如果所有操作成功，succ为true，否则为false
+          failure中以字符串方式返回失败的操作
+          '''
+          result = {}
+          result[:succ] = true
+          result[:failure] = []
+          result[:result] = []
+
+          if params[:budget] != nil
+            budget_result = update_budget( auth, params[:budget] )
+            result[:succ] = result[:succ] && budget_result[:succ]
+            result[:failure] << 'budget' unless budget_result[:succ]
+          end
+
+          if params[:exclude_ip] != nil
+            ip_result = update_exclude_ip( auth, params[:exclude_ip] )
+            result[:succ] = result[:succ] && ip_result[:succ]
+            result[:failure] << 'exclude_ip' unless budget_result[:succ]
+          end
+
+          return result
         end
 
         def self.get_all_object( auth, ids )

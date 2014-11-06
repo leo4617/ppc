@@ -14,6 +14,7 @@ module PPC
                         [:pc_destination, :destinationUrl],
                         [:status, :status]
                       ]
+
         @status_map = [ 
                                     [:id,:id], 
                                     [:quality,:qualityScore],
@@ -35,10 +36,17 @@ module PPC
         end
 
         def self.update( auth, keywords )
-          keyword_types = JSON.generate( make_type( keywords ) )
+          keyword_types = make_type( keywords ).to_json
           body = { 'keywords' => keyword_types}
           response = request( auth, Service, 'update', body )
           process( response, 'affectedRecords', 'failKeywordIds' ){ |x| x }        
+        end
+
+        # 对update的再封装实现activate方法
+        def self.activate( auth, ids )
+          keywords = []
+          ids.each{ |id| keywords << { id: id, status:'enable'} }
+          update( auth, keywords )
         end
 
         def self.delete( auth, ids )
@@ -47,6 +55,17 @@ module PPC
           process( response, 'affectedRecords' ){ |x|  x  }     
         end
 
+        def self.status( auth, ids )
+          body = { idList: to_json_string( ids ) }
+          response = request( auth, Service, 'getStatusByIdList', body )
+          process( response, 'keywordList' ){ |x| reverse_type( x['item'], @status_map ) }     
+        end
+
+        # quality 本质上和 status 在一个方法里面
+        def self.quality( auth, ids )
+          status( auth, ids)
+        end
+        
         def self.search_id_by_group_id( auth, id, status = nil, match_type = nil )
           # 处理条件  
           body = {}
@@ -57,10 +76,10 @@ module PPC
           process( response, 'keywordIdList' ){ |x|to_id_list( x['item'] ) }     
         end
 
-        def self.status( auth, ids )
-          body = { idList: to_json_string( ids ) }
-          response = request( auth, Service, 'getStatusByIdList', body )
-          process( response, 'keywordList' ){ |x| reverse_type( x['item'], @status_map ) }     
+        # combine search_id and get to provide another method
+        def self.search_by_group_id( auth, id )
+          keyword_ids = search_id_by_group_id( auth, id )
+          get( auth, keyword_ids )
         end
 
         def self.getChangedIdList

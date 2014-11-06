@@ -45,6 +45,12 @@ module PPC
           process( response, 'groupIdList' ){ |x| to_id_list( x['item'] ) }
         end
 
+        # combine searchIdbyId and get to provide another method
+        def self.search_by_plan_id( auth, id )
+          group_ids = search_id_by_plan_id( auth, id )
+          get( auth, group_ids )
+        end
+
       end
     end
   end
