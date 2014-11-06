@@ -4,7 +4,6 @@ require 'ppc/api/qihu/plan'
 require 'ppc/api/qihu/group'
 require 'ppc/api/qihu/keyword'
 require 'ppc/api/qihu/creative'
-
 require 'httparty'
 require 'json'
 
@@ -26,7 +25,6 @@ module PPC
       end
 
       def self.process( response, key, failure_key = '', &func )
-        p response
         response_key = response.keys[0]
         content = response[ response_key ]
         # special case solution
@@ -101,7 +99,6 @@ module PPC
         end
         return params
       end
-
 
     end
   end

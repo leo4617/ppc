@@ -17,14 +17,15 @@ module PPC
                         [:update_time, :updateTime]
                       ]
 
+        # 奇虎组服务不提供批量add,delete和update方法
         def self.add( auth, group )
           response = request( auth, Service, 'add', make_type( group )[0] )
-          process( response, 'id' ){ |x| x  }
+          process( response, 'id' ){ |x| x.to_i  }
         end
         
         def self.update( auth, group )
           response = request( auth, Service, 'update', make_type( group )[0]  )
-          process( response, 'id' ){ |x| x  }
+          process( response, 'id' ){ |x| x.to_i  }
         end
 
         def self.get( auth, ids )
@@ -41,7 +42,7 @@ module PPC
       
         def self.search_id_by_plan_id( auth, id )
           response = request( auth, Service, 'getIdListByCampaignId', { 'campaignId' => id.to_s })
-          process( response, 'groupIdList' ){ |x| x['item'] }
+          process( response, 'groupIdList' ){ |x| to_id_list( x['item'] ) }
         end
 
       end

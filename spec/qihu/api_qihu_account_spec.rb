@@ -3,7 +3,7 @@ describe ::PPC::API::Qihu::Account do
   auth[:token] = $qihu_token
   auth[:accessToken] = $qihu_accessToken
 
-  it 'can get info' do
+  it 'can get accnout info' do
     response = ::PPC::API::Qihu::Account::info( auth )
     is_success( response )
     expect( response[:result].keys ).to eq [:id, :name, :email, :company, :industry1, :industry2, :balance, :budget, :open_domains]

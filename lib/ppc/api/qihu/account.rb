@@ -46,11 +46,6 @@ module PPC
           process( response, 'excludeIpList' ){ |x| x['item'] }
         end
 
-        def self.ids( auth )
-          response = request( auth, Service, 'getCampaignIdList' )
-          process( response, 'campaignIdList' ){ |x| x['item'] }
-        end 
-
         private
         def self.update_budget( auth, budget )
           response = request( auth, Service, 'updateBudget', { budget:budget })

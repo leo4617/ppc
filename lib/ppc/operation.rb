@@ -3,22 +3,22 @@ module PPC
 
     attr_accessor :id
     
-    def initialize(params)
+    def initialize( params )
       @id   = params[:id]
       @se   = params[:se]
-      auth = {
+      @auth = {
         username: params[:username],
         password: params[:password],
         # 在qihu360的api中，apikey就是auth[:token]
         token:    params[:token]
       }
       # add support for qihu360
-      # if  @se == 'qihu360'
-      #   raise "you are using qihu service, please enter cipherkey" if params[:cipherkey] == nil
-      #   raise "you are using qihu service, please enter cipheriv" if params[:cipheriv] == nil
-      #   cipher = { key: params[:cipherkey], iv: params[:cipheriv] } ) 
-      #   @auth[:accesstoken] = qihu_refresh_token( @auth, cipher )
-      # end
+      if  @se == 'qihu' && params[:accessToken] == nil 
+        raise "you are using qihu service, please enter cipherkey" if params[:cipherkey] == nil
+        raise "you are using qihu service, please enter cipheriv" if params[:cipheriv] == nil
+        cipher = { key: params[:cipherkey], iv: params[:cipheriv] } 
+        @auth[:accessToken] = qihu_refresh_token( @auth, cipher )
+      end
     end
 
     def qihu_refresh_token( account, cipher )
@@ -38,6 +38,7 @@ module PPC
         data = response.parsed_response
         account.api_key = data["account_clientLogin_response"]["accessToken"]
     end
+
     def call(service)
       eval "::PPC::API::#{@se.capitalize}::#{service.capitalize}"
     end
@@ -76,7 +77,7 @@ module PPC
     # Lazy Code #
     # ++++++++ #
 
-    # auxilary fucntion
+    # helper fucntion
     def get_obj( ids, service )
         '''
         Return service object. 
