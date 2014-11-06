@@ -2,6 +2,9 @@
 require 'ppc/api/qihu/account'
 require 'ppc/api/qihu/plan'
 require 'ppc/api/qihu/group'
+require 'ppc/api/qihu/keyword'
+require 'ppc/api/qihu/creative'
+
 require 'httparty'
 require 'json'
 
@@ -32,10 +35,10 @@ module PPC
         end
 
         result = { }
-        if content.keys.include? 'failures'
+        if content['failures'] != nil
           result[:succ] = false
           result[:failure] = content['failures']['item']
-          result[:result] = nil
+          result[:result] = content[ key ]
         else
           result[:succ] = true
           result[:result] = func[ key==''? content : content[ key ] ]
@@ -52,6 +55,13 @@ module PPC
         ids_str = []
         ids.each{ |x| ids_str << x.to_s }
         ids_str.to_json
+      end
+
+      def self.to_id_list( ids_str )
+            ids_str = [ids_str] unless ids_str.is_a? Array
+            ids_i = []
+            ids_str.each{ |id| ids_i<<id.to_i }
+            ids_i
       end
 
       def self.make_type( params, map = @map)
