@@ -1,18 +1,17 @@
-require 'baidu/operation_spec_helper'
+require 'opeartion/operation_spec_helper'
 
-  Auth =  {}
-  Auth[:username] = $baidu_username
-  Auth[:password] = $baidu_password 
-  Auth[:token] = $baidu_token
-  Auth[:se] = 'baidu'
-  preparation = ::PPC::API::Baidu::Group::ids( Auth )
+  auth =  {}
+  auth[:username] = $baidu_username
+  auth[:password] = $baidu_password 
+  auth[:token] = $baidu_token
+  auth[:se] = 'baidu'
+  preparation = ::PPC::API::Baidu::Group::ids( auth )
   test_plan_id = preparation[:result][0][:plan_id]
   test_group_id = preparation[:result][0][:group_ids][0]
 
-
 describe ::PPC::Operation::Account do
   subject{
-    ::PPC::Operation::Account.new( Auth )
+    ::PPC::Operation::Account.new( auth )
   }
 
   it_should_behave_like( "it can operate itself", {budget:2990})
@@ -45,7 +44,7 @@ end
 describe ::PPC::Operation::Plan do
   # get test subject
   subject{
-    ::PPC::Operation::Plan.new( Auth.merge({id:test_plan_id}) )
+    ::PPC::Operation::Plan.new( auth.merge({id:test_plan_id}) )
   }
 
   it_should_behave_like( "it can operate itself", {budget:2000})
@@ -58,7 +57,7 @@ end
 describe ::PPC::Operation::Group do
   # get test subject
   subject{
-    ::PPC::Operation::Group.new( Auth.merge({id:test_group_id}) )
+    ::PPC::Operation::Group.new( auth.merge({id:test_group_id}) )
   }
 
   it_should_behave_like( "it can operate itself", {price:200})
@@ -67,24 +66,3 @@ describe ::PPC::Operation::Group do
                                       { match_type:'wide'})
   it_should_behave_like( "it can get all sub_objects", 'keyword')
 end
-
-# describe ::PPC::Operation::Keyword do
-  # # get test subject
-  # subject{
-  #   ::PPC::Operation::Keyword.new( Auth.merge({id:?}) )
-  # }
-
-  # it_should_behave_like( "it can operate itself", {price:200})
-# end
-
-# describe ::PPC::Operation::Creative do
-  # # get test subject
-  # subject{
-  #   ::PPC::Operation::Creative.new( Auth.merge({id:?}) )
-  # }
-
-  # it_should_behave_like( "it can operate itself", {price:200})
-# end
-
-
-

@@ -73,7 +73,7 @@ module PPC
           body['matchType'] = match_type if match_type
           body['groupId'] = id
           response = request( auth, Service, 'getIdListByGroupId', body )
-          process( response, 'keywordIdList' ){ |x|to_id_list( x['item'] ) }     
+          process( response, 'keywordIdList' ){ |x|to_id_list( x==nil ? nil: x['item'] ) }     
         end
 
         # combine search_id and get to provide another method

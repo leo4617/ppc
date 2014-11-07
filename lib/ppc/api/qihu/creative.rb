@@ -72,7 +72,7 @@ module PPC
           body['status'] = status if status
           body['groupId'] = id
           response = request( auth, Service, 'getIdListByGroupId', body )
-          process( response, 'creativeIdList' ){ |x|  to_id_list( x['item'] )  }     
+          process( response, 'creativeIdList' ){ |x|  to_id_list( x==nil ? nil: x['item'] ) }     
         end
 
         # combine two methods to provide another mether

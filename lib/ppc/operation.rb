@@ -21,22 +21,22 @@ module PPC
       end
     end
 
-    def qihu_refresh_token( account, cipher )
-        cipher_aes = OpenSSL::cipher_aes::AES.new(128, :CBC)
+    def qihu_refresh_token( auth, cipher )
+        cipher_aes = OpenSSL::Cipher::AES.new(128, :CBC)
         cipher_aes.encrypt
         cipher_aes.key = cipher[:key]
         cipher_aes.iv = cipher[:iv]
-        encrypted = (cipher_aes.update(Digest::MD5.hexdigest(account.password)) + cipher_aes.final).unpack('H*').join
+        encrypted = (cipher_aes.update(Digest::MD5.hexdigest( auth[:password] )) + cipher_aes.final).unpack('H*').join
         url = "https://api.e.360.cn/account/clientLogin"
         response = HTTParty.post(url,
           :body => {
-          :username => account.username,
+          :username => auth[:username],
           :passwd => encrypted[0,64]
           },
-          :headers => {'apiKey' => account.token }
+          :headers => {'apiKey' => auth[:token] }
         )
         data = response.parsed_response
-        account.api_key = data["account_clientLogin_response"]["accessToken"]
+        data["account_clientLogin_response"]["accessToken"]
     end
 
     def call(service)

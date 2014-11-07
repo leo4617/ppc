@@ -83,7 +83,7 @@ module PPC
         def self.search_id_by_group_id( auth, group_ids, debug = false  )
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { cpcGrpIds: group_ids }
-          response = request( auth, Service, "getCpcIdeaByCpcGrpId", body )
+          response = request( auth, Service, "getCpcIdByCpcGrpId", body )
           process(response, 'cpcGrpCpcIds', debug){|x| make_groupKeywordIds( x ) }
         end
 
@@ -148,7 +148,7 @@ module PPC
                   type[ key[1] ] = Match_type[ value ] if value                 
                 else
                   value = param[ key[0] ]
-                  type[ key[1] ] = value if value
+                  type[ key[1] ] = value if value != nil
                 end
               end
             types << type
@@ -169,7 +169,7 @@ module PPC
                   param[ key[0] ] = Match_type_r[ value ] if value                 
                 else
                   value = type[ key[1].to_s.snake_case.to_sym ]
-                  param[ key[0] ] = value if value
+                  param[ key[0] ] = value if value != nil
                 end
               end # map.each
             params << param

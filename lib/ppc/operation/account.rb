@@ -6,7 +6,8 @@ module PPC
 
       def info
         info = call('account').info(@auth)
-        @id = info[:result][0][:id] if @id == nil
+        p info
+        @id = info[:result][:id] if @id == nil
         return info
       end
 

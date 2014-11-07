@@ -49,6 +49,7 @@ module PPC
         '''
         convert list of string/int to list of json string
         '''
+        return '' if ids == nil
         ids = [ids] unless ids.is_a? Array
         ids_str = []
         ids.each{ |x| ids_str << x.to_s }
@@ -56,10 +57,11 @@ module PPC
       end
 
       def self.to_id_list( ids_str )
-            ids_str = [ids_str] unless ids_str.is_a? Array
-            ids_i = []
-            ids_str.each{ |id| ids_i<<id.to_i }
-            ids_i
+        return [] if ids_str == nil
+        ids_str = [ids_str] unless ids_str.is_a? Array
+        ids_i = []
+        ids_str.each{ |id| ids_i<<id.to_i }
+        ids_i
       end
 
       def self.make_type( params, map = @map)

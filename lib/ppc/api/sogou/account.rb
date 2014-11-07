@@ -20,7 +20,7 @@ module PPC
 
         def self.info(auth, debug = false)
           response = request(auth,Service,'getAccountInfo'  )
-          return process( response, 'accountInfoType', debug ){ |x|reverse_type(x) }
+          return process( response, 'accountInfoType', debug ){ |x|reverse_type(x)[0] }
         end
 
         def self.update(auth, param = {}, debug = false)
@@ -33,7 +33,7 @@ module PPC
           infoType = make_type( param )[0]
           body = { accountInfoType: infoType }
           response = request(auth,Service,'updateAccountInfo', body)
-          return process( response, 'accountInfoType', debug ){ |x|reverse_type(x) }
+          return process( response, 'accountInfoType', debug ){ |x|reverse_type(x)[0] }
         end
 
       end
