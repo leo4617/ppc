@@ -31,7 +31,17 @@ module PPC
           creative_types = make_type( creatives ).to_json
           body = { 'creatives' => creative_types}
           response = request( auth, Service, 'add', body )
-          process( response, 'creativeIdList'){ |x| to_id_list( x['item'] ) }
+          process( response, 'creativeIdList'){ |x| to_id_hash_list( x['item'] ) }
+        end
+
+        # helper function for self.add() method
+        private
+        def self.to_id_hash_list( str )
+          reuturn [] if str == nil
+          str = [str] unless str.is_a?Array
+          x= []
+          str.each{ |i| x << { id: i.to_i } }
+          return x
         end
 
         def self.update( auth, creatives )
@@ -72,13 +82,22 @@ module PPC
           body['status'] = status if status
           body['groupId'] = id
           response = request( auth, Service, 'getIdListByGroupId', body )
-          process( response, 'creativeIdList' ){ |x|  to_id_list( x==nil ? nil: x['item'] ) }     
+          # 伪装成百度接口
+          process( response, 'creativeIdList' ){ 
+            |x|  
+            [ { group_id:id, creative_ids:to_id_list( x==nil ? nil: x['item'] ) } ] 
+          }     
         end
 
         # combine two methods to provide another mether
         def self.search_by_group_id( auth, id )
           creative_ids = search_id_by_group_id( auth, id )
-          get( auth , creative_ids )
+          response = get( auth , creative_ids )
+          # 伪装成百度接口
+          if response[:succ]
+            response[:result] = [ { group_id:id, creatives:response[:result ] } ]
+          end
+          return response
         end
 
       end

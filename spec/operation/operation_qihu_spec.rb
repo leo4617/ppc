@@ -9,7 +9,7 @@ require 'operation/operation_spec_helper'
 
   auth[:se] = 'qihu'
   test_plan_id = 717479502
-  test_group_id = 1170453458
+  test_group_id = 1203987666
 
 describe ::PPC::Operation::Account do
   subject{

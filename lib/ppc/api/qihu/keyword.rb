@@ -32,7 +32,17 @@ module PPC
           keyword_types =  make_type( keywords ).to_json
           body = { 'keywords' => keyword_types}
           response = request( auth, Service, 'add', body )
-          process( response, 'keywordIdList'){ |x| to_id_list( x['item'] )  }
+          process( response, 'keywordIdList'){ |x| to_id_hash_list( x['item'] )  }
+        end
+
+        # helper function for self.add() method
+        private
+        def self.to_id_hash_list( str )
+          reuturn [] if str == nil
+          str = [str] unless str.is_a?Array
+          x= []
+          str.each{ |i| x << { id: i.to_i } }
+          return x
         end
 
         def self.update( auth, keywords )
@@ -73,13 +83,22 @@ module PPC
           body['matchType'] = match_type if match_type
           body['groupId'] = id
           response = request( auth, Service, 'getIdListByGroupId', body )
-          process( response, 'keywordIdList' ){ |x|to_id_list( x==nil ? nil: x['item'] ) }     
+          # 伪装成百度接口
+          process( response, 'keywordIdList' ){ 
+            |x|
+            [ { group_id:id, keyword_ids:to_id_list( x==nil ? nil: x['item'] ) } ]
+          }     
         end
 
         # combine search_id and get to provide another method
         def self.search_by_group_id( auth, id )
-          keyword_ids = search_id_by_group_id( auth, id )
-          get( auth, keyword_ids )
+          keyword_ids = search_id_by_group_id( auth, id )[:result][0][:keyword_ids]
+          response = get( auth, keyword_ids )
+          if response[:succ]
+            # 伪装成百度接口
+            response[:result] = [ { group_id:id, keywords:response[:result] } ]
+          end
+          return response
         end
 
         def self.getChangedIdList

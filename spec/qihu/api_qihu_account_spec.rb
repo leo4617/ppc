@@ -23,11 +23,5 @@ describe ::PPC::API::Qihu::Account do
     response = ::PPC::API::Qihu::Account::update_budget( auth, 3500 )
     is_success( response )
   end
-
-  it ' can get all plan ids ' do
-     response = ::PPC::API::Qihu::Account::ids( auth )
-     is_success( response )
-     expect( response[:result].class ).to eq Array
-  end
-
+  
 end

@@ -3,7 +3,7 @@ describe ::PPC::API::Qihu::Group do
   auth[:token] = $qihu_token
   auth[:accessToken] =  $qihu_accessToken
 
-  test_plan_id = ::PPC::API::Qihu::Account::ids( auth )[:result][0].to_i
+  test_plan_id = ::PPC::API::Qihu::Plan::ids( auth )[:result][0].to_i
   test_group_id = 0 
 
   it 'can add a group' do
@@ -25,10 +25,15 @@ describe ::PPC::API::Qihu::Group do
   end
 
   it 'can search id by plan id ' do
-    response = ::PPC::API::Qihu::Group::search_id_by_plan_id( auth, test_plan_id )
+    response = ::PPC::API::Qihu::Group::search_id_by_plan_id( auth, 717479502 )
     is_success( response )
   end
 
+  it 'can search by plan id ' do
+    response = ::PPC::API::Qihu::Group::search_by_plan_id( auth, 717479502 )
+    is_success( response )
+  end
+  
   it 'can delete a group' do
     response = ::PPC::API::Qihu::Group::delete( auth, test_group_id)
     is_success( response )   

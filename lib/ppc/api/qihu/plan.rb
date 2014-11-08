@@ -36,19 +36,21 @@ module PPC
 
         # combine two original method to provice new method
         def self.all( auth )
-          plan_ids = ids( auth )
+          plan_ids = ids( auth )[:result]
           get( auth, plan_ids )
         end
         
         # 奇虎计划API不提供批量服务
         def self.add( auth, plan )
           response = request( auth, Service, 'add', make_type( plan )[0])
-          process( response, 'id' ){ |x| x.to_i }
+          # 这里将返回的简单int做一个array和hash的封装一保证接口和百度，搜狗的一致性
+          process( response, 'id' ){ |x| [ { id:x.to_i } ] }
         end
 
         def self.update( auth, plan ) 
            response = request( auth, Service, 'update', make_type( plan )[0])
-           process( response, 'id' ){ |x| x.to_i }
+           #同上，保证接口一致性
+           process( response, 'id' ){ |x| [ { id:x.to_i } ] }
         end
 
         def self.delete( auth, id )

@@ -3,12 +3,18 @@ describe ::PPC::API::Qihu::Keyword do
   auth[:token] = $qihu_token
   auth[:accessToken] = $qihu_accessToken
 
-  test_plan_id = ::PPC::API::Qihu::Account::ids( auth )[:result][0].to_i
-  test_group_id = ::PPC::API::Qihu::Group::search_id_by_plan_id( auth, test_plan_id )[:result][0].to_i
+  test_plan_id = ::PPC::API::Qihu::Plan::ids( auth )[:result][0].to_i
+  test_group_id = ::PPC::API::Qihu::Group::search_id_by_plan_id( auth, test_plan_id )[:result][0][:group_ids][0]to_i
   test_keyword_id = 0
 
-  it 'can search keyword by group id' do
+  it 'can search keyword id by group id' do
     response = ::PPC::API::Qihu::Keyword::search_id_by_group_id( auth, test_group_id )
+    is_success( response)
+    expect( response[:result].class ).to eq Array
+  end
+
+  it 'can search keyword by group id' do
+    response = ::PPC::API::Qihu::Keyword::search_by_group_id( auth, test_group_id )
     is_success( response)
     expect( response[:result].class ).to eq Array
   end

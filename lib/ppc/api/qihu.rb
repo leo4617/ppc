@@ -25,6 +25,7 @@ module PPC
       end
 
       def self.process( response, key, failure_key = '', &func )
+        p response
         response_key = response.keys[0]
         content = response[ response_key ]
         # special case solution
