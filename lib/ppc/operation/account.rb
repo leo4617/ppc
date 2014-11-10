@@ -1,4 +1,3 @@
-require 'ppc/operation'
 module PPC
   module Operation
     class Account

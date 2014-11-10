@@ -4,6 +4,7 @@ require 'ppc/api/qihu/plan'
 require 'ppc/api/qihu/group'
 require 'ppc/api/qihu/keyword'
 require 'ppc/api/qihu/creative'
+require 'ppc/api/qihu/report'
 require 'httparty'
 require 'json'
 

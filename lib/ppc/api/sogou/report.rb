@@ -32,14 +32,14 @@ module PPC
           process( response, 'isGenerated', debug ){ |x| status[x] }
         end
 
-        def self.get_file_url( auth, id, debug = false )
+        def self.get_url( auth, id, debug = false )
           body = { reportId:  id }
           response = request( auth, Service, ' getReportPath' ,body)
           process( response, 'reportPath', debug ){ |x| x }       
         end
 
         private
-        def self.get_date()
+        def self.get_date( params )
          begin
             startDate = DateTime.parse(params[:start]).iso8601
             endDate = DateTime.parse(params[:end]).iso8601
@@ -59,7 +59,7 @@ module PPC
           requesttypes = []
           params.each do  |param|
             requesttype = {}
-            startDate, endDate = get_date()
+            startDate, endDate = get_date( param )
 
             requesttype[:performanceData]    =     param[:fields]  && %w(cost cpc click impression ctr) || %w(click)
             requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type] 
