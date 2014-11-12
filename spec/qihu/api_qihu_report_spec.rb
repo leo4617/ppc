@@ -4,8 +4,8 @@ describe ::PPC::API::Qihu::Report do
   auth[:accessToken] =  $qihu_accessToken
 
   it "can get keyword cost report" do
-    param = { level:"group"}
-    response = ::PPC::API::Qihu::Report::get_keyword_report( auth , param)
+    param = { level:"account"}
+    response = ::PPC::API::Qihu::Report::cost_report( auth , param)
   end
 
 end

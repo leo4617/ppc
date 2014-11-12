@@ -6,23 +6,51 @@ module PPC
     class Qihu
       class Report< Qihu
         Service = 'report'
-        def self.get_keyword_report( auth, params )
-          body = make_report_request_type( params )
-          p body
+
+        @map =[
+                [:queryword,:queryword],
+                [:plan_id,:campaignId],
+                [:creative_id,:creativeId],
+                [:keyword,:keyword],
+                [:views,:views],
+                [:clicks,:clicks],
+                [:date,:date],
+                [:keyword_id,:keywordId],
+                [:group_id,:groupId],
+                [:cost,:totalCost],
+                [:position,:avgPosition]
+              ]
+
+        def self.cost_report( auth, params )
+          body = make_type( params )
+          response = request( auth, Service, 'keyword', body )
+          process( response, 'keywordList' ){ |x| get_item( x )}
+        end
+
+        def self.query_report( auth, params )
+          body = make_type( params )
           response = request( auth, Service, 'queryword', body )
-          p response
+          process( response, 'querywordList' ){ |x| get_item( x )}
+        end
+
+        # incase idlist == nil
+        private
+        def self.get_item( params )
+          return nil if params == nil
+          return reverse_type( params ) 
         end
 
         private 
-        def self.make_report_request_type( param )
+        def self.make_type( param )
           type = {}
           # add option
           type[:level] = param[:level]
-          type[:page] = param[:page]
+          type[:page] = param[:page] || 1
           # add ids
           if param[:ids] != nil
-            ids = [ param[:ids] ] unless param[:ids].is_a? Array
-            type[:idList] = ids.to_json
+            ids = param[:ids] 
+            ids = [ ids ] unless ids.is_a? Array
+            type[:IdList] = ids.to_json
           end
           # add date
           if param[:startDate]==nil || param[:endDate]==nil
@@ -37,8 +65,8 @@ module PPC
 
         private
         def self.get_date()
-            startDate = (Time.now - 2*24*3600).utc.iso8601
-            endDate = (Time.now - 24*3600).utc.iso8601
+            endDate = Time.now.to_s[0,10]
+            startDate = (Time.now - 24*3600).to_s[0,10]
           return startDate,endDate
         end
 

@@ -21,12 +21,11 @@ module PPC
                                 'accessToken' => auth[:accessToken], 
                                 'serveToken' => Time.now.to_i.to_s  }
               )
-
+        p params
         response.parsed_response
       end
 
       def self.process( response, key, failure_key = '', &func )
-        p response
         response_key = response.keys[0]
         content = response[ response_key ]
         # special case solution
