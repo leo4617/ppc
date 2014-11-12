@@ -5,8 +5,7 @@ module PPC
       class Keyword< Sogou
         Service = 'Cpc'
 
-        Match_type  = { 'exact' => 0, 'wide' => 1 }
-        Match_type_r  = { 0 => 'exact', 1 => 'wide' }
+        Match_type  = { 'exact' => 0, 'wide' => 1,0 => 'exact', 1 => 'wide' } 
                 
         @map  = [
                             [:id,:cpcId],
@@ -166,7 +165,7 @@ module PPC
               map.each do |key|
                 if key[0] == :match_type
                    value = type[ key[1].to_s.snake_case.to_sym]
-                  param[ key[0] ] = Match_type_r[ value ] if value                 
+                  param[ key[0] ] = Match_type[ value ] if value                 
                 else
                   value = type[ key[1].to_s.snake_case.to_sym ]
                   param[ key[0] ] = value if value != nil

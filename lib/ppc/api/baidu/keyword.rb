@@ -5,8 +5,7 @@ module PPC
       class Keyword< Baidu
         Service = 'Keyword'
 
-        Match_type  = { 'exact' => 1, 'pharse' => 2, 'wide' => 3 }
-        Match_type_r  = { 1 => 'exact', 2=> 'pharse' , 3 => 'wide' }
+        Match_type  = { 'exact' => 1, 'pharse' => 2, 'wide' => 3,1 => 'exact', 2=> 'pharse' , 3 => 'wide'  }
         
         Device          = { 'pc' => 0, 'mobile' => 1, 'all' => 2 }
         Type              = { 'plan' => 3, 'group' => 5, 'keyword' => 11 }
@@ -189,7 +188,7 @@ module PPC
               map.each do |key|
                 if key[0] == :match_type
                    value = type[ key[1].to_s ]
-                  param[ key[0] ] = Match_type_r[ value ] if value                 
+                  param[ key[0] ] = Match_type[ value ] if value                 
                 else
                   value = type[ key[1].to_s ]
                   param[ key[0] ] = value if value
