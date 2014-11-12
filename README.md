@@ -36,7 +36,11 @@ ppc
     group.add_keyword( [ keyword1, keyword2 ] ) 
     
     
-### Return value:
+-----------------------------------------------
+    
+#API:
+
+### Return values:
 All mehtods return a hash:
     
     {
