@@ -47,15 +47,15 @@ module PPC
         return result
       end
 
-      def self.to_json_string( ids )
+      def self.to_json_string( items )
         '''
         convert list of string/int to list of json string
         '''
-        return '' if ids == nil
-        ids = [ids] unless ids.is_a? Array
-        ids_str = []
-        ids.each{ |x| ids_str << x.to_s }
-        ids_str.to_json
+        return '' if items == nil
+        items = [items] unless items.is_a? Array
+        items_str = []
+        items.each{ |x| items_str << x.to_s }
+        items_str.to_json
       end
 
       def self.to_id_list( ids_str )

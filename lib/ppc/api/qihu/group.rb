@@ -16,6 +16,7 @@ module PPC
                         [:add_time, :addTime],
                         [:update_time, :updateTime]
                       ]
+
         # 再次封装提供all和ids
         def self.ids( auth )
           '''
@@ -84,6 +85,30 @@ module PPC
           end
           return response
         end
+
+      # customize make type to convert negative word
+      def self.make_type( params, map = @map)
+        '''
+        '''
+        params = [ params ] unless params.is_a? Array
+
+        types = []
+        params.each do |param|
+          type = {}
+
+            map.each do |key|
+              if key[0] == :negative
+                value = param[ :negative ].to_json
+              else
+                value = param[ key[0] ]
+              end
+              type[ key[1] ] = value if value != nil
+            end
+
+          types << type
+        end
+        return types
+      end
 
       end
     end
