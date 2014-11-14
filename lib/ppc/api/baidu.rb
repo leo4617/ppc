@@ -49,25 +49,20 @@ module PPC
         http.use_ssl = true
 
         response = http.post(uri.path, http_body, http_header)
-        response = JSON.parse response.body
-
-        # return response if with_header else response['body']
+        response = JSON.parse( response.body )
       end
 
-      def self.process( response, key,  debug = false , &func)
+      def self.process( response, key, &func)
         '''
         Process Http response. If operation successes, return value of given keys.
         You can process the result using function &func, or do nothing by passing 
         block {|x|x}
         =========================== 
         @Output: resultType{ desc: boolean, failure: Array,  result: Array }
+
         failure is the failures part of response\'s header
         result is the processed response body.
         '''
-        # debug当初为调试所用，现在失效
-        # 相关代码暂时保留， 未来将会移除
-        # return response if debug
-
         result = {}
         result[:succ] = response['header']['desc']=='success'? true : false
         result[:failure] = response['header']['failures']

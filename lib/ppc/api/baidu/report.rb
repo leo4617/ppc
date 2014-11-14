@@ -17,7 +17,7 @@ module PPC
 
 
         # 少用，而且百度说明文档不清楚，实际操作不可行，失效
-        # def self.get_realtime( auth, params, type = 'data', debug = false )
+        # def self.get_realtime( auth, params, type = 'data'  )
         #   request = make_realtimerequest( params )[0]
         #   body = { realTimeRequestTypes:  request }
         #   response = request( auth, Service, 'getRealTimeData' ,body)
@@ -33,27 +33,27 @@ module PPC
         # end
 
 
-        def self.get_id( auth, params, debug = false )
+        def self.get_id( auth, params  )
           request = make_reportrequest( params )[0]
           body =  { reportRequestType:  request }
           response = request( auth, Service, 'getProfessionalReportId' ,body) 
-          process( response, 'reportId', debug ){ |x| x }
+          process( response, 'reportId' ){ |x| x }
         end
 
-        def self.get_status( auth, id, debug = false)
+        def self.get_status( auth, id )
           '''
           input id should be string
           '''
           status = {1=>'Waiting' ,2=>'Opearting' ,3=>'Finished'}
           body = { reportId:  id }
           response = request( auth, Service, 'getReportState' ,body)
-          process( response, 'isGenerated', debug ){ |x| status[x] }
+          process( response, 'isGenerated' ){ |x| status[x] }
         end
 
-        def self.get_url( auth, id, debug = false )
+        def self.get_url( auth, id  )
           body = { reportId:  id }
           response = request( auth, Service, 'getReportFileUrl' ,body)
-          process( response, 'reportFilePath', debug ){ |x| x }       
+          process( response, 'reportFilePath' ){ |x| x }       
         end
 
         private

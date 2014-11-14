@@ -17,22 +17,22 @@ module PPC
                         [:reserved, :reserved]
                       ]
 
-        def self.ids(auth, debug = false )
+        def self.ids(auth )
           """
           @return : Array of campaignAdgroupIds
           """
           response = request( auth, Service , "getAllAdgroupId" )
-          process( response, 'campaignAdgroupIds', debug ){ |x| make_planGroupIds( x ) }
+          process( response, 'campaignAdgroupIds' ){ |x| make_planGroupIds( x ) }
         end
 
-        def self.get( auth, ids, debug = false )
+        def self.get( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids }
           response = request(auth, Service, "getAdgroupByAdgroupId",body )
-          process( response, 'adgroupTypes', debug ){ |x| reverse_type(x) }
+          process( response, 'adgroupTypes' ){ |x| reverse_type(x) }
         end
 
-        def self.add( auth, groups, debug = false )
+        def self.add( auth, groups )
           """
           @ input : one or list of AdgroupType
           @ output : list of AdgroupType
@@ -42,10 +42,10 @@ module PPC
           body = {adgroupTypes:  adgrouptypes }
           
           response = request( auth, Service, "addAdgroup", body  )
-          process( response, 'adgroupTypes', debug ){ |x| reverse_type(x) }
+          process( response, 'adgroupTypes' ){ |x| reverse_type(x) }
         end
 
-        def self.update( auth, groups, debug = false )
+        def self.update( auth, groups )
           """
           @ input : one or list of AdgroupType
           @ output : list of AdgroupType
@@ -54,31 +54,31 @@ module PPC
           body = {adgroupTypes: adgrouptypes}
           
           response = request( auth, Service, "updateAdgroup",body )
-          process( response, 'adgroupTypes', debug ){ |x| reverse_type(x) }
+          process( response, 'adgroupTypes' ){ |x| reverse_type(x) }
         end
 
-        def self.delete( auth, ids, debug = false )
+        def self.delete( auth, ids )
           """
           delete group body has no message
           """
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids }
           response = request( auth, Service,"deleteAdgroup", body )
-          process( response, 'nil', debug ){ |x|  x  }
+          process( response, 'nil' ){ |x|  x  }
         end
 
-        def self.search_by_plan_id( auth, ids, debug = false )
+        def self.search_by_plan_id( auth, ids )
           ids = [ ids ] unless ids.class == Array
           body = { campaignIds: ids }
           response = request( auth, Service ,"getAdgroupByCampaignId",  body )
-          process( response, 'campaignAdgroups', debug ){ |x| make_planGroups( x ) }
+          process( response, 'campaignAdgroups' ){ |x| make_planGroups( x ) }
         end
 
-        def self.search_id_by_plan_id( auth, ids, debug = false )
+        def self.search_id_by_plan_id( auth, ids )
           ids = [ ids ] unless ids.class == Array
           body = { campaignIds: ids }
           response = request( auth, Service ,"getAdgroupIdByCampaignId",  body )
-          process( response, 'campaignAdgroupIds', debug ){ |x| make_planGroupIds( x ) }
+          process( response, 'campaignAdgroupIds' ){ |x| make_planGroupIds( x ) }
         end
 
         private
