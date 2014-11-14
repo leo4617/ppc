@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["maqianlie@gmail.com, liuyu_tc@163.com, seoaqua@qq.com"]
   spec.summary       = %q{ppc api for  baidu qihu sogou}
   spec.description   = %q{ppc api for  baidu qihu sogou}
-  spec.homepage      = "http://github.com/seoaqua/ppc"
+  spec.homepage      = "http://github.com/elong/ppc"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

@@ -12,20 +12,16 @@ describe ::PPC::API::Baidu do
 
   response = JSON.parse fake_response
 
-  Expected_success_result = [:id, :balance, :cost, :payment, 
+  expected_success_result = [:id, :balance, :cost, :payment, 
                                                 :budget_type, :budget, :region, :exclude_ip, 
                                                 :open_domains, :reg_domain, :offline_time, 
                                                 :weekly_budget ]
 
-  Expected_failure_result = ["code", "message", "position", "content"] 
+  expected_failure_result = ["code", "message", "position", "content"] 
 
   it 'can process response' do
     response = ::PPC::API::Baidu::process( response, 'accountInfoType' ){|x| ::PPC::API::Baidu::Account::reverse_type(x)}
-    
-    p "HAHA"*12
-    p response
-
-    expect( response[:result][0].keys ).to eq Expected_success_result
+    expect( response[:result][0].keys ).to eq expected_success_result
   end
 
   # params for make_type and reverse_type test
@@ -47,7 +43,7 @@ describe ::PPC::API::Baidu do
   test_param[ :id] = 123
   test_param[ :name] = 'testplan'
   test_param[ :exclude_ip] =  [321,5432,52,1]
-  test_param[ :exact_negative] = ['test','plan']
+  test_param[ :exact_negative] = ['wu','liaode']
 
   expected_type = [{:campaignId=>123, :campaignName=>"testplan", :excludeIp=>[321, 5432, 52, 1], :exactNegativeWords=>["wu", "liaode"]}]
   expexted_params = [{:id=>123, :name=>"test_plan", :exclude_ip=>[321, 5432, 52, 1], :exact_negative=>["wu", "liaode"]}]

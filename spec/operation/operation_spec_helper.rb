@@ -1,4 +1,4 @@
-shared_examples "it can operate itself" do 
+shared_examples "object" do 
   | update |
   it 'can get info' do
     result = subject.info
@@ -12,7 +12,7 @@ shared_examples "it can operate itself" do
 end
 
 # 在这之前要describ object
-shared_examples "it can operate sub_objects" do 
+shared_examples "object operator" do 
   |object_name,  add_info, update_info |
   object_id = 0
   
@@ -20,8 +20,6 @@ shared_examples "it can operate sub_objects" do
     method_name = "add_"+object_name
     result = subject.send( method_name.to_sym, add_info )
     is_success( result )
-    p "HAHAHAAAHA"*12
-    p result
     object_id = result[:result][0][:id]
   end
 
@@ -38,7 +36,7 @@ shared_examples "it can operate sub_objects" do
   end
 end
 
-  shared_examples "it can get all sub_objects" do
+  shared_examples "object parent" do
     | object_name| 
     it 'can get all objects'do
       result = subject.send( (object_name + 's').to_sym ) 

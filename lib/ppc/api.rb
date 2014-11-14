@@ -1,4 +1,6 @@
 require 'ppc/api/baidu'
+require 'ppc/api/sogou'
+require 'ppc/api/qihu'
 
 module PPC
   module API

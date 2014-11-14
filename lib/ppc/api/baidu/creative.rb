@@ -39,10 +39,10 @@ module PPC
 
         def self.update( auth, creatives, debug = false )
           '''
-          根据实际使用情况，更新的时候creative title为必填选
+          根据实际使用情况
           '''
           body = { creativeTypes: make_type( creatives ) }
-          response = request( auth, Service, 'addCreative', body )
+          response = request( auth, Service, 'updateCreative', body )
           process( response, 'creativeTypes', debug ){ |x| reverse_type(x) }
         end
 
@@ -110,10 +110,10 @@ module PPC
         private
         def self.make_groupCreatives( groupCreatives )
           group_creatives = []
-          groupCreative.each do |groupKeyword|
+          groupCreatives.each do |groupCreative |
             group_creative = {}
             group_creative[:group_id] = groupCreative['adgroupId']
-            group_creative[:keywords] = reverse_type( groupCreative['keywordTypes'] )
+            group_creative[:creatives] = reverse_type( groupCreative['creativeTypes'] )
             group_creatives << group_creative
           end
           return group_creatives

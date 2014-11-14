@@ -1,25 +1,20 @@
 module PPC
   module API
-    class Baidu
-      class Account< Baidu
+    class Sogou
+      class Account< Sogou
         Service = 'Account'
 
         @map = [
-                          [:id,:userid],            
+                          [:id,:accountid],            
                           [:balance,:balance],         
-                          [:cost,:cost],               
-                          [:payment,:payment],                          
-                          [:status,:userStat],                            
-                          [:budget_type,:budgetType],                   
+                          [:cost,:totalCost],               
+                          [:payment,:totalPay],                          
+                          [:budget_type,:type],                   
                           [:budget,:budget],                              
-                          [:region,:regionTarget],                    
-                          [:exclude_ip,:excludeIp],                        
-                          [:isdynamic,:isDynamicCreative],         
-                          [:dynamic_param,:dynamicCreativeParam], 
-                          [:open_domains,:openDomains],                  
-                          [:reg_domain,:regDomain],                       
+                          [:region,:regions],                    
+                          [:exclude_ip,:excludeIps],                        
+                          [:open_domains,:domains],                  
                           [:offline_time,:budgetOfflineTime],         
-                          [:weekly_budget,:weeklyBudget],                
                           [:opt,:opt]                                  
                         ]
 
@@ -38,7 +33,6 @@ module PPC
           infoType = make_type( param )[0]
           body = { accountInfoType: infoType }
           response = request(auth,Service,'updateAccountInfo', body)
-          
           return process( response, 'accountInfoType', debug ){ |x|reverse_type(x)[0] }
         end
 

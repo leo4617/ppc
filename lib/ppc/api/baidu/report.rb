@@ -15,21 +15,21 @@ module PPC
         Device_map = { 'all' => 0, 'pc' => 1, 'mobile' => 2 }
         Unit_map = { 'day' => 5, 'week' => 4, 'month' => 3, 'year' => 1, 'hour' => 7 }
 
-        def self.get_realtime( auth, params, type = 'data', debug = false )
-          request = make_realtimerequest( params )[0]
-          body = { realTimeRequestTypes:  request }
-          response = request( auth, Service, 'getRealTimeData' ,body)
-          if debug
-            return response
-          end
-
-          response = case type
-            when 'data'     then    response['body']['realTimeResultTypes']
-            when 'query'  then   response['body']['realTimeQueryResultTypes']
-            when 'pair'      then    response['body']['realTimePairResultTypes']
-          end
-          return response                   
-        end
+        # 少用，而且百度说明文档不清楚，实际操作不可行，失效
+        # def self.get_realtime( auth, params, type = 'data', debug = false )
+        #   request = make_realtimerequest( params )[0]
+        #   body = { realTimeRequestTypes:  request }
+        #   response = request( auth, Service, 'getRealTimeData' ,body)
+        #   if debug
+        #     return response
+        #   end
+        #   response = case type
+        #     when 'data'     then    response['body']['realTimeResultTypes']
+        #     when 'query'  then   response['body']['realTimeQueryResultTypes']
+        #     when 'pair'      then    response['body']['realTimePairResultTypes']
+        #   end
+        #   return response                   
+        # end
 
 
         def self.get_id( auth, params, debug = false )
@@ -49,14 +49,15 @@ module PPC
           process( response, 'isGenerated', debug ){ |x| status[x] }
         end
 
-        def self.get_file_url( auth, id, debug = false )
+        def self.get_url( auth, id, debug = false )
+
           body = { reportId:  id }
           response = request( auth, Service, 'getReportFileUrl' ,body)
           process( response, 'reportFilePath', debug ){ |x| x }       
         end
 
         private
-        def self.get_date()
+        def self.get_date( params )
          begin
             startDate = DateTime.parse(params[:start]).iso8601
             endDate = DateTime.parse(params[:end]).iso8601
@@ -77,7 +78,7 @@ module PPC
           requesttypes = []
           params.each do  |param|
             requesttype = {}
-            startDate, endDate = get_date()
+            startDate, endDate = get_date( param )
 
             requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
             requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type] 
@@ -102,7 +103,7 @@ module PPC
           requesttypes = []
           params.each do  |param|
             requesttype = {}
-            startDate, endDate = get_date()
+            startDate, endDate = get_date( param )
 
             requesttype[:performanceData]   =     param[:fields]        ||     %w(click impression)
             requesttype[:reportType]               =     Type_map[ param[:type] ]          if  param[:type]

@@ -15,6 +15,15 @@ module PPC
     class Baidu
 
       @map = nil
+      @@debug = false
+
+      def self.debug_on
+        @@debug = true
+      end
+
+      def self.debug_off
+        @@debug = false
+      end
 
       def self.request( auth, service, method, params = {} )
         '''
@@ -35,7 +44,8 @@ module PPC
         }
 
         http = Net::HTTP.new(uri.host, 443)
-        http.set_debug_output $stderr
+        # 是否显示http通信输出
+        http.set_debug_output( $stdout ) if @@debug
         http.use_ssl = true
 
         response = http.post(uri.path, http_body, http_header)
@@ -44,7 +54,7 @@ module PPC
         # return response if with_header else response['body']
       end
 
-      def self.process( response, key , debug = false ,  &func)
+      def self.process( response, key,  debug = false , &func)
         '''
         Process Http response. If operation successes, return value of given keys.
         You can process the result using function &func, or do nothing by passing 
@@ -54,8 +64,10 @@ module PPC
         failure is the failures part of response\'s header
         result is the processed response body.
         '''
-        # 保留 debug 功能
-        return response if debug
+        # debug当初为调试所用，现在失效
+        # 相关代码暂时保留， 未来将会移除
+        # return response if debug
+
 
         result = {}
         result[:succ] = response['header']['desc']=='success'? true : false
@@ -92,7 +104,7 @@ module PPC
 
             map.each do |key|
               value = param[ key[0] ]
-              type[ key[1] ] = value if value
+              type[ key[1] ] = value if value != nil
             end
 
           types << type
@@ -119,7 +131,7 @@ module PPC
           
             map.each do |key|
                 value = type[ key[1].to_s ]
-                param[ key[0] ] = value if value
+                param[ key[0] ] = value if value != nil
             end
 
           params << param
