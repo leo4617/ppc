@@ -80,16 +80,6 @@ end
 
 
 require 'ppc'
-<<<<<<< HEAD
-
-$baidu_domain = ''
-$baidu_username = ''
-$baidu_password = ''
-$baidu_token = ''
-$qihu_username = ''
-$qihu_password = ''
-$qihu_token = ''
-=======
 $domain = ''
 
 $baidu_username = ''
@@ -103,7 +93,6 @@ $qihu_cipherkey = ''
 $qihu_cipheriv = ''
 $qihu_accessToken = ''
 
->>>>>>> oop
 $sogou_username = ''
 $sogou_password = ''
 $sogou_token = ''
