@@ -96,7 +96,7 @@ module PPC
           objs << class_obj.new( param )
         end
 
-        return objs[0] if objs.length == 1 else objs 
+        return objs.length == 1 ? objs[0] : objs 
     end
 
     # +++++ Plan opeartion funcitons +++++ #
