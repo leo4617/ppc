@@ -4,20 +4,22 @@ module PPC
     attr_accessor :id
     
     def initialize( params )
-      @id   = params[:id]
-      @se   = params[:se]
+      @id   = param[:id]
+      @se   = param[:se]
       @auth = {
-        username: params[:username],
-        password: params[:password],
+        username: param[:username],
+        password: param[:password],
         # 在qihu360的api中，apikey就是auth[:token]
-        token:    params[:token]
+        token:    param[:token]
       }
       # add support for qihu360
-      if  @se == 'qihu' && params[:accessToken] == nil 
-        raise "you are using qihu service, please enter cipherkey" if params[:cipherkey] == nil
-        raise "you are using qihu service, please enter cipheriv" if params[:cipheriv] == nil
-        cipher = { key: params[:cipherkey], iv: params[:cipheriv] } 
+      if  @se == 'qihu' && param[:accessToken] == nil 
+        raise "you are using qihu service, please enter cipherkey" if param[:cipherkey] == nil
+        raise "you are using qihu service, please enter cipheriv" if param[:cipheriv] == nil
+        cipher = { key: param[:cipherkey], iv: param[:cipheriv] } 
         @auth[:accessToken] = qihu_refresh_token( @auth, cipher )
+      else
+        @auth[:accessToken] = param[:accessToken]
       end
     end
 
