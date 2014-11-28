@@ -22,7 +22,15 @@ module PPC
       def plan_ids
         call('plan').ids(@auth)
       end
+      
+      def keywords(group_id)
+        call( 'keyword' ).search_by_group_id( @auth, group_id )
+      end
 
+      def keyword_ids(group_id)
+        call( 'keyword' ).search_id_by_group_id( @auth, group_id )
+      end
+      
       # plan operation
       include ::PPC::Operation::Plan_operation
 
