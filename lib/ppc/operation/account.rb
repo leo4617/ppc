@@ -23,6 +23,7 @@ module PPC
         call('plan').ids(@auth)
       end
       
+      # some useful keyword methods
       def keywords(group_id)
         call( 'keyword' ).search_by_group_id( @auth, group_id )
       end
@@ -30,6 +31,24 @@ module PPC
       def keyword_ids(group_id)
         call( 'keyword' ).search_id_by_group_id( @auth, group_id )
       end
+
+      # report methods, only support baidu and sogou 
+      def get_report_id( param )
+        """
+        Acquire professional report id,
+        
+        """
+        call( 'report' ).get_id( @auth, param )
+      end
+
+      def get_report_status( id )
+        call( 'report' ).get_status( @auth, id )
+      end
+
+      def get_report_url( id )
+        call( 'report' ).get_url( @auth, id )
+      end
+
       
       # plan operation
       include ::PPC::Operation::Plan_operation

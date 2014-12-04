@@ -1,4 +1,4 @@
-require 'operation/operation_spec_helper'
+require './operation_spec_helper'
 
   auth =  {}
   auth[:username] = $sogou_username

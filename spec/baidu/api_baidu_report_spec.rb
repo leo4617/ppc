@@ -6,12 +6,6 @@ describe ::PPC::API::Baidu::Report do
 
   test_report_id = []
 
-  # it 'can get real time report' do
-  #   param = { type: 'plan', level:'plan',range:'plan',unit:'week',device:'all' }
-  #   response = ::PPC::API::Baidu::Report::get_realtime( auth, param, 'data' )
-  #   is_success( response )
-  # end
-
   it 'can get professional report id' do
     param = { type: 'plan', level:'plan',range:'plan',unit:'week',device:'all' }
     response = ::PPC::API::Baidu::Report::get_id( auth, param )
