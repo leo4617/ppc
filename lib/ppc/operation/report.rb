@@ -3,6 +3,7 @@ module PPC
     module Report
 
       def query_report( param = nil )
+        param = {} if not param
         param[:type]   ||= 'pair'
         param[:fields] ||=  %w(click impression)
         param[:level]  ||= 'pair'
@@ -12,6 +13,7 @@ module PPC
       end
 
       def creative_report( param = nil )
+        param = {} if not param
         param[:type]   ||= 'creative'
         param[:fields] ||=  %w(impression click cpc cost ctr cpm position conversion)
         param[:level]  ||= 'creative'
@@ -21,6 +23,7 @@ module PPC
       end
 
       def keyword_report( param = nil )
+        param = {} if not param
         param[:type]   ||= 'keyword'
         param[:fields] ||=  %w(impression click cpc cost ctr cpm position conversion)
         param[:level]  ||= 'keywordid'
@@ -30,17 +33,20 @@ module PPC
       end
  
       def download_report( param, debug = false )
-        id = call('report').get_id( @auth, param )[:result]
-        p "Got report id:" + id.to_s if debug 
+        response = call('report').get_id( @auth, param )[:result]
+        if response[:succ]
+          p "Got report id:" + id.to_s if debug 
+          loop do
+            sleep 3 
+            break if call('report').get_state( @auth, id )[:result] == 'Finished'
+            p "Report is not generated, waiting..." if debug 
+          end
 
-        loop do
-          sleep 3 
-          break if call('report').get_state( @auth, id )[:result] == 'Finished'
-          p "Report is not generated, waiting..." if debug 
+          url = call('report').get_url( @auth, id )[:result]
+          return open(url).read.force_encoding('gb18030').encode('utf-8')
+        else
+          raise response[:failure][0]["message"]
         end
-
-        url = call('report').get_url( @auth, id )[:result]
-        return open(url).read.force_encoding('gb18030').encode('utf-8')
       end
 
     end

@@ -1,3 +1,4 @@
+require 'time'
 require './operation_spec_helper'
   auth =  {}
   auth[:username] = $baidu_username
@@ -41,9 +42,12 @@ describe ::PPC::Operation::Account do
   
   # opetation report test
   it 'can get report' do
-    subject.query_report()
-    subject.keyword_report()
-    subject.creative_report()
+    endDate = Time.now.utc.iso8601
+    startDate =( Time.now-30*3600*24).utc.iso8601
+    pa = {startDate:startDate, endDate:endDate}
+    subject.query_report(pa)
+    subject.keyword_report(pa)
+    subject.creative_report(pa)
   end
 end
 

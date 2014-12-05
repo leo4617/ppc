@@ -43,13 +43,15 @@ module PPC
 
         private
         def self.get_date( param )
-         begin
+          begin
             startDate = DateTime.parse(param[:start]).iso8601
             endDate = DateTime.parse(param[:end]).iso8601
           rescue Exception => e
             startDate = (Time.now - 2*24*3600).utc.iso8601
             endDate = (Time.now - 24*3600).utc.iso8601
           end
+          startDate = param[:startDate] || startDate
+          endDate = param[:endDate] || endDate
           return startDate,endDate
         end
 
