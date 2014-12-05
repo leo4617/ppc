@@ -1,5 +1,4 @@
 require './operation_spec_helper'
-
   auth =  {}
   auth[:username] = $baidu_username
   auth[:password] = $baidu_password 
@@ -41,24 +40,11 @@ describe ::PPC::Operation::Account do
                             mobil_destination:$baidu_domain})
   
   # opetation report test
-  report_id = ''
-  it 'can get report id' do
-    param = { type: 'plan', level:'plan',range:'plan',unit:'week',device:'all' }
-    response = subject.get_report_id( param )
-    is_success( response )
-    report_id = response[:result]
+  it 'can get report' do
+    subject.query_report()
+    subject.keyword_report()
+    subject.creative_report()
   end
-
-  it 'can get report status' do
-    response = subject.get_report_status( report_id )
-    is_success( response )
-  end
-
-  it 'can get report url' do
-    response = subject.get_report_url( report_id )
-    is_success( response )
-  end
-
 end
 
 describe ::PPC::Operation::Plan do

@@ -182,8 +182,10 @@ end # PPC
 # because if we load files before defining the 
 # module ::PPC::Operation. Errors of 'uninitialized constance'
 # will occur
+require 'ppc/operation/report'
 require 'ppc/operation/account'
 require 'ppc/operation/group'
 require 'ppc/operation/plan'
 require 'ppc/operation/keyword'
 require 'ppc/operation/creative'
+

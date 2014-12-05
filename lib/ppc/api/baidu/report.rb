@@ -8,7 +8,7 @@ module PPC
         # 需要用到的映射集合
         Type_map = { 'account' => 2, 'plan'=> 10, 'group'=> 11, 
                       'keyword'=> 14, 'creative'=> 12, 'pair'=> 15, 
-                       'region'=> 3, 'wordid'=> 9 }
+                       'region'=> 3, 'wordid'=> 9 , 'query'=>6 }
 
         Level_map = {  'account' => 2, 'plan' => 3, 'group' => 5, 
                         'creative'=> 7, 'keywordid' => 11, 'pair' => 12, 
@@ -25,7 +25,7 @@ module PPC
           process( response, 'reportId' ){ |x| x }
         end
 
-        def self.get_status( auth, id )
+        def self.get_state( auth, id )
           '''
           input id should be string
           '''

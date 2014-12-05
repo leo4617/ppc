@@ -24,7 +24,7 @@ module PPC
           process( response, 'reportId', debug ){ |x| x }
         end
 
-        def self.get_status( auth, id, debug = false)
+        def self.get_state( auth, id, debug = false)
           '''
           input id should be string
           '''
