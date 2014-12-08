@@ -32,7 +32,7 @@ module PPC
         download_report( param )
       end
  
-      def download_report( param, debug = false )
+      def download_report( param, debug = true )
         response = call('report').get_id( @auth, param )
         if response[:succ]
           id = response[:result]
