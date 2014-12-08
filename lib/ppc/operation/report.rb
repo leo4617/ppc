@@ -33,8 +33,9 @@ module PPC
       end
  
       def download_report( param, debug = false )
-        response = call('report').get_id( @auth, param )[:result]
+        response = call('report').get_id( @auth, param )
         if response[:succ]
+          id = response[:result]
           p "Got report id:" + id.to_s if debug 
           loop do
             sleep 3 
