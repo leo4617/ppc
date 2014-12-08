@@ -2,37 +2,37 @@ module PPC
   module Operation
     module Report
 
-      def query_report( param = nil )
+      def query_report( param = nil, debug = false )
         param = {} if not param
         param[:type]   ||= 'pair'
         param[:fields] ||=  %w(click impression)
         param[:level]  ||= 'pair'
         param[:range]  ||= 'account'
         param[:unit]   ||= 'day'
-        download_report( param )
+        download_report( param, debug )
       end
 
-      def creative_report( param = nil )
+      def creative_report( param = nil, debug = false )
         param = {} if not param
         param[:type]   ||= 'creative'
         param[:fields] ||=  %w(impression click cpc cost ctr cpm position conversion)
         param[:level]  ||= 'creative'
         param[:range]  ||= 'creative'
         param[:unit]   ||= 'day'
-        download_report( param )
+        download_report( param, debug )
       end
 
-      def keyword_report( param = nil )
+      def keyword_report( param = nil, debug = false )
         param = {} if not param
         param[:type]   ||= 'keyword'
         param[:fields] ||=  %w(impression click cpc cost ctr cpm position conversion)
         param[:level]  ||= 'keywordid'
         param[:range]  ||= 'keywordid'
         param[:unit]   ||= 'day'
-        download_report( param )
+        download_report( param, debug )
       end
  
-      def download_report( param, debug = true )
+      def download_report( param, debug = false )
         response = call('report').get_id( @auth, param )
         if response[:succ]
           id = response[:result]

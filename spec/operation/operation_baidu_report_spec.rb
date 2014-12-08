@@ -13,8 +13,8 @@ describe ::PPC::Operation::Account do
     endDate = Time.now.utc.iso8601
     startDate =( Time.now-30*3600*24).utc.iso8601
     pa = {startDate:startDate, endDate:endDate}
-    p subject.query_report(pa )
-    p subject.keyword_report(pa )
-    p subject.creative_report(pa )
+    subject.query_report( pa, true )
+    subject.keyword_report( pa, true )
+    subject.creative_report( pa, true )
   end
 end
