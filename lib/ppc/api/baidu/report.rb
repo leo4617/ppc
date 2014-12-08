@@ -40,16 +40,37 @@ module PPC
           response = request( auth, Service, 'getReportFileUrl' ,body)
           process( response, 'reportFilePath' ){ |x| x }       
         end
-
-        private
-        def self.get_date( param )
-          startDate = parse_date( param[:startDate] )
-          endDate = parse_date( param[:endDate] )
-          return startDate,endDate
-        end
         
+        private
+        def self.make_reportrequest( param )
+          """
+          make RepoerRequestType
+          ==============
+          @Input : :fields,:type,:level,:range,:unit,:device,:id_only,:startDate:endDate
+          ==============
+          Note:
+            We cast [ type, level, range, unit,device ] from int to string.
+          For more information please see those map at the begining of the file
+          """
+          requesttype = {}
+          requesttype[:performanceData]   =     param[:fields]  || %w(click impression)
+          requesttype[:reportType]        =     Type_map[ param[:type] ]      if  param[:type]
+          requesttype[:levelOfDetails]    =     Level_map[  param[:level] ]   if param[:level]
+          requesttype[:statRange]         =     Level_map[ param[:range] ]    if param[:range]
+          requesttype[:unitOfTime]        =     Unit_map[ param[:unit] ]      if param[:unit]
+          requesttype[:device]            =     Device_map[ param[:device] ]  if param[:device]
+          requesttype[:idOnly]            =     param[:id_only] || false
+          requesttype[:startDate]         =     parse_date( param[:startDate] )
+          requesttype[:endDate]           =     parse_date( param[:endDate] )
+          return requesttype
+        end
+
         private 
         def self.parse_date( date )
+          """
+          Cast string to time:
+          'YYYYMMDD' => Time
+          """
           if date
             y = date[0..3]
             m = date[4..5]
@@ -63,31 +84,6 @@ module PPC
             end
           end
           date
-        end
-
-        private
-        def self.make_reportrequest( param )
-          """
-          make RepoerRequestType
-          ==============
-          @Input : :fields,:type,:level,:range,:unit,:device,:id_only,:startDate:endDate
-          ==============
-          Note:
-            We cast [ type, level, range, unit,device ] from int to string.
-          For more information please see those map at the begining of the file
-          """
-          requesttype = {}
-          startDate, endDate = get_date( param )
-          requesttype[:performanceData]   =     param[:fields]  || %w(click impression)
-          requesttype[:reportType]        =     Type_map[ param[:type] ]      if  param[:type]
-          requesttype[:levelOfDetails]    =     Level_map[  param[:level] ]   if param[:level]
-          requesttype[:statRange]         =     Level_map[ param[:range] ]    if param[:range]
-          requesttype[:unitOfTime]        =     Unit_map[ param[:unit] ]      if param[:unit]
-          requesttype[:device]            =     Device_map[ param[:device] ]  if param[:device]
-          requesttype[:idOnly]            =     param[:id_only] || false
-          requesttype[:startDate]         =     startDate
-          requesttype[:endDate]           =     endDate
-          return requesttype
         end
 
       end # Repost
