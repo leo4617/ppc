@@ -10,11 +10,15 @@ describe ::PPC::Operation::Account do
   }
   # opetation report test
   it 'can get report' do
-    endDate = Time.now.utc.iso8601
-    startDate =( Time.now-30*3600*24).utc.iso8601
-    pa = {startDate:startDate, endDate:endDate}
-    subject.query_report( pa, true )
-    subject.keyword_report( pa, true )
-    subject.creative_report( pa, true )
+    endDate = Time.now.to_s[0..9].split('-').join
+    startDate =( Time.now-27*3600*24).to_s[0..9].split('-').join
+
+    p "startDate:#{startDate}"
+    p "endDate:#{endDate}"
+
+    param = {startDate:startDate, endDate:endDate}
+    subject.query_report( param, true )
+    subject.keyword_report( param, true )
+    subject.creative_report( param, true )
   end
 end

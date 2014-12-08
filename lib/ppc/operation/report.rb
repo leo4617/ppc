@@ -38,7 +38,7 @@ module PPC
           id = response[:result]
           p "Got report id:" + id.to_s if debug 
           loop do
-            sleep 3 
+            sleep 2 
             break if call('report').get_state( @auth, id )[:result] == 'Finished'
             p "Report is not generated, waiting..." if debug 
           end

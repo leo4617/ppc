@@ -43,16 +43,26 @@ module PPC
 
         private
         def self.get_date( param )
-          begin
-            startDate = DateTime.parse(param[:start]).iso8601
-            endDate = DateTime.parse(param[:end]).iso8601
-          rescue Exception => e
-            startDate = (Time.now - 2*24*3600).utc.iso8601
-            endDate = (Time.now - 24*3600).utc.iso8601
-          end
-          startDate = param[:startDate] || startDate
-          endDate = param[:endDate] || endDate
+          startDate = parse_date( param[:startDate] )
+          endDate = parse_date( param[:endDate] )
           return startDate,endDate
+        end
+        
+        private 
+        def self.parse_date( date )
+          if date
+            y = date[0..3]
+            m = date[4..5]
+            d = date[6..7]
+            date = Time.new( y, m, d )
+          else
+            begin
+              date = DateTime.parse( date )
+            rescue Exception => e
+              date = (Time.now - 2*24*3600)
+            end
+          end
+          date
         end
 
         private
