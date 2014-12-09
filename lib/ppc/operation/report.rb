@@ -4,7 +4,7 @@ module PPC
 
       def query_report( param = nil, debug = false )
         param = {} if not param
-        param[:type]   ||= 'pair'
+        param[:type]   ||= 'query'
         param[:fields] ||=  %w(click impression)
         param[:level]  ||= 'pair'
         param[:range]  ||= 'account'
