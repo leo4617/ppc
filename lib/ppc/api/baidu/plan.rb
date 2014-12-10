@@ -17,6 +17,7 @@ module PPC
                 [:show_prob,:showProb],   
                 [:device,:device],
                 [:price_ratio,:priceRatio], 
+                [:dynamic,:isDynamicCreative],
                 [:pause,:pause],
                 [:status,:status]
                ]
