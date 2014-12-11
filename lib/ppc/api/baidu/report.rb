@@ -77,11 +77,7 @@ module PPC
             d = date[6..7]
             date = Time.new( y, m, d )
           else
-            begin
-              date = DateTime.parse( date )
-            rescue Exception => e
-              date = (Time.now - 2*24*3600)
-            end
+            date = (Time.now - 24*3600)
           end
           date
         end

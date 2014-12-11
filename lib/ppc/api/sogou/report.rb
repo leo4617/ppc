@@ -41,18 +41,6 @@ module PPC
         end
 
         private
-        def self.get_date( param )
-         begin
-            startDate = DateTime.parse(param[:start]).iso8601
-            endDate = DateTime.parse(param[:end]).iso8601
-          rescue Exception => e
-            startDate = (Time.now - 2*24*3600).utc.iso8601
-            endDate = (Time.now - 24*3600).utc.iso8601
-          end
-          return startDate,endDate
-        end
-
-        private
         def self.make_reportrequest( param )
           '''
           make RepoerRequestType
@@ -69,9 +57,26 @@ module PPC
           requesttype[:unitOfTime]         =     Unit_map[ param[:unit] ]        if param[:unit] 
           requesttype[:platform]           =     Device_map[ param[:device] ]    if param[:device]
           requesttype[:idOnly]             =     param[:id_only]                 if param[:id_only]!=nil
-          requesttype[:startDate] = param[:startDate]==nil ? startDate :param[:startDate]
-          requesttype[:endDate]   = param[:endDate]==nil   ? endDate :param[:endDate]
+          requesttype[:startDate] = parse_date( param[:startDate] )
+          requesttype[:endDate]   = parse_date( param[:endDate] )
           return requesttype
+        end
+
+        private 
+        def self.parse_date( date )
+          """
+          Cast string to time:
+          'YYYYMMDD' => Time
+          """
+          if date
+            y = date[0..3]
+            m = date[4..5]
+            d = date[6..7]
+            date = Time.new( y, m, d )
+          else
+            date = (Time.now - 24*3600)
+          end
+          date
         end
 
       end # Repost
