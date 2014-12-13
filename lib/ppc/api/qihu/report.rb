@@ -14,23 +14,77 @@ module PPC
                 [:keyword,:keyword],
                 [:views,:views],
                 [:clicks,:clicks],
+                [:startDate,:startDate],
+                [:endDate,:endDate],
                 [:date,:date],
                 [:keyword_id,:keywordId],
                 [:group_id,:groupId],
                 [:cost,:totalCost],
-                [:position,:avgPosition]
+                [:position,:avgPosition],
+                [:total_num,:totalNumber],
+                [:total_page,:totalPage]
               ]
 
-        def self.cost_report( auth, params )
-          body = make_type( params )
-          response = request( auth, Service, 'keyword', body )
-          process( response, 'keywordList' ){ |x| get_item( x )}
+        ###################
+        # API abstraction #
+        ###################
+        def self.abstract( auth, type_name, method_name, key, param = nil )
+          body = make_type( param )
+          response = request( auth, Service, method_name, body )
+          process( response, key ){ |x| get_item( x )}
         end
 
-        def self.query_report( auth, params )
-          body = make_type( params )
-          response = request( auth, Service, 'queryword', body )
-          process( response, 'querywordList' ){ |x| get_item( x )}
+        type_list = ['keyword', 'query', 'creative', 'sublink']
+        type_list.each do |type|
+          # type
+          define_singleton_method type.to_sym do |auth, param|
+              abstract( auth, type, type, type+'List', param )
+          end
+          # typeCount
+          define_singleton_method (type+'_count').to_sym do |auth, param|
+              abstract( auth, type, type+'Count', '', param )
+          end
+          # typeNow
+          define_singleton_method (type+'_now').to_sym do |auth, param|
+              abstract( auth, type, type+'Now', type+'List', param )
+          end
+          # typeNowCount
+          define_singleton_method (type+'_now_count').to_sym do |auth, param|
+              abstract( auth, type, type+'NowCount', '', param )
+          end
+        end
+
+
+        ############################
+        # define operation methods #
+        ############################
+        def self.download_report(auth, type, param)
+          # deal_with time
+          param[:startDate] = parse_date( param[:startDate] )
+          param[:endDate] = parse_date( param[:endDate] )
+          now = Time.now.to_s[0...10]
+          is_now = now==param[:startDate]
+        
+          # get page num
+          if is_now
+            method = (type+'_now_count').to_sym
+            total_page = send(method, auth, param)
+          else
+            num_of_page = (type+'_count').to_sym
+            num_of_page = send(method, auth, param)
+          end
+
+          # combine pages and get whole report
+          report = []
+          # page_num.times do each | page_i|
+          #   if is_now
+          #     report_i = eval
+          #   else
+          #     report_i = eval
+          #   end
+          #   report.append( report_i )
+          # end
+          return report
         end
 
         # incase idlist == nil
@@ -44,7 +98,7 @@ module PPC
         def self.make_type( param )
           type = {}
           # add option
-          type[:level] = param[:level]
+          type[:level] = param[:level] || 'account'
           type[:page] = param[:page] || 1
           # add ids
           if param[:ids] != nil
@@ -70,7 +124,24 @@ module PPC
           return startDate,endDate
         end
 
-      end
-    end
-  end
-end
+        private 
+        def self.parse_date( date )
+          """
+          Cast string to time:
+          'YYYYMMDD' => Time
+          """
+          if date
+            y = date[0..3]
+            m = date[4..5]
+            d = date[6..7]
+            date = Time.new( y, m, d )
+          else
+            date = (Time.now - 24*3600)
+          end
+          date.to_s[0,10]
+        end
+
+      end # Report
+    end # Qihu
+  end # API
+end # PPC

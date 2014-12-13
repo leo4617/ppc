@@ -30,7 +30,7 @@ module PPC
           '''
           status = {1=>'Waiting' ,2=>'Opearting' ,3=>'Finished'}
           body = { reportId:  id }
-          response = request( auth, Service, ' getReportStatus' ,body)
+          response = request( auth, Service, ' getReportState' ,body)
           process( response, 'isGenerated', debug ){ |x| status[x] }
         end
 
@@ -49,7 +49,6 @@ module PPC
           ::PPC::API::Baidu::Report:make_reportrequest()
           '''
           requesttype = {}
-          startDate, endDate = get_date( param )
           requesttype[:performanceData]    =     param[:fields]  && %w(cost cpc click impression ctr) || %w(click)
           requesttype[:reportType]         =     Type_map[ param[:type] ]        if  param[:type] 
           requesttype[:levelOfDetails]     =     Level_map[  param[:level] ]     if param[:level]
@@ -77,6 +76,57 @@ module PPC
             date = (Time.now - 24*3600)
           end
           date
+        end
+
+        def download_report( auth, param, debug = false )
+          response = call('report').get_id( auth, param )
+          if response[:succ]
+            id = response[:result]
+            p "Got report id:" + id.to_s if debug 
+            loop do
+              sleep 2 
+              break if call('report').get_state( auth, id )[:result] == 'Finished'
+              p "Report is not generated, waiting..." if debug 
+            end
+
+            url = call('report').get_url( auth, id )[:result]
+            return open(url).read.force_encoding('gb18030').encode('utf-8')
+          else
+            raise response[:failure][0]["message"]
+          end
+        end
+
+        ###########################
+        # intreface for Operation #
+        ###########################
+        def query_report( auth, param = nil, debug = false )
+          param = {} if not param
+          param[:type]   ||= 'query'
+          param[:fields] ||=  %w(click)
+          param[:level]  ||= 'pair'
+          param[:range]  ||= 'account'
+          param[:unit]   ||= 'day'
+          download_report( param, debug )
+        end
+
+        def creative_report( auth, param = nil, debug = false )
+          param = {} if not param
+          param[:type]   ||= 'creative'
+          param[:fields] ||=  %w( cost cpc click impression ctr )
+          param[:level]  ||= 'creative'
+          param[:range]  ||= 'creative'
+          param[:unit]   ||= 'day'
+          download_report( param, debug )
+        end
+
+        def keyword_report( auth, param = nil, debug = false )
+          param = {} if not param
+          param[:type]   ||= 'keyword'
+          param[:fields] ||=  %w( cost cpc click impression ctr )
+          param[:level]  ||= 'keywordid'
+          param[:range]  ||= 'keywordid'
+          param[:unit]   ||= 'day'
+          download_report( param, debug )
         end
 
       end # Repost

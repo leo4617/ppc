@@ -18,6 +18,9 @@ module PPC
 
         Unit_map = { 'day' => 5, 'week' => 4, 'month' => 3, 'year' => 1, 'hour' => 7 }
 
+        ########################
+        # API wraping function #
+        ########################
         def self.get_id( auth, params  )
           request = make_reportrequest( params )
           body =  { reportRequestType:  request }
@@ -80,6 +83,58 @@ module PPC
             date = (Time.now - 24*3600)
           end
           date
+        end
+
+        #################################
+        # useful function for operation #
+        #################################
+        def self.query_report( auth, param = nil, debug = false )
+          param = {} if not param
+          param[:type]   ||= 'query'
+          param[:fields] ||=  %w(click impression)
+          param[:level]  ||= 'pair'
+          param[:range]  ||= 'account'
+          param[:unit]   ||= 'day'
+          download_report( auth, param, debug )
+        end
+
+        def self.creative_report( auth, param = nil, debug = false )
+          param = {} if not param
+          param[:type]   ||= 'creative'
+          param[:fields] ||=  %w(impression click cpc cost ctr cpm position conversion)
+          param[:level]  ||= 'creative'
+          param[:range]  ||= 'creative'
+          param[:unit]   ||= 'day'
+          download_report( auth, param, debug )
+        end
+
+        def self.keyword_report( auth, param = nil, debug = false )
+          param = {} if not param
+          param[:type]   ||= 'keyword'
+          param[:fields] ||=  %w(impression click cpc cost ctr cpm position conversion)
+          param[:level]  ||= 'keywordid'
+          param[:range]  ||= 'keywordid'
+          param[:unit]   ||= 'day'
+          download_report( auth, param, debug )
+        end
+   
+        def self.download_report( auth, param, debug = false )
+          p param
+          response = get_id( auth, param )
+          if response[:succ]
+            id = response[:result]
+            p "Got report id:" + id.to_s if debug 
+            loop do
+              sleep 2 
+              break if get_state( auth, id )[:result] == 'Finished'
+              p "Report is not generated, waiting..." if debug 
+            end
+
+            url = get_url( auth, id )[:result]
+            return open(url).read.force_encoding('gb18030').encode('utf-8')
+          else
+            raise response[:failure][0]["message"]
+          end
         end
 
       end # Repost
