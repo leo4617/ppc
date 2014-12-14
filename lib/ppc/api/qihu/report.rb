@@ -42,7 +42,9 @@ module PPC
           end
           # typeCount
           define_singleton_method (type+'_count').to_sym do |auth, param|
-              abstract( auth, type, type+'Count', '', param )
+              response = abstract( auth, type, type+'Count', '', param )
+              response[:result] = response[:result][0]
+              return response
           end
           # typeNow
           define_singleton_method (type+'_now').to_sym do |auth, param|
@@ -50,10 +52,11 @@ module PPC
           end
           # typeNowCount
           define_singleton_method (type+'_now_count').to_sym do |auth, param|
-              abstract( auth, type, type+'NowCount', '', param )
+              response = abstract( auth, type, type+'NowCount', '', param )
+              response[:result] = response[:result][0]
+              return response
           end
         end
-
 
         ############################
         # define operation methods #
@@ -68,25 +71,36 @@ module PPC
           # get page num
           if is_now
             method = (type+'_now_count').to_sym
-            total_page = send(method, auth, param)
+            count = send(method, auth, param)[:result]
           else
-            num_of_page = (type+'_count').to_sym
-            num_of_page = send(method, auth, param)
+            method = (type+'_count').to_sym
+            count = send(method, auth, param)[:result]
           end
 
           # combine pages and get whole report
           report = []
-          # page_num.times do each | page_i|
-          #   if is_now
-          #     report_i = eval
-          #   else
-          #     report_i = eval
-          #   end
-          #   report.append( report_i )
-          # end
+          count[:total_page].to_i.times do each | page_i|
+            if is_now
+              report_i = eval
+            else
+              report_i = eval
+            end
+            report.append( report_i )
+          end
           return report
         end
 
+        def keyword_report( auth, param )
+          download_report(auth, 'keyword', param)
+        end
+
+        def creative_report( auth, param )
+          download_report(auth, 'keyword', param)
+        end
+
+        ###################
+        # Helper Function #
+        ###################
         # incase idlist == nil
         private
         def self.get_item( params )

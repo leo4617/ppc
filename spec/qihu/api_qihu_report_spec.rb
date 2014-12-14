@@ -9,8 +9,8 @@ describe ::PPC::API::Qihu::Report do
   type_list = ['keyword',  'creative', 'sublink']
   method_list = ['','_now','_now_count','_count']
 
-  startDate = (Time.now - 5*24*3600).to_s[0...10]
-  endDate = (Time.now - 2*24*3600).to_s[0...10]
+  startDate = (Time.now - 5*24*3600).to_s[0...10].split('-').join
+  endDate = (Time.now - 2*24*3600).to_s[0...10].split('-').join
   param = {level:"account", startDate:startDate, endDate:endDate}
 
   ############################
@@ -43,9 +43,6 @@ describe ::PPC::API::Qihu::Report do
   end
 
   it 'can download creative report' do
-  end
-
-  it 'can download query report' do
   end
 
 end
