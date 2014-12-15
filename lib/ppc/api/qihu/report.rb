@@ -28,31 +28,31 @@ module PPC
         ###################
         # API abstraction #
         ###################
-        def self.abstract( auth, type_name, method_name, key, param = nil )
+        def self.abstract( auth, type_name, method_name, key, param = nil, &func )
           body = make_type( param )
           response = request( auth, Service, method_name, body )
-          process( response, key ){ |x| get_item( x )}
+          process( response, key ){ |x| func[ x ] }
         end
 
         type_list = ['keyword', 'query', 'creative', 'sublink']
         type_list.each do |type|
           # type
           define_singleton_method type.to_sym do |auth, param|
-              abstract( auth, type, type, type+'List', param )
+              abstract( auth, type, type, type+'List', param ){ |x| x['item']}
           end
           # typeCount
           define_singleton_method (type+'_count').to_sym do |auth, param|
-              response = abstract( auth, type, type+'Count', '', param )
+              response = abstract( auth, type, type+'Count', '', param ){ |x| get_item(x) }
               response[:result] = response[:result][0]
               return response
           end
           # typeNow
           define_singleton_method (type+'_now').to_sym do |auth, param|
-              abstract( auth, type, type+'Now', type+'List', param )
+              abstract( auth, type, type+'Now', type+'List', param ){ |x| x['item']}
           end
           # typeNowCount
           define_singleton_method (type+'_now_count').to_sym do |auth, param|
-              response = abstract( auth, type, type+'NowCount', '', param )
+              response = abstract( auth, type, type+'NowCount', '', param ){ |x| get_item(x) }
               response[:result] = response[:result][0]
               return response
           end
@@ -61,41 +61,38 @@ module PPC
         ############################
         # define operation methods #
         ############################
+        def self.keyword_report( auth, param )
+          download_report(auth, 'keyword', param)
+        end
+
+        def self.creative_report( auth, param )
+          download_report(auth, 'creative', param)
+        end
+        
         def self.download_report(auth, type, param)
           # deal_with time
-          param[:startDate] = parse_date( param[:startDate] )
-          param[:endDate] = parse_date( param[:endDate] )
           now = Time.now.to_s[0...10]
-          is_now = now==param[:startDate]
+          is_now = now==parse_date(param[:startDate])
         
           # get page num
           if is_now
             method = (type+'_now_count').to_sym
             count = send(method, auth, param)[:result]
+            method = (type+'_now').to_sym
           else
             method = (type+'_count').to_sym
             count = send(method, auth, param)[:result]
+            method = type.to_sym
           end
-
-          # combine pages and get whole report
+          
           report = []
-          count[:total_page].to_i.times do each | page_i|
-            if is_now
-              report_i = eval
-            else
-              report_i = eval
-            end
-            report.append( report_i )
+          count[:total_page].to_i.times do | page_i|
+            param[:page] = page_i +1
+            report_i = send(method, auth, param)[:result]
+            report += report_i
           end
+        
           return report
-        end
-
-        def keyword_report( auth, param )
-          download_report(auth, 'keyword', param)
-        end
-
-        def creative_report( auth, param )
-          download_report(auth, 'keyword', param)
         end
 
         ###################
@@ -124,8 +121,8 @@ module PPC
           if param[:startDate]==nil || param[:endDate]==nil
             type[:startDate], type[:endDate] = get_date()
           else
-            type[:startDate] = param[:startDate]
-            type[:endDate] = param[:endDate]
+            type[:startDate] = parse_date( param[:startDate] )
+            type[:endDate] = parse_date( param[:endDate] )
           end
 
           return type

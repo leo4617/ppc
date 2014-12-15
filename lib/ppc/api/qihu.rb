@@ -25,7 +25,6 @@ module PPC
       end
 
       def self.process( response, key, failure_key = '', &func )
-        p response
         response_key = response.keys[0]
         content = response[ response_key ]
         # special case solution
@@ -34,7 +33,6 @@ module PPC
         end
 
         result = { }
-
         if content['failures'] != nil
           result[:succ] = false
           result[:failure] = content['failures']['item']
