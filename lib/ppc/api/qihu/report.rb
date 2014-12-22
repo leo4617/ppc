@@ -59,17 +59,17 @@ module PPC
         end
 
         ############################
-        # define operation methods #
+        # Interfaces for operation #
         ############################
-        def self.keyword_report( auth, param )
-          download_report(auth, 'keyword', param)
+        def self.keyword_report( auth, param, debug = false )
+          download_report(auth, 'keyword', param, debug )
         end
 
-        def self.creative_report( auth, param )
-          download_report(auth, 'creative', param)
+        def self.creative_report( auth, param, debug = false )
+          download_report(auth, 'creative', param, debug)
         end
         
-        def self.download_report(auth, type, param)
+        def self.download_report(auth, type, param, debug = false)
           # deal_with time
           now = Time.now.to_s[0...10]
           is_now = now==parse_date(param[:startDate])
@@ -87,6 +87,7 @@ module PPC
           
           report = []
           count[:total_page].to_i.times do | page_i|
+            p "Start downloading #{page_i+1}th page, totally #{count[:total_page]} pages"
             param[:page] = page_i +1
             report_i = send(method, auth, param)[:result]
             report += report_i

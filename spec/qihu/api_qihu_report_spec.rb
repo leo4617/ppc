@@ -1,8 +1,6 @@
 describe ::PPC::API::Qihu::Report do
-  auth = {}
-  auth[:token] = $qihu_token
-  auth[:accessToken] =  $qihu_accessToken
-  
+  auth = $baidu_auth
+
   # param for test    
 
   # all method of query return 403 forbidden

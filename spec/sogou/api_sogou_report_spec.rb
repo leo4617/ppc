@@ -1,8 +1,5 @@
 describe ::PPC::API::Sogou::Report do
-  auth =  {}
-  auth[:username] = $sogou_username
-  auth[:password] = $sogou_password 
-  auth[:token] = $sogou_token
+  auth = $sogou_auth
 
   param = {} 
   param[:type]   = 'query'

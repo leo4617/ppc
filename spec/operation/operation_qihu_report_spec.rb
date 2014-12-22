@@ -1,6 +1,15 @@
+  auth =  {}
+  auth[:username] = $qihu_username
+  auth[:password] = $qihu_password
+  auth[:cipherkey] = $qihu_cipherkey
+  auth[:cipheriv] = $qihu_cipheriv
+  auth[:token] = $qihu_token
+
+  auth[:se] = 'qihu'
+
 describe ::PPC::Operation::Account do
   subject{
-    ::PPC::Operation::Account.new( $baidu_auth )
+    ::PPC::Operation::Account.new( auth )
   }
   # opetation report test
   it 'can get report' do
@@ -9,8 +18,7 @@ describe ::PPC::Operation::Account do
 
     p "startDate:#{startDate},endDate:#{endDate}"
     param = {startDate:startDate, endDate:endDate}
-
-    subject.query_report( param, true )
+    
     subject.keyword_report( param, true )
     subject.creative_report( param, true )
   end
