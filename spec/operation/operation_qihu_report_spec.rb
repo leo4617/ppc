@@ -1,11 +1,4 @@
-  auth =  {}
-  auth[:username] = $qihu_username
-  auth[:password] = $qihu_password
-  auth[:cipherkey] = $qihu_cipherkey
-  auth[:cipheriv] = $qihu_cipheriv
-  auth[:token] = $qihu_token
-
-  auth[:se] = 'qihu'
+auth = $qihu_auth
 
 describe ::PPC::Operation::Account do
   subject{
