@@ -1,5 +1,5 @@
 describe ::PPC::API::Qihu::Plan do
-  auth = $baidu_auth
+  auth = $qihu_auth
 
   test_plan_id = 0
 

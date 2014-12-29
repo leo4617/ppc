@@ -1,5 +1,5 @@
 describe ::PPC::API::Qihu::Account do
-  auth = $baidu_auth
+  auth = $qihu_auth
 
   it 'can get accnout info' do
     response = ::PPC::API::Qihu::Account::info( auth )

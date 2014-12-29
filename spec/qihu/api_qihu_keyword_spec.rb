@@ -1,5 +1,5 @@
 describe ::PPC::API::Qihu::Keyword do
-  auth = $baidu_auth
+  auth = $qihu_auth
 
   test_plan_id = ::PPC::API::Qihu::Plan::ids( auth )[:result][0].to_i
   test_group_id = ::PPC::API::Qihu::Group::search_id_by_plan_id( auth, test_plan_id )[:result][0][:group_ids][0]to_i

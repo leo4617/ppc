@@ -15,9 +15,6 @@ module PPC
         call('account').update(@auth,account)
       end
 
-      # it can get report
-      include ::PPC::Operation::Report
-
       # subobject(plan) operations
       def plans
         call('plan').all(@auth)
@@ -47,6 +44,9 @@ module PPC
 
       # creative opeartions
       include ::PPC::Operation::Creative_operation
+
+      # report operations
+      include ::PPC::Operation::Report
 
     end
   end

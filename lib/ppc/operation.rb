@@ -4,8 +4,13 @@ module PPC
     attr_accessor :id
     
     def initialize( params )
-      @id   = params[:id]
-      @se   = params[:se]
+      
+      if params[:se] == nil
+        raise 'please specific a search engine'
+      else 
+        @se = params[:se]
+      end
+      @id = params[:id]
       @auth = {
         username: params[:username],
         password: params[:password],

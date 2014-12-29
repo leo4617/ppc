@@ -1,5 +1,5 @@
 describe ::PPC::API::Qihu::Report do
-  auth = $baidu_auth
+  auth = $qihu_auth
 
   # param for test    
 
