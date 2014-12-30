@@ -8,11 +8,11 @@ module PPC
         # 需要用到的映射集合
         Type_map = { 'account' => 1, 'plan'=> 2, 'group'=> 3, 
                       'keyword'=> 5, 'creative'=> 4, 'pair'=> 15, 
-                       'region'=> 3, 'wordid'=> 9 }
+                       'query'=> 3 }
 
-        Level_map = {  'account' => 1, 'plan' => 2, 'group' => 3, 
-                        'creative' => 4, 'keywordid' => 5, 'pair' => 12, 
-                          'wordid' => 6 }
+        Range_map = {  'account' => 1, 'plan' => 2, 'group' => 3, 
+                        'creative' => 4, 'keyword' => 5 }
+
         Device_map = { 'all' => 0, 'pc' => 1, 'mobile' => 2 }
 
         Unit_map = { 'day' => 1, 'week' => 2, 'month' => 3 }
@@ -20,7 +20,8 @@ module PPC
         def self.get_id( auth, params, debug = false )
           request = make_reportrequest( params )
           body =  { ReportRequestType: request }
-          response = request( auth, Service, ' getReportId' ,body) 
+          p body
+          response = request( auth, Service, 'getReportId' ,body) 
           process( response, 'reportId', debug ){ |x| x }
         end
 
@@ -30,13 +31,13 @@ module PPC
           '''
           status = {1=>'Waiting' ,2=>'Opearting' ,3=>'Finished'}
           body = { reportId:  id }
-          response = request( auth, Service, ' getReportState' ,body)
+          response = request( auth, Service, 'getReportState' ,body)
           process( response, 'isGenerated', debug ){ |x| status[x] }
         end
 
         def self.get_url( auth, id, debug = false )
           body = { reportId:  id }
-          response = request( auth, Service, ' getReportPath' ,body)
+          response = request( auth, Service, 'getReportPath' ,body)
           process( response, 'reportPath', debug ){ |x| x }       
         end
 
@@ -49,10 +50,9 @@ module PPC
           ::PPC::API::Baidu::Report:make_reportrequest()
           '''
           requesttype = {}
-          requesttype[:performanceData]    =     param[:fields]  && %w(cost cpc click impression ctr) || %w(click)
+          requesttype[:performanceData]    =     param[:fields] || %w(click)
           requesttype[:reportType]         =     Type_map[ param[:type] ]        if  param[:type] 
-          requesttype[:levelOfDetails]     =     Level_map[  param[:level] ]     if param[:level]
-          requesttype[:statRange]          =     Level_map[ param[:range] ]      if param[:range]
+          requesttype[:statRange]          =     Range_map[ param[:range] ]      if param[:range]
           requesttype[:unitOfTime]         =     Unit_map[ param[:unit] ]        if param[:unit] 
           requesttype[:platform]           =     Device_map[ param[:device] ]    if param[:device]
           requesttype[:idOnly]             =     param[:id_only]                 if param[:id_only]!=nil
@@ -103,7 +103,6 @@ module PPC
           param = {} if not param
           param[:type]   ||= 'query'
           param[:fields] ||=  %w(click)
-          param[:level]  ||= 'pair'
           param[:range]  ||= 'account'
           param[:unit]   ||= 'day'
           download_report( param, debug )
@@ -113,9 +112,7 @@ module PPC
           param = {} if not param
           param[:type]   ||= 'creative'
           param[:fields] ||=  %w( cost cpc click impression ctr )
-          param[:level]  ||= 'creative'
           param[:range]  ||= 'creative'
-          param[:unit]   ||= 'day'
           download_report( param, debug )
         end
 
@@ -123,9 +120,7 @@ module PPC
           param = {} if not param
           param[:type]   ||= 'keyword'
           param[:fields] ||=  %w( cost cpc click impression ctr )
-          param[:level]  ||= 'keywordid'
           param[:range]  ||= 'keywordid'
-          param[:unit]   ||= 'day'
           download_report( param, debug )
         end
 

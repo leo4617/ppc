@@ -21,11 +21,8 @@ describe ::PPC::API::Baidu::Report do
   # end
 end
 
-describe "::PPC::API::Baidu::Report useful fuction" do
-  auth =  {}
-  auth[:username] = $baidu_username
-  auth[:password] = $baidu_password 
-  auth[:token] = $baidu_token
+describe "::PPC::API::Baidu::Report Operation interface" do
+  auth =  $baidu_auth 
 
   subject{
     ::PPC::API::Baidu::Report
