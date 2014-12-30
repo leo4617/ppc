@@ -19,8 +19,7 @@ module PPC
 
         def self.get_id( auth, params, debug = false )
           request = make_reportrequest( params )
-          body =  { ReportRequestType: request }
-          p body
+          body =  { reportRequestType: request }
           response = request( auth, Service, 'getReportId' ,body) 
           process( response, 'reportId', debug ){ |x| x }
         end
@@ -29,7 +28,7 @@ module PPC
           '''
           input id should be string
           '''
-          status = {1=>'Waiting' ,2=>'Opearting' ,3=>'Finished'}
+          status = {'-1'=>'Waiting' ,'0'=>'Opearting' ,'1'=>'Finished'}
           body = { reportId:  id }
           response = request( auth, Service, 'getReportState' ,body)
           process( response, 'isGenerated', debug ){ |x| status[x] }
@@ -38,7 +37,7 @@ module PPC
         def self.get_url( auth, id, debug = false )
           body = { reportId:  id }
           response = request( auth, Service, 'getReportPath' ,body)
-          process( response, 'reportPath', debug ){ |x| x }       
+          process( response, 'reportFilePath', debug ){ |x| x }       
         end
 
         private
@@ -75,53 +74,53 @@ module PPC
           else
             date = (Time.now - 24*3600)
           end
-          date
-        end
-
-        def download_report( auth, param, debug = false )
-          response = call('report').get_id( auth, param )
-          if response[:succ]
-            id = response[:result]
-            p "Got report id:" + id.to_s if debug 
-            loop do
-              sleep 2 
-              break if call('report').get_state( auth, id )[:result] == 'Finished'
-              p "Report is not generated, waiting..." if debug 
-            end
-
-            url = call('report').get_url( auth, id )[:result]
-            return open(url).read.force_encoding('gb18030').encode('utf-8')
-          else
-            raise response[:failure][0]["message"]
-          end
+          date.utc.iso8601
         end
 
         ###########################
         # intreface for Operation #
         ###########################
-        def query_report( auth, param = nil, debug = false )
+        def self.download_report( auth, param, debug = false )
+          response = get_id( auth, param )
+          if response[:succ]
+            id = response[:result]
+            p "Got report id:" + id.to_s if debug 
+            loop do
+              sleep 2 
+              break if get_state( auth, id )[:result] == 'Finished'
+              p "Report is not generated, waiting..." if debug 
+            end
+
+            url = get_url( auth, id )[:result]
+            return open(url).read
+          else
+            raise response[:failure][0]["message"]
+          end
+        end
+
+        def self.query_report( auth, param = nil, debug = false )
           param = {} if not param
           param[:type]   ||= 'query'
           param[:fields] ||=  %w(click)
           param[:range]  ||= 'account'
           param[:unit]   ||= 'day'
-          download_report( param, debug )
+          download_report( auth, param, debug )
         end
 
-        def creative_report( auth, param = nil, debug = false )
+        def self.creative_report( auth, param = nil, debug = false )
           param = {} if not param
           param[:type]   ||= 'creative'
           param[:fields] ||=  %w( cost cpc click impression ctr )
           param[:range]  ||= 'creative'
-          download_report( param, debug )
+          download_report( auth, param, debug )
         end
 
-        def keyword_report( auth, param = nil, debug = false )
+        def self.keyword_report( auth, param = nil, debug = false )
           param = {} if not param
           param[:type]   ||= 'keyword'
           param[:fields] ||=  %w( cost cpc click impression ctr )
           param[:range]  ||= 'keywordid'
-          download_report( param, debug )
+          download_report( auth, param, debug )
         end
 
       end # Repost

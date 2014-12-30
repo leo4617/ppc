@@ -42,7 +42,6 @@ module PPC
         # debug print
         debug_print( operation ) if @@debug
         result = operation.call.hash[:envelope]
-
         #extract header and body
         response = { }
         response[:header] = result[:header][:res_header]
