@@ -111,7 +111,7 @@ module PPC
           param = {} if not param
           param[:type]   ||= 'creative'
           param[:fields] ||=  %w( cost cpc click impression ctr )
-          param[:range]  ||= 'creative'
+          param[:range]  ||= 'account'
           download_report( auth, param, debug )
         end
 
@@ -119,7 +119,7 @@ module PPC
           param = {} if not param
           param[:type]   ||= 'keyword'
           param[:fields] ||=  %w( cost cpc click impression ctr )
-          param[:range]  ||= 'keywordid'
+          param[:range]  ||= 'account'
           download_report( auth, param, debug )
         end
 
