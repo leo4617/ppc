@@ -94,7 +94,7 @@ module PPC
             url = get_url( auth, id )[:result]
             return open(url).read
           else
-            raise response[:failure][0]["message"]
+            raise response[:failure][:message]
           end
         end
 
