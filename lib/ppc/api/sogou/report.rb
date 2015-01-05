@@ -92,7 +92,7 @@ module PPC
             end
 
             url = get_url( auth, id )[:result]
-            return open(url).read
+            ActiveSupport::Gzip.decompress( open(url).read )
           else
             raise response[:failure][:message]
           end
