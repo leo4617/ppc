@@ -92,7 +92,7 @@ module PPC
             end
 
             url = get_url( auth, id )[:result]
-            ActiveSupport::Gzip.decompress( open(url).read )
+            ActiveSupport::Gzip.decompress( open(url).read ).force_encoding('gb18030').encode('utf-8')
           else
             raise response[:failure][:message]
           end
