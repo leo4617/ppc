@@ -17,8 +17,8 @@ module PPC
         # 日后考虑将httpparty用Net/http代替
         response = HTTParty.post(url, 
                 body: params,
-                headers: {'apiKey' => auth[:token], 
-                                'accessToken' => auth[:accessToken], 
+                headers: {'apiKey' => auth[:api_key], 
+                                'accessToken' => auth[:token], 
                                 'serveToken' => Time.now.to_i.to_s  }
               )
         response.parsed_response

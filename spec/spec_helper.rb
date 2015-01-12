@@ -88,9 +88,8 @@ baidu_token = ''
 qihu_username = ''
 qihu_password = ''
 qihu_token =  ''
-qihu_cipherkey = ''
-qihu_cipheriv = ''
-qihu_accessToken = ''
+qihu_api_key = ''
+qihu_api_secret = ''
 
 
 sogou_username = ''
@@ -110,9 +109,9 @@ $baidu_auth =  {
 $qihu_auth = {
               username: qihu_username,
               password: qihu_password,
-              cipherkey: qihu_cipherkey,
-              cipheriv: qihu_cipheriv,
               token: qihu_token,
+              api_key: qihu_api_key,
+              api_secret: qihu_api_secret,
               se: 'qihu'
              }
 

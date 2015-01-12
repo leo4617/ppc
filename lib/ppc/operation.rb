@@ -18,13 +18,13 @@ module PPC
         token:    params[:token]
       }
       # add support for qihu360
-      if  @se == 'qihu' && params[:accessToken] == nil 
-        raise "you are using qihu service, please enter cipherkey" if params[:cipherkey] == nil
-        raise "you are using qihu service, please enter cipheriv" if params[:cipheriv] == nil
-        cipher = { key: params[:cipherkey], iv: params[:cipheriv] } 
-        @auth[:accessToken] = qihu_refresh_token( @auth, cipher )
-      else
-        @auth[:accessToken] = params[:accessToken]
+      if @se == 'qihu' && params[:api_key].nil?
+        raise "you are using qihu service, please enter api_key"
+      end
+      if @se == 'qihu' && params[:token].nil? && params[:api_secret].nil?
+        raise "you are using qihu service, please enter api_secret" 
+        cipher = { key: params[:api_secret][0,16], iv: paramsi[:api_secret][16,16] } 
+        @auth[:token] = qihu_refresh_token( @auth, cipher )
       end
     end
 
@@ -40,7 +40,7 @@ module PPC
           :username => auth[:username],
           :passwd => encrypted[0,64]
           },
-          :headers => {'apiKey' => auth[:token] }
+          :headers => {'apiKey' => auth[:api_key] }
         )
         data = response.parsed_response
         data["account_clientLogin_response"]["accessToken"]
