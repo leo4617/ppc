@@ -23,6 +23,8 @@ module PPC
       end
       if @se == 'qihu' && params[:token].nil? && params[:api_secret].nil?
         raise "you are using qihu service, please enter api_secret" 
+      end
+      if @se == 'qihu' && params[:token].nil? && !params[:api_secret].nil?
         cipher = { key: params[:api_secret][0,16], iv: paramsi[:api_secret][16,16] } 
         @auth[:token] = qihu_refresh_token( @auth, cipher )
       end
