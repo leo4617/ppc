@@ -66,7 +66,9 @@ module PPC
         result = {}
         result[:succ] = response['header']['desc']=='success'? true : false
         result[:failure] = response['header']['failures']
-        result[:result] = func[ response['body'][key] ]
+        unless response['body'].nil? or response['body'][key].nil?
+          result[:result] = func[ response['body'][key] ]
+        end
         return result
       end # process
 
