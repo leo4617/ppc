@@ -18,14 +18,12 @@ module PPC
         token:    params[:token]
       }
       # add support for qihu360
-      if @se == 'qihu' && params[:api_key].nil?
-        raise "you are using qihu service, please enter api_key"
-      end
-      if @se == 'qihu' && params[:token].nil? && params[:api_secret].nil?
-        raise "you are using qihu service, please enter api_secret" 
-      end
-      if @se == 'qihu' && params[:token].nil? && !params[:api_secret].nil?
+      if @se == 'qihu'
+        raise "you are using qihu service, please enter api_key" if params[:api_key].nil?
         @auth[:api_key] = params[:api_key]
+      end
+      if @se == 'qihu' && params[:token].nil? 
+        raise "you are using qihu service, please enter api_secret" if params[:api_secret].nil?
         @auth[:api_secret] = params[:api_secret]
         @auth[:token] = qihu_refresh_token
       end
