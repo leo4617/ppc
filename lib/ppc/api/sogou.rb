@@ -68,7 +68,9 @@ module PPC
         result = {}
         result[:succ] = response[:header][:desc]=='success'? true : false
         result[:failure] = response[:header][:failures]
-        result[:result] = func[ response[:body][ key.snake_case.to_sym ] ]
+        unless response['body'].nil? or response['body'][key.snake_case.to_sym].nil?
+          result[:result] = func[ response[:body][ key.snake_case.to_sym ] ]
+        end
         return result
       end
 
