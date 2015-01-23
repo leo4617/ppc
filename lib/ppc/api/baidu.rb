@@ -43,7 +43,13 @@ module PPC
           'Content-Type' => 'application/json; charset=UTF-8'
         }
 
-        http = Net::HTTP.new(uri.host, 443)
+        if ENV["PROXY_HOST"]
+          proxy_port = ENV["PROXY_PORT"] ? ENV["PROXY_PORT"].to_i : 80
+          http = Net::HTTP.new(uri.host, 443, ENV["PROXY_HOST"], proxy_port)
+        else
+          http = Net::HTTP.new(uri.host, 443)
+        end
+
         # 是否显示http通信输出
         http.set_debug_output( $stdout ) if @@debug
         http.use_ssl = true
