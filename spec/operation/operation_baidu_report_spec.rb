@@ -10,8 +10,8 @@ describe ::PPC::Operation::Account do
     p "startDate:#{startDate},endDate:#{endDate}"
     param = {startDate:startDate, endDate:endDate}
 
-    subject.query_report( param, true )
-    subject.keyword_report( param, true )
-    subject.creative_report( param, true )
+    p subject.query_report( param, true )
+    p subject.keyword_report( param, true )
+    p subject.creative_report( param, true )
   end
 end

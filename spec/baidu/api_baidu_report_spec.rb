@@ -11,7 +11,7 @@ describe ::PPC::API::Baidu::Report do
   end
 
   it 'can get professional report status' do
-    response = ::PPC::API::Baidu::Report::get_status( auth, test_report_id[0] )
+    response = ::PPC::API::Baidu::Report::get_state( auth, test_report_id[0] )
     is_success( response )
   end
 
@@ -36,9 +36,9 @@ describe "::PPC::API::Baidu::Report Operation interface" do
     p "endDate:#{endDate}"
 
     param = {startDate:startDate, endDate:endDate}
-    subject.query_report( auth, param, true )
-    subject.keyword_report( auth, param, true )
-    subject.creative_report( auth,param, true )
+    p subject.query_report( auth, param, true )
+    p subject.keyword_report( auth, param, true )
+    p subject.creative_report( auth,param, true )
   end
 
 end
