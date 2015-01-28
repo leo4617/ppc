@@ -49,6 +49,11 @@ describe ::PPC::Operation::Account do
     subject.keyword_report(pa)
     subject.creative_report(pa)
   end
+
+  # bulk job test
+  it "acn download all objs" do
+    subject.download
+  end
 end
 
 describe ::PPC::Operation::Plan do

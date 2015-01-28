@@ -34,7 +34,8 @@ module PPC
         cipher_aes.encrypt
         cipher_aes.key = @auth[:api_secret][0,16]
         cipher_aes.iv = @auth[:api_secret][16,16]
-        encrypted = (cipher_aes.update(Digest::MD5.hexdigest( @auth[:password] )) + cipher_aes.final).unpack('H*').join
+        encrypted = (cipher_aes.update(Digest::MD5.hexdigest(@auth[:password]))
+                     + cipher_aes.final).unpack('H*').join
         url = "https://api.e.360.cn/account/clientLogin"
         response = HTTParty.post(url,
           :body => {
@@ -47,38 +48,15 @@ module PPC
         data["account_clientLogin_response"]["accessToken"]
     end
 
-    def call(service)
-      eval "::PPC::API::#{@se.capitalize}::#{service.capitalize}"
+    def download( param = {} )
+        """
+        download all objs of an account
+        """
+        eval("::PPC::API::#{@se.capitalize}::Bulk").download( @auth, param )
     end
 
-    def download(params = {})
-      bulk = ::PPC::Baidu::Bulk.new({
-                                      username: @username,
-                                      password: @password,
-                                      token:    @token,
-                                      debug:    @debug
-      })
-
-      params[:extended] = params[:extended] || 2
-
-      begin
-        file_id = bulk.file_id_of_all(params)
-        puts "file_id: #{file_id}" if @debug
-
-        loop do
-          state = bulk.state(file_id)
-          raise "invalid file state: #{state}" unless %w(1 2 3 null).include? state
-          break if state == '3'
-          puts "waiting for #{file_id} to be ready. current state:#{state}" if @debug
-          sleep 3
-        end
-        puts "#{file_id} is ready" if @debug
-        return bulk.path(file_id)
-      rescue
-        raise BulkException.new(file_id,bulk)
-      end  
-
-      return false
+    def call(service)
+      eval "::PPC::API::#{@se.capitalize}::#{service.capitalize}"
     end
 
     # ++++++++ #
