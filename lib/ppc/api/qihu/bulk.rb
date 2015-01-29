@@ -10,22 +10,22 @@ module PPC
           #文档上面写的输入类型是String？
           body = { 'idList' =>  ids } if ids
           response = request( auth, Service, 'getAllObjects' )
-          process( response, 'account_getAllObjects_response' ){ |x| x }
+          process( response, 'fileId' ){ |x| x }
         end
 
         def self.get_file_state( auth, id )
           body = { 'fileId' => id }
-          response = request( auth, Service, 'getAllObjects' , body )
-          process( response, 'account_getFileState_response' ){ |x| x }
+          response = request( auth, Service, 'getFileState' , body )
+          process( response, '' ){ |x| x }
         end
 
         def self.download( auth, ids = nil)
           result = get_all_object(auth, ids)
-          field_id = result[:result]['fieldId']
+          field_id = result[:result]
           loop do 
             status = get_file_state(auth, field_id)
             return status if status[:result]['isGenerated'] == 'success'
-            sleep 3
+            sleep 15
           end
         end
       end
