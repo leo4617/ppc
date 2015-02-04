@@ -7,8 +7,8 @@ module PPC
         ::PPC::API::Baidu::Creative::get( @auth, @id )
       end
 
-      def update( keywordType )
-        ::PPC::API::Baidu::Keyword::update( @auth, keywordType )
+      def update( type )
+        ::PPC::API::Baidu::Keyword::update( @auth, type.merge( id:@id) )
       end
 
       def activate()
