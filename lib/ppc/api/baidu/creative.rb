@@ -13,7 +13,7 @@ module PPC
                         [:description2,:description2],
                         [:pc_destination,:pcDestinationUrl],
                         [:pc_display,:pcDisplayUrl],
-                        [:moile_destination,:mobileDestinationUrl],
+                        [:mobile_destination,:mobileDestinationUrl],
                         [:mobile_display,:mobileDisplayUrl],
                         [:pause,:pause],
                         [:preference,:devicePreference] 
