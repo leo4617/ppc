@@ -48,12 +48,12 @@ module PPC
         response[:header] = result[:header][:res_header]
         response[:body] = result[:body][ (method + "Response").snake_case.to_sym ]
         # debug print
-        p response if @@debug
+        puts response if @@debug
         return response
       end
 
       def self.debug_print( operation )
-        p '{:header=>' + operation.header.to_s + ',  :body=>' + operation.body.to_s + '}'
+        puts '{:header=>' + operation.header.to_s + ',  :body=>' + operation.body.to_s + '}'
       end
 
       def self.process( response, key, debug = false, &func )
@@ -68,7 +68,7 @@ module PPC
         result = {}
         result[:succ] = response[:header][:desc]=='success'? true : false
         result[:failure] = response[:header][:failures]
-        unless response['body'].nil? or response['body'][key.snake_case.to_sym].nil?
+        unless response[:body].nil? or response[:body][key.snake_case.to_sym].nil?
           result[:result] = func[ response[:body][ key.snake_case.to_sym ] ]
         end
         return result

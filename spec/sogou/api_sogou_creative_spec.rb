@@ -18,9 +18,9 @@ describe ::PPC::API::Sogou::Creative do
   end
 
   it 'can add Creative' do
-    Creative = { group_id: test_group_id, title: 'testCreative', 
+    Creative = { group_id: test_group_id, title: 'testCreative0', 
                         description1:"this is a test", description2: "this is another test",
-                        pc_destination:$sogou_domain, pc_display:$sogou_domain }
+                        pc_destination:$domain, pc_display:$domain }
     response = ::PPC::API::Sogou::Creative::add( auth, Creative )
     is_success( response )
     p response

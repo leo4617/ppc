@@ -13,19 +13,18 @@ describe ::PPC::API::Sogou::Keyword do
 
   it 'can search keyword by group id' do
     response = ::PPC::API::Sogou::Keyword::search_by_group_id( auth, test_group_id )
-    p response
     is_success( response )
   end
 
   it 'can add keyword' do
-    keyword = { group_id: test_group_id, keyword: 'testkeyword', match_type:'exact' }
+    keyword = { group_id: test_group_id, keyword: 'testkeyword123', match_type:'exact' }
     response = ::PPC::API::Sogou::Keyword::add( auth, keyword )
     is_success( response )
     test_keyword_id << response[:result][0][:id]
   end
 
   it 'can get status' do
-    response = ::PPC::API::Sogou::Keyword::status( auth, test_keyword_id)
+    response = ::PPC::API::Sogou::Keyword::status( auth, test_keyword_id )
     is_success(response)
     expect(response[:result][0].keys).to eq [:id,:status]
   end

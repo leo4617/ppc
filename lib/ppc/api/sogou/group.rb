@@ -6,16 +6,16 @@ module PPC
         Service = 'CpcGrp'
 
         @map =[
-                        [:plan_id, :cpcPlanId],
-                        [:id, :cpcGrpId],
-                        [:name, :cpcGrpName],
-                        [:price, :maxPrice],
-                        [:negative, :negativeWords],
-                        [:exact_negative, :exactNegativeWords],
-                        [:pause, :pause],
-                        [:status, :status],
-                        [:opt, :opt]
-                      ]
+                [:plan_id, :cpcPlanId],
+                [:id, :cpcGrpId],
+                [:name, :cpcGrpName],
+                [:price, :maxPrice],
+                [:negative, :negativeWords],
+                [:exact_negative, :exactNegativeWords],
+                [:pause, :pause],
+                [:status, :status],
+                [:opt, :opt]
+              ]
 
         def self.ids(auth, debug = false )
           """
@@ -85,10 +85,14 @@ module PPC
 
         private
         def self.make_planGroupIds( cpcPlanGrpIdTypes )
+          """
+          Transfer Sogou API to PPC API
+          Item: cpc_plan_group_ids
+          """
           cpcPlanGrpIdTypes = [cpcPlanGrpIdTypes] unless cpcPlanGrpIdTypes.is_a? Array
           planGroupIds = []
           cpcPlanGrpIdTypes.each do |cpcPlanGrpIdType|
-            planGroupId = { }
+            planGroupId = {}
             planGroupId[:plan_id] = cpcPlanGrpIdType[:cpc_plan_id]
             planGroupId[:group_ids] = cpcPlanGrpIdType[:cpc_grp_ids]
             planGroupIds << planGroupId
@@ -98,6 +102,9 @@ module PPC
 
         private
         def self.make_planGroups( cpcPlanGrpTypes )
+          """
+          Transfer Sogou API to PPC API
+          """
           # 多加一行change成array
           cpcPlanGrpTypes = [cpcPlanGrpTypes] unless cpcPlanGrpTypes.is_a? Array
           planGroups = []

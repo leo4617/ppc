@@ -1,4 +1,7 @@
 # -*- coding:utf-8 -*-
+"""
+Todo: Implement Activate Method
+"""
 module PPC
   module API
     class Sogou
@@ -8,26 +11,26 @@ module PPC
         Match_type  = { 'exact' => 0, 'wide' => 1,0 => 'exact', 1 => 'wide' } 
                 
         @map  = [
-                            [:id,:cpcId],
-                            [:group_id,:cpcGrpId],
-                            [:keyword,:cpc],
-                            [:price,:price],
-                            [:pc_destination,:visitUrl],
-                            [:mobile_destination,:mobileVisitUrl],
-                            [:match_type,:matchType],
-                            [:pause,:pause],
-                            [:status,:status],
-                            [:quality,:cpcQuality]
-                        ]
+                  [:id,:cpcId],
+                  [:group_id,:cpcGrpId],
+                  [:keyword,:cpc],
+                  [:price,:price],
+                  [:pc_destination,:visitUrl],
+                  [:mobile_destination,:mobileVisitUrl],
+                  [:match_type,:matchType],
+                  [:pause,:pause],
+                  [:status,:status],
+                  [:quality,:cpcQuality]
+                ]
         @quality_map = [
-                                      [:id,:cpcId],
-                                      [:quality,:cpcQuality]
-                                    ]
+                          [:id,:cpcId],
+                          [:quality,:cpcQuality]
+                        ]
 
         @status_map = [
-                                    [:id,:cpcId],
-                                    [:status,:status]
-                                  ]
+                        [:id,:cpcId],
+                        [:status,:status]
+                      ]
 
         # 后面改成info方法
         def self.get( auth, ids, debug = false )
@@ -86,7 +89,7 @@ module PPC
           process(response, 'cpcGrpCpcIds', debug){|x| make_groupKeywordIds( x ) }
         end
 
-        # sogou的keyword服务不提供质量度
+        # sogou的keyword服务不提供质量度和状态，从getInfo方法中查询
         def self.status( auth, ids, debug = false )
           '''
           Return [ { id: id, status: status} ... ]
@@ -94,7 +97,6 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { cpcIds: ids}
           response = request( auth, Service, 'getCpcByCpcId', body )
-          
           process(response, 'cpcTypes', debug){  |x|  reverse_type(x, @status_map) }
         end
 
@@ -110,6 +112,9 @@ module PPC
 
         private
         def self.make_groupKeywordIds( cpcGrpCpcIdTypes )
+          """
+          Transfer Sogou API to PPC API
+          """
           cpcGrpCpcIdTypes = [cpcGrpCpcIdTypes] unless cpcGrpCpcIdTypes.is_a? Array
           group_keyword_ids = []
           cpcGrpCpcIdTypes.each do |cpcGrpCpcIdType|
@@ -164,7 +169,7 @@ module PPC
              # 增加对matchtype的自动转换
               map.each do |key|
                 if key[0] == :match_type
-                   value = type[ key[1].to_s.snake_case.to_sym]
+                  value = type[ key[1].to_s.snake_case.to_sym]
                   param[ key[0] ] = Match_type[ value ] if value                 
                 else
                   value = type[ key[1].to_s.snake_case.to_sym ]

@@ -40,11 +40,12 @@ describe ::PPC::API::Qihu::Keyword do
   it 'can get status' do
       response =  ::PPC::API::Qihu::Keyword::status( auth, test_keyword_id )
       is_success( response )
+      p test_keyword_id
   end
 
-  it 'can delete keyword' do
-      response =  ::PPC::API::Qihu::Keyword::delete( auth, test_keyword_id )
-      is_success( response )
-  end
+  # it 'can delete keyword' do
+  #     response =  ::PPC::API::Qihu::Keyword::delete( auth, test_keyword_id )
+  #     is_success( response )
+  # end
   
 end
