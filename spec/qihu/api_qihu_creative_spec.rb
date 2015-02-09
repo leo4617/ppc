@@ -1,8 +1,8 @@
 describe ::PPC::API::Qihu::Creative do
   auth = $qihu_auth
 
-  test_plan_id = ::PPC::API::Qihu::Account::ids( auth )[:result][0].to_i
-  test_group_id = ::PPC::API::Qihu::Group::search_id_by_plan_id( auth, test_plan_id )[:result][0].to_i
+  test_plan_id = ::PPC::API::Qihu::Plan::ids( auth )[:result][0].to_i
+  test_group_id = ::PPC::API::Qihu::Group::search_id_by_plan_id( auth, test_plan_id )[:result][0][:group_ids][0].to_i
   test_Creative_id = 0
 
   it 'can search creatives by group id' do
@@ -20,7 +20,7 @@ describe ::PPC::API::Qihu::Creative do
                           }
     response =  ::PPC::API::Qihu::Creative::add( auth, creative1)
     is_success( response )
-    test_Creative_id = response[:result][0]
+    test_Creative_id = response[:result][0][:id]
   end
 
   it 'can update a creative' do
@@ -30,18 +30,18 @@ describe ::PPC::API::Qihu::Creative do
   end 
 
   it 'can get creatives' do
-    response =  ::PPC::API::Qihu::Creative::get( auth, test_Creative_id )
+    response =  ::PPC::API::Qihu::Creative::get( auth, [test_Creative_id] )
     is_success( response )
     expect( response[:result][0].keys ).to include( :id, :title )
   end
 
   it 'can get status' do
-      response =  ::PPC::API::Qihu::Creative::status( auth, test_Creative_id )
+      response =  ::PPC::API::Qihu::Creative::status( auth, [test_Creative_id] )
       is_success( response )
   end
 
   it 'can delete a creative' do
-      response =  ::PPC::API::Qihu::Creative::delete( auth, test_Creative_id )
+      response =  ::PPC::API::Qihu::Creative::delete( auth, [test_Creative_id] )
       is_success( response )
   end
   

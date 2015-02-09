@@ -18,11 +18,11 @@ describe ::PPC::API::Qihu::Plan do
   it 'can add a plan' do
     response = ::PPC::API::Qihu::Plan::add( auth, {name:'planForTest'})
     is_success( response )
-    test_plan_id = response[:result]
+    test_plan_id = response[:result][0][:id]
   end
 
   it 'can get a plan' do
-    response = ::PPC::API::Qihu::Plan::get( auth, test_plan_id )
+    response = ::PPC::API::Qihu::Plan::get( auth, [test_plan_id] )
     is_success( response )
   end
   
