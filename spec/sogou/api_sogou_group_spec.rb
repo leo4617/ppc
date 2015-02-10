@@ -7,6 +7,7 @@ describe ::PPC::API::Sogou::Group do
   it 'can get all group' do 
     response = ::PPC::API::Sogou::Group::ids( auth )
     is_success( response ) 
+    expect(response[:result]).not_to be_nil
   end
 
   it 'can add group' do 
@@ -20,21 +21,25 @@ describe ::PPC::API::Sogou::Group do
     group = { id: test_group_id[0], price:600 }
     response = ::PPC::API::Sogou::Group::update( auth, group )
     is_success( response )
+    expect(response[:result]).not_to be_nil
   end
 
   it 'can search group by group id' do
     response = ::PPC::API::Sogou::Group::get( auth, test_group_id )
     is_success( response )
+    expect(response[:result]).not_to be_nil
   end
   
   it 'can search group id by plan id' do
     response = ::PPC::API::Sogou::Group::search_id_by_plan_id( auth, test_plan_id )
     is_success( response )
+    expect(response[:result]).not_to be_nil
   end
 
   it 'search by plan id' do 
     response = ::PPC::API::Sogou::Group::search_by_plan_id( auth, test_plan_id )
     is_success( response )
+    expect(response[:result]).not_to be_nil
   end  
 
   it 'can delete group' do 

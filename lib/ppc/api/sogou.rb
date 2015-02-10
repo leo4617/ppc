@@ -56,14 +56,14 @@ module PPC
         puts '{:header=>' + operation.header.to_s + ',  :body=>' + operation.body.to_s + '}'
       end
 
-      def self.process( response, key, debug = false, &func )
+      def self.process( response, key, &func )
         '''
         @input
         : type key : string
         : param key : type name, we will transfer camel string 
                                into snake_case symbol inside the method
         '''
-        return response if debug
+        return response if @@debug
 
         result = {}
         result[:succ] = response[:header][:desc]=='success'? true : false
