@@ -23,16 +23,52 @@ module PPC
             extended:                 params[:extended]     || 0
           }
           response = request( auth, Service, 'getAllObjects',options )
-          response[:get_all_objects_response][:file_id]
+          process( response, 'fileId'){ |x| x }
         end
 
         def self.state( auth, id)
           raise "empty id" if id.nil? or id.empty?
-          request(auth, Service, 'getFileState',{fileId:id})[:get_file_state_response][:is_generated]
+          response = request(auth, Service, 'getFileState',{fileId:id})
+          process( response, 'isGenerated'){ |x| x }
         end
 
         def self.path( auth, id)
-          request( auth, Service, 'getFilePath',{fileId:id})[:get_file_path_response][:file_paths]
+          response = request( auth, Service, 'getFilePath',{fileId:id})
+          process( response, 'filePaths' ){ |x| x }       
+        end
+
+        ###########################
+        # interface for operation #
+        ###########################
+        def self.download( auth, params = {} )
+          """
+          """
+          params[:extended] = params[:extended] || 2
+          begin
+            file_id = get_all_object( auth, params )
+            if file_id[:succ]
+              file_id = file_id[:result]
+            else
+              raise file_id[:failure][0]['message']
+            end
+
+            puts "file_id: #{file_id}" if @@debug
+
+            loop do
+              state = state( auth, file_id )[:result].to_s
+              raise "invalid file state: #{state}" unless %w(1 2 3 null).include? state
+              break if state == '3'
+              puts "waiting for #{file_id} to be ready. current state:#{state}" if @@debug
+              sleep 3
+            end
+
+            puts "#{file_id} is ready" if @@debug
+            return path( auth, file_id )
+
+          rescue => e
+            p "Error encounter:#{e.to_s}"
+          end  
+          return false
         end
 
       end

@@ -4,23 +4,23 @@ module PPC
       include ::PPC::Operation
 
       def info()
-        ::PPC::API::Baidu::Creative::get( @auth, @id )
+        call( 'creative' ).get( @auth, @id )
       end
 
-      def update( keywordType )
-        ::PPC::API::Baidu::Keyword::update( @auth, keywordType )
+      def update( type )
+        call( 'creative' ).update( @auth, type.merge( id:@id) )
       end
 
       def activate()
-        ::PPC::API::Baidu::Creative::activate( @auth, @id )
+        call( 'creative' ).activate( @auth, @id )
       end
 
       def status()
-        ::PPC::API::Baidu::Creative::status( @auth, @id )
+        call( 'creative' ).status( @auth, @id )
       end
 
       def delete()
-        ::PPC::API::Baidu::Creative::delete( @auth, @id )
+        call( 'creative' ).delete( @auth, @id )
       end
 
     end

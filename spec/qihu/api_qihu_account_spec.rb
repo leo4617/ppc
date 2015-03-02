@@ -18,7 +18,7 @@ describe ::PPC::API::Qihu::Account do
   end
 
   it 'can update budget' do
-    response = ::PPC::API::Qihu::Account::update_budget( auth, 3500 )
+    response = ::PPC::API::Qihu::Account::update_budget( auth, 0 )
     is_success( response )
   end
   

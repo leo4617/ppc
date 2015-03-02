@@ -6,7 +6,6 @@ module PPC
       # self operations
       def info
         info = call('account').info(@auth)
-        p info
         @id = info[:result][:id] if @id == nil
         return info
       end

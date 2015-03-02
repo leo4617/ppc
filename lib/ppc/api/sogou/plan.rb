@@ -22,45 +22,45 @@ module PPC
                           [:status,:status],
                         ]
 
-        def self.all( auth, debug = false )
+        def self.all( auth )
           response = request( auth, Service, 'getAllCpcPlan' )
-          process( response, 'cpcPlanTypes' , debug ){ |x| reverse_type(x) }
+          process( response, 'cpcPlanTypes' ){ |x| reverse_type(x) }
         end
 
-        def self.ids( auth, debug = false )
+        def self.ids( auth )
           response = request( auth, Service, 'getAllCpcPlanId' )
-          process( response, 'cpcPlanIds' , debug ){ |x| x }
+          process( response, 'cpcPlanIds' ){ |x| x }
         end
 
-        def self.get( auth, ids, debug = false )
+        def self.get( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
           body = { cpcPlanIds: ids }
           response = request( auth, Service, 'getCpcPlanByCpcPlanId', body)
-          process( response, 'cpcPlanTypes' , debug ){ |x| reverse_type(x) }
+          process( response, 'cpcPlanTypes' ){ |x| reverse_type(x) }
         end
 
-        def self.add( auth, plans, debug = false )
+        def self.add( auth, plans )
           cpcPlanTypes = make_type( plans )
           body = { cpcPlanTypes: cpcPlanTypes }
           response = request( auth, Service, 'addCpcPlan', body)
-          process( response, 'cpcPlanTypes' , debug ){ |x| reverse_type(x) }
+          process( response, 'cpcPlanTypes' ){ |x| reverse_type(x) }
         end
 
-        def self.update(auth,plans, debug = false )
+        def self.update( auth, plans )
           cpcPlanTypes = make_type( plans )
           body = { cpcPlanTypes: cpcPlanTypes }
           response = request( auth, Service, 'updateCpcPlan', body)
-          process( response, 'cpcPlanTypes' , debug ){ |x| reverse_type(x) }
+          process( response, 'cpcPlanTypes' ){ |x| reverse_type(x) }
         end
 
-        def self.delete(auth, ids, debug = false )
+        def self.delete(auth, ids )
           ids = [ ids ] unless ids.class == Array
           body = { cpcPlanIds: ids }
           response = request( auth, Service, 'deleteCpcPlan', body)
-          process( response, '' , debug ){ |x| x }
+          process( response, '' ){ |x| x }
         end
        
       end # Service
     end # baidu
   end # API
-end # PPC
+end # PP

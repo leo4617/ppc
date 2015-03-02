@@ -91,11 +91,9 @@ qihu_token =  ''
 qihu_api_key = ''
 qihu_api_secret = ''
 
-
 sogou_username = ''
 sogou_password = ''
 sogou_token = ''
-
 
 
 $domain = ''
@@ -121,11 +119,6 @@ $sogou_auth = {
                 token: sogou_token,
                 se: 'sogou'
               }
-
-
-
-
-
 
 def is_success( result )
   expect( result[:succ] ).to eq true

@@ -2,29 +2,35 @@
 describe ::PPC::API::Baidu::Creative do
   auth = $baidu_auth
 
+  ::PPC::API::Baidu::debug_off
   test_group_id = ::PPC::API::Baidu::Group::ids( auth )[:result][0][:group_ids][0]
   test_plan_id = ::PPC::API::Baidu::Plan::all( auth )[:result][0][:plan_id]
   test_creative_id = []
+  ::PPC::API::Baidu::debug_on
 
  it 'can add creative' do
-    creative = { group_id: test_group_id, 
-                        title: 'TestCreative', preference:1, 
-                        description1:'this is rest',
-                        description2:'also is a test',
-                        pc_destination:$baidu_domain,
-                        pc_display:$baidu_domain }
+    creative = {
+                  group_id: test_group_id, 
+                  title: 'TestCreative', preference:1, 
+                  description1:'this is rest',
+                  description2:'also is a test',
+                  pc_destination:$domain,
+                  pc_display:$domain 
+                }
     response = ::PPC::API::Baidu::Creative::add( auth, creative )
     is_success( response )
     test_creative_id << response[:result][0][:id]
   end
 
   it 'can update creative' do
-    update = { id:test_creative_id[0], 
-                       title:'ElongUpdateTest',
-                       description1:'test for update',
-                        mobile_destination:$baidu_domain,
-                        pc_destination:$baidu_domain,
-                       pause:true} 
+    update = { 
+                id:test_creative_id[0], 
+                title:'ElongUpdateTest',
+                description1:'test for update',
+                mobile_destination:$domain,
+                pc_destination:$domain,
+                pause:true
+              } 
     response = ::PPC::API::Baidu::Creative::update( auth, update )
     is_success( response )
   end

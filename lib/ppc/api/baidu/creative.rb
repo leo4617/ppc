@@ -6,18 +6,18 @@ module PPC
         Service = 'Creative'
 
         @map =[
-                        [:id,:creativeId],
-                        [:group_id,:adgroupId],
-                        [:title,:title],
-                        [:description1,:description1],
-                        [:description2,:description2],
-                        [:pc_destination,:pcDestinationUrl],
-                        [:pc_display,:pcDisplayUrl],
-                        [:moile_destination,:mobileDestinationUrl],
-                        [:mobile_display,:mobileDisplayUrl],
-                        [:pause,:pause],
-                        [:preference,:devicePreference] 
-                      ]
+                [:id,:creativeId],
+                [:group_id,:adgroupId],
+                [:title,:title],
+                [:description1,:description1],
+                [:description2,:description2],
+                [:pc_destination,:pcDestinationUrl],
+                [:pc_display,:pcDisplayUrl],
+                [:mobile_destination,:mobileDestinationUrl],
+                [:mobile_display,:mobileDisplayUrl],
+                [:pause,:pause],
+                [:preference,:devicePreference] 
+              ]     
 
         def self.add( auth, creatives )
           body = { creativeTypes: make_type( creatives ) }

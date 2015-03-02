@@ -4,27 +4,28 @@ module PPC
       include ::PPC::Operation
 
       def info()
-        ::PPC::API::Baidu::Keyword::get( @auth, @id )
+        call( 'keyword' ).get( @auth, @id )
       end
 
       def update( type )
-        ::PPC::API::Baidu::Keyword::update( @auth, type.merge( id:@id) )
+        call( 'keyword' ).update( @auth, type.merge( id:@id) )
       end
 
+      # Todo: Implement Activate method in Sogou API
       def activate()
-        ::PPC::API::Baidu::Keyword::activate( @auth, @id )
+        call( 'keyword' ).activate( @auth, @id )
       end
       
       def status()
-        ::PPC::API::Baidu::Keyword::status( @auth, @id )
+        call( 'keyword' ).status( @auth, @id )
       end
 
       def quality()
-        ::PPC::API::Baidu::Keyword::quality( @auth, @id )
+        call( 'keyword' ).quality( @auth, @id )
       end
 
       def delete()
-        ::PPC::API::Baidu::Keyword::delete( @auth, @id )
+        call( 'keyword' ).delete( @auth, @id )
       end
 
     end

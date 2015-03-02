@@ -17,27 +17,27 @@ module PPC
 
         Unit_map = { 'day' => 1, 'week' => 2, 'month' => 3 }
 
-        def self.get_id( auth, params, debug = false )
+        def self.get_id( auth, params )
           request = make_reportrequest( params )
           body =  { reportRequestType: request }
           response = request( auth, Service, 'getReportId' ,body) 
-          process( response, 'reportId', debug ){ |x| x }
+          process( response, 'reportId' ){ |x| x }
         end
 
-        def self.get_state( auth, id, debug = false)
+        def self.get_state( auth, id )
           '''
           input id should be string
           '''
           status = {'-1'=>'Waiting' ,'0'=>'Opearting' ,'1'=>'Finished'}
           body = { reportId:  id }
           response = request( auth, Service, 'getReportState' ,body)
-          process( response, 'isGenerated', debug ){ |x| status[x] }
+          process( response, 'isGenerated' ){ |x| status[x] }
         end
 
-        def self.get_url( auth, id, debug = false )
+        def self.get_url( auth, id )
           body = { reportId:  id }
           response = request( auth, Service, 'getReportPath' ,body)
-          process( response, 'reportFilePath', debug ){ |x| x }       
+          process( response, 'reportFilePath' ){ |x| x }       
         end
 
         private
