@@ -38,7 +38,7 @@ module PPC
         end
 
         def self.update( auth, sublinks )
-          sublink_types = make_type( creatives ).to_json
+          sublink_types = make_type( sublinks ).to_json
           body = { 'sublinks' => sublink_types}
           response = request( auth, Service, 'update', body )
           process( response, 'affectedRecords', 'failKeywordIds' ){ |x| x }        
@@ -56,30 +56,6 @@ module PPC
           body = { 'idList' => ids }
           response = request( auth, Service, 'deleteByIdList', body )
           process( response, 'affectedRecords' ){ |x|x }     
-        end
-
-        def self.search_id_by_group_id( auth, id, status = nil)
-          # 处理条件  
-          body = {}
-          body['status'] = status if status
-          body['groupId'] = id
-          response = request( auth, Service, 'getIdListByGroupId', body )
-          # 伪装成百度接口
-          process( response, 'creativeIdList' ){ 
-            |x|  
-            [ { group_id:id, creative_ids:to_id_list( x==nil ? nil: x['item'] ) } ] 
-          }     
-        end
-
-        # combine two methods to provide another mether
-        def self.search_by_group_id( auth, id )
-          creative_ids = search_id_by_group_id( auth, id )
-          response = get( auth , creative_ids )
-          # 伪装成百度接口
-          if response[:succ]
-            response[:result] = [ { group_id:id, creatives:response[:result ] } ]
-          end
-          return response
         end
 
       end
