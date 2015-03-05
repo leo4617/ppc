@@ -5,7 +5,7 @@ module PPC
       class Keyword< Baidu
         Service = 'Keyword'
 
-        Match_type  = { 'exact' => 1, 'pharse' => 2, 'wide' => 3,1 => 'exact', 2=> 'pharse' , 3 => 'wide'  }
+        Match_type  = { 'exact' => 1, 'phrase' => 2, 'wide' => 3,1 => 'exact', 2=> 'phrase' , 3 => 'wide'  }
         Device      = { 'pc' => 0, 'mobile' => 1, 'all' => 2 }
         Type        = { 'plan' => 3, 'group' => 5, 'keyword' => 11 }
         
