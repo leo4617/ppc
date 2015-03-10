@@ -29,7 +29,7 @@ module PPC
         '''
         request should return whole http response including header
         '''
-        uri = URI("https://api.baidu.com/json/sms/v3/#{service}Service/#{method}")
+        uri = URI("https://api.baidu.com/json/sms/service/#{service}Service/#{method}")
         http_body = {
           header: {
             username:   auth[:username],
