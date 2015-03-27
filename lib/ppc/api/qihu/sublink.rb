@@ -27,6 +27,13 @@ module PPC
           process( response, 'sublinkIdList'){ |x| to_id_hash_list( x['item'] ) }
         end
 
+        def self.delete( auth, ids )
+          ids = to_json_string( ids )
+          body = { 'idList' => ids }
+          response = request( auth, Service, 'deleteByIdList', body )
+          process( response, 'affectedRecords' ){ |x|x }     
+        end
+
         # helper function for self.add() method
         private
         def self.to_id_hash_list( str )
