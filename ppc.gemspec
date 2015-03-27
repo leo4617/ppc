@@ -5,6 +5,12 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 # require ppc for version
 require 'ppc'
 
+puts """################ WARNING #################
+#  Savon 3.0 is not avaliable on gem source.
+#  Please download it from github, 
+#  checkout savon3 branch and install manually.
+##########################################""" 
+
 Gem::Specification.new do |spec|
   spec.name          = "ppc"
   spec.version       = PPC::VERSION
@@ -22,5 +28,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'httparty', '~> 0.13', '>= 0.13.0'
   spec.add_dependency 'savon',  '~> 3.0', '>= 3.0.0'
-
+  spec.add_dependency 'awesome_print'
 end
