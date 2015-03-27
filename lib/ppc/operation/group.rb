@@ -8,7 +8,7 @@ module PPC
       end
 
       def update( info )
-        info[:id] = @id unless info[:id]
+        info[:id] = @id if (info.is_a? Hash) && info[:id].nil?
         call('group').update(@auth, info)
       end
 
