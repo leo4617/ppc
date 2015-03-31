@@ -95,6 +95,9 @@ sogou_username = ''
 sogou_password = ''
 sogou_token = ''
 
+sm_username = ''
+sm_password = ''
+sm_token = ''
 
 $domain = ''
 $baidu_auth =  {
@@ -120,6 +123,12 @@ $sogou_auth = {
                 se: 'sogou'
               }
 
+$sm_auth = {
+                username: sm_username,
+                password: sm_password,
+                token: sm_token,
+                se: 'sm'
+              }
 def is_success( result )
   expect( result[:succ] ).to eq true
 end
