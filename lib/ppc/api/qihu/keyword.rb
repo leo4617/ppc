@@ -11,7 +11,8 @@ module PPC
                   [:keyword, :word],
                   [:price, :price],
                   [:match_type, :matchType],
-                  [:pc_destination, :destinationUrl],
+                  [:pc_destination, :url],
+                  [:mobile_destination, :mobileUrl],
                   [:status, :status]
                 ]
 
