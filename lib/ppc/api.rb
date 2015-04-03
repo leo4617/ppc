@@ -1,6 +1,12 @@
+require 'awesome_print'
+require 'net/http'
+require 'net/https'
+require 'httparty'
+require 'json'
 require 'ppc/api/baidu'
 require 'ppc/api/sogou'
 require 'ppc/api/qihu'
+require 'ppc/api/sm'
 
 module PPC
   module API

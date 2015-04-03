@@ -12,7 +12,9 @@ module PPC
                  [:description1, :description1],
                  [:description2, :description2],
                  [:pc_destination, :destinationUrl],
-                 [:pc_display, :displayUrl]
+                 [:pc_display, :displayUrl],
+                 [:mobile_destination, :mobileDestinationUrl],
+                 [:mobile_display, :mobileDisplayUrl]
                 ]
 
         @status_map = [ 

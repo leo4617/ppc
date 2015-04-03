@@ -7,8 +7,6 @@ require 'ppc/api/qihu/creative'
 require 'ppc/api/qihu/report'
 require 'ppc/api/qihu/sublink'
 require 'ppc/api/qihu/bulk'
-require 'httparty'
-require 'json'
 
 module PPC
   module API

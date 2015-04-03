@@ -6,10 +6,6 @@ require 'ppc/api/sm/group'
 require 'ppc/api/sm/keyword'
 require 'ppc/api/sm/report'
 require 'ppc/api/sm/creative'
-require 'awesome_print'
-require 'net/http'
-require 'net/https'
-require 'json'
 module PPC
   module API
     class Sm
@@ -29,43 +25,32 @@ module PPC
         '''
         request should return whole http response including header
         '''
-        uri = URI("https://e.sm.cn/json/api/#{method}")
+        uri = URI("https://e.sm.cn/api/#{service}/#{method}")
         http_body = {
-          "header" => {
-            "username" => auth[:username],
-            "password" => auth[:password],
-            "token"    => auth[:token]
+          header: {
+            username:   auth[:username],
+            password:   auth[:password],
+            token:      auth[:token]
           },
-          "body" => params
-        }#.to_json
+          body: params
+        }.to_json
 
         http_header = {
-          'Content-Type' => 'application/json; charset=UTF-8',
+          'Content-Type' => 'application/json'
         }
 
         if ENV["PROXY_HOST"]
           proxy_port = ENV["PROXY_PORT"] ? ENV["PROXY_PORT"].to_i : 80
-          http = Net::HTTP.new(uri.host, 443, ENV["PROXY_HOST"], proxy_port)
+          http = Net::HTTP.new(uri.host, uri.port, ENV["PROXY_HOST"], proxy_port)
         else
-          http = Net::HTTP.new(uri.host, 443)
+          http = Net::HTTP.new(uri.host, uri.port)
         end
 
         # 是否显示http通信输出
-        # http.set_debug_output( $stdout )# if @@debug
-        # http.use_ssl = true
+        http.set_debug_output( $stdout ) if @@debug
+        http.use_ssl = true
 
-        # response = http.post(uri.path, http_body, http_header)
-        req = Net::HTTP::Post.new(uri)
-        req.set_form_data(http_body)
-        http = Net::HTTP.start(uri.host, uri.port, :use_ssl => true)
-        http.set_debug_output( $stdout )
-        response = http.request(req)
-        # warn response['location']
-        # response = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
-        #   http.request(req)
-        # end
-        # warn "#{response.to_hash}"
-        # warn "#{response.body}"
+        response = http.post(uri.path, http_body, http_header)
         response = JSON.parse( response.body )
       end
 
@@ -81,9 +66,9 @@ module PPC
         result is the processed response body.
         '''
         result = {}
-        result[:succ] = response['header']['desc']=='success'? true : false
+        result[:succ] = response['header']['desc'] =='success'? true : false
         result[:failure] = response['header']['failures']
-        unless response['body'].nil? or response['body'][key].nil?
+        if response['body'].nil? && response['body'][key]
           result[:result] = func[ response['body'][key] ]
         end
         return result

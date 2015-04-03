@@ -6,10 +6,7 @@ require 'ppc/api/baidu/group'
 require 'ppc/api/baidu/keyword'
 require 'ppc/api/baidu/report'
 require 'ppc/api/baidu/creative'
-require 'awesome_print'
-require 'net/http'
-require 'net/https'
-require 'json'
+require 'ppc/api/baidu/phone_new_creative'
 module PPC
   module API
     class Baidu
@@ -29,7 +26,7 @@ module PPC
         '''
         request should return whole http response including header
         '''
-        uri = URI("https://api.baidu.com/json/sms/service/#{service}Service/#{method}")
+        uri = URI("https://api.baidu.com/json/sms/v3/#{service}Service/#{method}")
         http_body = {
           header: {
             username:   auth[:username],
