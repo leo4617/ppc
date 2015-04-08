@@ -30,7 +30,8 @@ module PPC
           header: {
             username:   auth[:username],
             password:   auth[:password],
-            token:      auth[:token]
+            token:      auth[:token],
+            target:     '艺龙_活动'
           },
           body: params
         }.to_json
