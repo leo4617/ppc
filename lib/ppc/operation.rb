@@ -34,8 +34,7 @@ module PPC
         cipher_aes.encrypt
         cipher_aes.key = @auth[:api_secret][0,16]
         cipher_aes.iv = @auth[:api_secret][16,16]
-        encrypted = (cipher_aes.update(Digest::MD5.hexdigest(@auth[:password]))
-                     + cipher_aes.final).unpack('H*').join
+        encrypted = (cipher_aes.update(Digest::MD5.hexdigest(@auth[:password])) + cipher_aes.final).unpack('H*').join
         url = "https://api.e.360.cn/account/clientLogin"
         response = HTTParty.post(url,
           :body => {
