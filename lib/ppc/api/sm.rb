@@ -31,7 +31,7 @@ module PPC
             username:   auth[:username],
             password:   auth[:password],
             token:      auth[:token],
-            target:     '艺龙_活动'
+            target:     auth[:target]
           },
           body: params
         }.to_json
@@ -52,7 +52,7 @@ module PPC
         http.use_ssl = true
 
         response = http.post(uri.path, http_body, http_header)
-        response = JSON.parse( response.body )
+        begin JSON.parse(response.body) rescue response.body end
       end
 
       def self.process( response, key, &func)
@@ -67,12 +67,10 @@ module PPC
         result is the processed response body.
         '''
         result = {}
-        result[:succ] = response['header']['desc'] =='success'? true : false
+        result[:succ] = response['header']['desc'] == 'success'
         result[:failure] = response['header']['failures']
-        if response['body'].nil? && response['body'][key]
-          result[:result] = func[ response['body'][key] ]
-        end
-        return result
+        result[:result] = begin response['body'][key] rescue nil end
+        result
       end # process
 
       def self.make_type( params, map = @map)
