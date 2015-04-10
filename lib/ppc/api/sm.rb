@@ -21,7 +21,7 @@ module PPC
         @@debug = false
       end
 
-      def self.request( auth, service, method, params = {} )
+      def self.request( auth, service, method, params = {}, http_method = 'post' )
         '''
         request should return whole http response including header
         '''
@@ -31,13 +31,13 @@ module PPC
             username:   auth[:username],
             password:   auth[:password],
             token:      auth[:token],
-            target:     '艺龙_活动'
+            target:     auth[:target] 
           },
           body: params
         }.to_json
 
         http_header = {
-          'Content-Type' => 'application/json'
+          'Content-Type' => 'application/json; charset=UTF-8'
         }
 
         if ENV["PROXY_HOST"]
@@ -50,8 +50,13 @@ module PPC
         # 是否显示http通信输出
         http.set_debug_output( $stdout ) if @@debug
         http.use_ssl = true
-
-        response = http.post(uri.path, http_body, http_header)
+        if http_method == 'delete'
+          req = Net::HTTP::Delete.new(uri.path, http_header)
+          req.body = http_body
+          response = http.request req
+        else
+          response = http.post(uri.path, http_body, http_header)
+        end
         response = JSON.parse( response.body )
       end
 
@@ -69,7 +74,7 @@ module PPC
         result = {}
         result[:succ] = response['header']['desc'] =='success'? true : false
         result[:failure] = response['header']['failures']
-        if response['body'].nil? && response['body'][key]
+        if !response['body'].nil? && response['body'][key]
           result[:result] = func[ response['body'][key] ]
         end
         return result
