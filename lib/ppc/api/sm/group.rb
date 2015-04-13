@@ -2,83 +2,66 @@
 module PPC
   module API
     class Sm
-      class Group< Sm
-        Service = 'Adgroup'
+      class Group < Sm
+        Service = 'adgroup'
 
         @map =[
-                        [:plan_id, :campaignId],
-                        [:id, :adgroupId],
-                        [:name, :adgroupName],
-                        [:price, :maxPrice],
-                        [:negative, :negativeWords],
-                        [:exact_negative, :exactNegativeWords],
-                        [:pause, :pause],
-                        [:status, :status],
-                        [:reserved, :reserved]
-                      ]
+               [:plan_id, :campaignId],
+               [:id, :adgroupId],
+               [:name, :adgroupName],
+               [:price, :maxPrice],
+               [:negative, :negativeWords],
+               [:exact_negative, :exactNegativeWords],
+               [:pause, :pause],
+               [:status, :status],
+               [:os, :adPlatformOS]
+              ]
 
-        def self.ids(auth )
-          """
-          @return : Array of campaignAdgroupIds
-          """
-          response = request( auth, Service , "getAllAdgroupId" )
-          process( response, 'campaignAdgroupIds' ){ |x| make_planGroupIds( x ) }
+        def self.ids( auth )
+          response = request(auth, Service, "getAllAdgroupId")
+          process(response, 'campaignAdgroupIds'){|x| make_planGroupIds(x)}
         end
 
-        def self.get( auth, ids )
+        def self.get(auth, ids)
           ids = [ ids ] unless ids.is_a? Array
-          body = { adgroupIds: ids }
-          response = request(auth, Service, "getAdgroupByAdgroupId",body )
-          process( response, 'adgroupTypes' ){ |x| reverse_type(x) }
+          body = {adgroupIds: ids}
+          response = request(auth, Service, "getAdgroupByAdgroupId", body)
+          process(response, 'adgroupTypes'){|x| reverse_type(x)}
         end
 
-        def self.add( auth, groups )
-          """
-          @ input : one or list of AdgroupType
-          @ output : list of AdgroupType
-          """
-          adgrouptypes = make_type( groups )
-
-          body = {adgroupTypes:  adgrouptypes }
-          
-          response = request( auth, Service, "addAdgroup", body  )
-          process( response, 'adgroupTypes' ){ |x| reverse_type(x) }
+        def self.add(auth, groups)
+          adgroup_types = make_type(groups)
+          body = {adgroupTypes: adgroup_types}
+          response = request(auth, Service, "addAdgroup", body)
+          process(response, 'adgroupTypes'){|x| reverse_type(x)}
         end
 
-        def self.update( auth, groups )
-          """
-          @ input : one or list of AdgroupType
-          @ output : list of AdgroupType
-          """
-          adgrouptypes = make_type( groups )
-          body = {adgroupTypes: adgrouptypes}
-          
-          response = request( auth, Service, "updateAdgroup",body )
-          process( response, 'adgroupTypes' ){ |x| reverse_type(x) }
+        def self.update(auth, groups)
+          adgroup_types = make_type(groups)
+          body = {adgroupTypes: adgroup_types}
+          response = request(auth, Service, "updateAdgroup", body)
+          process(response, 'adgroupTypes'){|x| reverse_type(x)}
         end
 
-        def self.delete( auth, ids )
-          """
-          delete group body has no message
-          """
-          ids = [ ids ] unless ids.is_a? Array
-          body = { adgroupIds: ids }
-          response = request( auth, Service,"deleteAdgroup", body )
-          process( response, 'nil' ){ |x|  x  }
+        def self.delete(auth, ids)
+          ids = [ids] unless ids.is_a? Array
+          body = {adgroupIds: ids}
+          response = request(auth, Service, "deleteAdgroup", body, "delete")
+          process(response, 'result'){ |x|  x  }
         end
 
-        def self.search_by_plan_id( auth, ids )
+        def self.search_by_plan_id(auth, ids)
           ids = [ ids ] unless ids.class == Array
           body = { campaignIds: ids }
-          response = request( auth, Service ,"getAdgroupByCampaignId",  body )
-          process( response, 'campaignAdgroups' ){ |x| make_planGroups( x ) }
+          response = request(auth, Service, "getAdgroupByCampaignId", body)
+          process(response, 'campaignAdgroups' ){ |x| make_planGroups( x ) }
         end
 
         def self.search_id_by_plan_id( auth, ids )
           ids = [ ids ] unless ids.class == Array
           body = { campaignIds: ids }
-          response = request( auth, Service ,"getAdgroupIdByCampaignId",  body )
-          process( response, 'campaignAdgroupIds' ){ |x| make_planGroupIds( x ) }
+          response = request(auth, Service, "getAdgroupIdByCampaignId", body)
+          process(response, 'campaignAdgroupIds'){ |x| make_planGroupIds( x ) }
         end
 
         private

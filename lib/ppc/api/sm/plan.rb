@@ -1,8 +1,8 @@
 module PPC
   module API
     class Sm
-      class Plan< Sm
-        Service = 'Campaign'
+      class Plan < Sm
+        Service = 'campaign'
 
         @map = [
                 [:id,:campaignId],
@@ -15,9 +15,6 @@ module PPC
                 [:schedule,:schedule], 
                 [:budget_offline_time,:budgetOfflineTime],
                 [:show_prob,:showProb],   
-                [:device,:device],
-                [:price_ratio,:priceRatio], 
-                [:is_dynamic,:isDynamicCreative],
                 [:pause,:pause],
                 [:status,:status]
                ]
@@ -28,7 +25,7 @@ module PPC
         end
 
         def self.ids( auth )
-          response = request( auth, Service, 'getAllCampaignId' )
+          response = request( auth, Service, 'getAllCampaignID' )
           process( response, 'campaignIds' ){ |x| x }
         end
 
@@ -40,25 +37,23 @@ module PPC
         end
 
         def self.add( auth, plans )
-          campaigntypes = make_type( plans )
-          # set extended = 1 to allow change of isDynamicCreative
-          body = { campaignTypes: campaigntypes, extended:1 }
+          campaign_types = make_type( plans )
+          body = { campaignTypes: campaign_types }
           response = request( auth, Service, 'addCampaign', body)
           process( response, 'campaignTypes' ){ |x| reverse_type(x) }
         end
 
         def self.update(auth,plans )
-          campaigntypes = make_type( plans )
-          # set extended = 1 to allow change of isDynamicCreative
-          body = { campaignTypes: campaigntypes, extended:1 }
+          campaign_types = make_type( plans )
+          body = { campaignTypes: campaign_types }
           response = request( auth, Service, 'updateCampaign', body)
           process( response, 'campaignTypes' ){ |x| reverse_type(x) }
         end
 
         def self.delete(auth, ids )
-          ids = [ ids ] unless ids.class == Array
+          ids = [ ids ] unless ids.is_a? Array
           body = { campaignIds: ids }
-          response = request( auth, Service, 'deleteCampaign', body)
+          response = request( auth, Service, 'deleteCampaign', body, "delete")
           process( response, 'result' ){ |x| x }
         end
        

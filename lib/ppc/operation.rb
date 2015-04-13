@@ -47,7 +47,7 @@ module PPC
         data["account_clientLogin_response"]["accessToken"]
     end
 
-    def download( param = {} )
+    def download( param = nil )
         """
         download all objs of an account
         """
