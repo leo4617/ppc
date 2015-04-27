@@ -91,13 +91,14 @@ qihu_token =  ''
 qihu_api_key = ''
 qihu_api_secret = ''
 
-sogou_username = ''
-sogou_password = ''
-sogou_token = ''
+sogou_username = 'app1@sogou.com'
+sogou_password = 'elongsem2014J'
+sogou_token = 'f7f16f683fb1c2fae695250b0b43b184'
 
-sm_username = ''
-sm_password = ''
-sm_token = ''
+sm_username = '艺龙旅行'
+sm_password = 'Elong123'
+sm_token = '825af12c-eb16-4dfb-b6e3-de6fee3cc814'
+sm_target = '艺龙_活动'
 
 $domain = ''
 $baidu_auth =  {
@@ -127,6 +128,7 @@ $sm_auth = {
                 username: sm_username,
                 password: sm_password,
                 token: sm_token,
+                target: sm_target,
                 se: 'sm'
               }
 def is_success( result )
