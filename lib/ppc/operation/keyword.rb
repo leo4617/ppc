@@ -24,8 +24,9 @@ module PPC
         call( 'keyword' ).quality( @auth, @id )
       end
 
-      def delete()
-        call( 'keyword' ).delete( @auth, @id )
+      def delete( ids = nil )
+        ids ||= @id
+        call( 'keyword' ).delete( @auth, ids )
       end
 
     end

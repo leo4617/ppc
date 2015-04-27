@@ -15,7 +15,8 @@ module PPC
         username: params[:username],
         password: params[:password],
         # 在qihu360的api中，apikey就是auth[:token]
-        token:    params[:token]
+        token:    params[:token],
+        target:   params[:target]
       }
       # add support for qihu360
       if @se == 'qihu'
