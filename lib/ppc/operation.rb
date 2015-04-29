@@ -11,7 +11,6 @@ module PPC
         @se = params[:se]
       end
       @id = params[:id]
-<<<<<<< HEAD
       @auth = {
         username: params[:username],
         password: params[:password],
@@ -19,15 +18,6 @@ module PPC
         token:    params[:token],
         target:   params[:target]
       }
-=======
-      @auth = {}
-      @auth[:username] = params[:username]
-      @auth[:password] = params[:password]
-      # 在qihu360的api中，apikey就是auth[:token]
-      @auth[:token]    = params[:token]
-      # 在sm的api中，username是账户管家，target是账户名
-      @auth[:target]   = params[:target] if params[:target]
->>>>>>> 7b6a48387b69f21b56cd5d0a3bbc375adf3ba10d
       # add support for qihu360
       if @se == 'qihu'
         raise "you are using qihu service, please enter api_key" if params[:api_key].nil?
