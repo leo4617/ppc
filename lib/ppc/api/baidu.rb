@@ -67,9 +67,15 @@ module PPC
         result is the processed response body.
         '''
         result = {}
-        result[:succ] = response['header']['desc']=='success'? true : false
+        result[:succ] = response['header']['desc'] =='success'? true : false
         result[:failure] = response['header']['failures']
-        result[:result] = begin response['body'][key] || response['body']['data'][0][key] rescue nil end
+        if !response['body'].nil? && response['body'][key]
+          result[:result] = func[ response['body'][key] ]
+        end
+        #result = {}
+        #result[:succ] = response['header']['desc']=='success'? true : false
+        #result[:failure] = response['header']['failures']
+        #result[:result] = begin response['body'][key] || response['body']['data'][0][key] rescue nil end
         return result
       end # process
 

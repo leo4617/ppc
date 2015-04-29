@@ -12,6 +12,16 @@ module PPC
   module API
     class Qihu
 
+      @@debug = false
+
+      def self.debug_on
+        @@debug = true
+      end
+
+      def self.debug_off
+        @@debug = false
+      end
+
       def self.request( auth, service, method, params = {} )
         url = "https://api.e.360.cn/2.0/#{service}/#{method}"
         # 日后考虑将httpparty用Net/http代替
@@ -21,6 +31,7 @@ module PPC
                                 'accessToken' => auth[:token], 
                                 'serveToken' => Time.now.to_i.to_s  }
               )
+        p response if @@debug
         response.parsed_response
       end
 
