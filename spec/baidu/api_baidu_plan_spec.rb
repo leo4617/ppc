@@ -3,7 +3,7 @@ describe ::PPC::API::Baidu::Plan do
 
   test_plan_id = []
 
-  ::PPC::API::Baidu.debug_on
+  #::PPC::API::Baidu.debug_on
 
   it "can get all plans" do
     response = ::PPC::API::Baidu::Plan::all( auth )

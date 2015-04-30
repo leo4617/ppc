@@ -7,3 +7,11 @@ class String
     downcase
   end
 end
+class Hash
+  def filter_and_replace_key(key_new, key_old)
+    if value = self.delete(key_old)
+      self[key_new] = value 
+    end
+    self
+  end
+end
