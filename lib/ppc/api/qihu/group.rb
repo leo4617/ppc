@@ -6,16 +6,16 @@ module PPC
         Service = 'group'
 
         @map = [
-                [:id, :id ],
-                [:plan_id, :campaignId],
-                [:status, :status ],
-                [:name, :name ],
-                [:price, :price ],
-                # negateive为json格式，make_type要定制
-                [:negative, :negativeWords ],
-                [:add_time, :addTime],
-                [:update_time, :updateTime]
-               ]
+          [:id, :id ],
+          [:plan_id, :campaignId],
+          [:status, :status ],
+          [:name, :name ],
+          [:price, :price ],
+          # negateive为json格式，make_type要定制
+          [:negative, :negativeWords ],
+          [:add_time, :addTime],
+          [:update_time, :updateTime]
+        ]
 
         # 再次封装提供all和ids
         def self.ids( auth )
@@ -48,7 +48,7 @@ module PPC
           # 保证接口一致性
           process( response, 'id' ){ |x| [ { id:x.to_i } ]    }
         end
-        
+
         def self.update( auth, group )
           response = request( auth, Service, 'update', make_type( group )[0]  )
           # 保证接口一致性
@@ -59,21 +59,21 @@ module PPC
           ids = to_json_string( ids )
           body = { 'idList' => ids }
           response = request( auth, Service, 'getInfoByIdList', body  )
-          process( response, 'groupList' ){ |x| reverse_type( x['item'] ) }
+          process( response, 'groupList' ){ |x| reverse_type(x) }
         end
 
         def self.delete( auth, id )
           response = request( auth, Service, 'deleteById', { id: id}  )
           process( response, 'affectedRecords' ){ |x| x == '1' }
         end
-      
+
         def self.search_id_by_plan_id( auth, id )
           response = request( auth, Service, 'getIdListByCampaignId', { 'campaignId' => id.to_s })
           #为了保持接口一致性，这里也是伪装成了百度的接口
           process( response, 'groupIdList' ){ 
             |x|
-             [ { plan_id:id, group_ids: to_id_list( x==nil ? nil: x['item'] ) } ]
-           }
+            [ { plan_id:id, group_ids: to_id_list(x) } ]
+          }
         end
 
         # combine searchIdbyId and get to provide another method
@@ -86,15 +86,15 @@ module PPC
           return response
         end
 
-      # customize make type to convert negative word
-      def self.make_type( params, map = @map)
-        '''
-        '''
-        params = [ params ] unless params.is_a? Array
+        # customize make type to convert negative word
+        def self.make_type( params, map = @map)
+          '''
+          '''
+          params = [ params ] unless params.is_a? Array
 
-        types = []
-        params.each do |param|
-          type = {}
+          types = []
+          params.each do |param|
+            type = {}
 
             map.each do |key|
               # next line transfer negative param to json
@@ -102,10 +102,10 @@ module PPC
               type[ key[1] ] = value if value != nil
             end
 
-          types << type
+            types << type
+          end
+          return types
         end
-        return types
-      end
 
       end
     end

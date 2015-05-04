@@ -1,6 +1,6 @@
 describe ::PPC::API::Qihu::Plan do
   auth = $qihu_auth
-
+  #::PPC::API::Qihu.debug_on
   test_plan_id = 0
 
   it ' can get all plan ids ' do

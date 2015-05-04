@@ -6,32 +6,32 @@ module PPC
         Service = 'campaign'
 
         @map = [
-                  [:id, :id],
-                  [:name,:name],
-                  [:budget, :budget],
-                  [:region, :region],
-                  [:schedule, :schedule],
-                  [:startDate, :startDate],
-                  [:endDate, :endDate ],
-                  [:status,:status], 
-                  [:extend_ad_type,:extendAdType]
-                ]
+          [:id, :id],
+          [:name,:name],
+          [:budget, :budget],
+          [:region, :region],
+          [:schedule, :schedule],
+          [:startDate, :startDate],
+          [:endDate, :endDate ],
+          [:status,:status], 
+          [:extend_ad_type,:extendAdType]
+        ]
 
 
-        def self.get( auth, ids )
+        def self.get(auth, ids)
           '''
           :Type ids: ( Array of ) String or integer
           '''
           ids = to_json_string( ids )    
-          body = { ' idList' =>  ids  }
+          body = {'idList' => ids}
           response = request( auth, Service, 'getInfoByIdList', body )
-          process( response, 'campaignList' ){ |x| reverse_type( x['item'] ) }
+          process( response, 'campaignList' ){ |x| reverse_type(x) }
         end
 
         # move getCampaignId to plan module for operation call
         def self.ids( auth )
           response = request( auth, 'account', 'getCampaignIdList' )
-          process( response, 'campaignIdList' ){ |x| to_id_list( x['item'])}
+          process( response, 'campaignIdList' ){ |x| to_id_list(x)}
         end 
 
         # combine two original method to provice new method
@@ -39,7 +39,7 @@ module PPC
           plan_ids = ids( auth )[:result]
           get( auth, plan_ids )
         end
-        
+
         # 奇虎计划API不提供批量服务
         def self.add( auth, plan )
           response = request( auth, Service, 'add', make_type( plan )[0])
@@ -48,9 +48,9 @@ module PPC
         end
 
         def self.update( auth, plan ) 
-           response = request( auth, Service, 'update', make_type( plan )[0])
-           #同上，保证接口一致性
-           process( response, 'id' ){ |x| [ { id:x.to_i } ] }
+          response = request( auth, Service, 'update', make_type( plan )[0])
+          #同上，保证接口一致性
+          process( response, 'id' ){ |x| [ { id:x.to_i } ] }
         end
 
         def self.delete( auth, id )

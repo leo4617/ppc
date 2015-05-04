@@ -26,14 +26,15 @@ module PPC
           ids = to_json_string( ids )
           body  = { 'idList' => ids }
           response = request( auth, Service, 'getInfoByIdList', body )
-          process( response, 'keywordList'){ |x| reverse_type( x['item'] ) }
+          process( response, 'keywordList'){ |x| reverse_type(x) }
         end
 
         def self.add( auth,  keywords )
           keyword_types =  make_type( keywords ).to_json
           body = { 'keywords' => keyword_types}
           response = request( auth, Service, 'add', body )
-          process( response, 'keywordIdList'){ |x| to_id_hash_list( x['item'] )  }
+          p response
+          process( response, 'keywordIdList'){ |x| to_id_hash_list(x)  }
         end
 
         # helper function for self.add() method
@@ -69,7 +70,7 @@ module PPC
         def self.status( auth, ids )
           body = { idList: to_json_string( ids ) }
           response = request( auth, Service, 'getStatusByIdList', body )
-          process( response, 'keywordList' ){ |x| reverse_type( x['item'], @status_map ) }     
+          process( response, 'keywordList' ){ |x| reverse_type(x, @status_map) }     
         end
 
         # quality 本质上和 status 在一个方法里面
@@ -87,7 +88,7 @@ module PPC
           # 伪装成百度接口
           process( response, 'keywordIdList' ){ 
             |x|
-            [ { group_id:id, keyword_ids:to_id_list( x==nil ? nil: x['item'] ) } ]
+            [{group_id:id, keyword_ids:to_id_list(x)}]
           }     
         end
 

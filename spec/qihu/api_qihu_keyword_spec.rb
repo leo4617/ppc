@@ -20,6 +20,7 @@ describe ::PPC::API::Qihu::Keyword do
   it 'can add keyword' do
     keyword1 = { group_id:test_group_id, keyword:"testKeyword1",price:0.3,match_type:"exact"}
     response =  ::PPC::API::Qihu::Keyword::add( auth, keyword1)
+    p response
     is_success( response )
     test_keyword_id = response[:result][0][:id]
   end

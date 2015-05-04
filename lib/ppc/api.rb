@@ -12,14 +12,14 @@ module PPC
   module API
 
     @map = nil
-    @@debug = false
+    @debug = false
 
     def debug_on
-      @@debug = true
+      @debug = true
     end
 
     def debug_off
-      @@debug = false
+      @debug = false
     end
 
     def request_uri(service: , method: )
@@ -37,13 +37,17 @@ module PPC
       }.to_json
     end
 
+    def request_http_header(auth)
+      {'Content-Type' => 'application/json; charset=UTF-8'}
+    end
+
     def request(auth, service, method, params = {}, http_method = 'post')
       '''
         request should return whole http response including header
       '''
       uri = request_uri(service: service, method: method)
       http_body = request_http_body(auth, params)
-      http_header = {'Content-Type' => 'application/json; charset=UTF-8'}
+      http_header = request_http_header(auth)
 
       # set request proxy
       if ENV["PROXY_HOST"]
@@ -54,7 +58,7 @@ module PPC
       end
 
       # 是否显示http通信输出
-      http.set_debug_output( $stdout ) if @@debug
+      http.set_debug_output( $stdout ) if @debug
       http.use_ssl = true
       if http_method == 'delete'
         req = Net::HTTP::Delete.new(uri.path, http_header)

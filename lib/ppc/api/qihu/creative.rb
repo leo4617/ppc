@@ -6,34 +6,34 @@ module PPC
         Service = 'creative'
 
         @map = [
-                 [:id,:id] ,
-                 [:group_id, :groupId],
-                 [:title,:title],
-                 [:description1, :description1],
-                 [:description2, :description2],
-                 [:pc_destination, :destinationUrl],
-                 [:pc_display, :displayUrl],
-                 [:mobile_destination, :mobileDestinationUrl],
-                 [:mobile_display, :mobileDisplayUrl]
-                ]
+          [:id,:id] ,
+          [:group_id, :groupId],
+          [:title,:title],
+          [:description1, :description1],
+          [:description2, :description2],
+          [:pc_destination, :destinationUrl],
+          [:pc_display, :displayUrl],
+          [:mobile_destination, :mobileDestinationUrl],
+          [:mobile_display, :mobileDisplayUrl]
+        ]
 
         @status_map = [ 
-                        [:id,:id], 
-                        [:quality,:qualityScore],
-                        [:status,:status]
-                      ]
+          [:id,:id], 
+          [:quality,:qualityScore],
+          [:status,:status]
+        ]
 
         def self.get( auth, ids )
           body  = { 'idList' => to_json_string( ids ) }
           response = request( auth, Service, 'getInfoByIdList', body )
-          process( response, 'creativeList'){ |x| reverse_type( x['item'] ) }
+          process( response, 'creativeList'){ |x| reverse_type(x) }
         end
 
         def self.add( auth,  creatives )
           creative_types = make_type( creatives ).to_json
           body = { 'creatives' => creative_types}
           response = request( auth, Service, 'add', body )
-          process( response, 'creativeIdList'){ |x| to_id_hash_list( x['item'] ) }
+          process( response, 'creativeIdList'){ |x| to_id_hash_list(x) }
         end
 
         # helper function for self.add() method
@@ -53,7 +53,7 @@ module PPC
           process( response, 'affectedRecords', 'failCreativeIds' ){ |x| x }        
         end
 
-         # 对update的再封装实现activate方法,未测试
+        # 对update的再封装实现activate方法,未测试
         def self.activate( auth, ids )
           creatives = []
           ids.each{ |id| creatives << { id: id, status:'enable'} }
@@ -70,7 +70,7 @@ module PPC
         def self.status( auth, ids )
           body = { idList: to_json_string( ids ) }
           response = request( auth, Service, 'getStatusByIdList', body )
-          process( response, 'creativeList' ){ |x| reverse_type( x['item'], @status_map ) }     
+          process( response, 'creativeList' ){ |x| reverse_type( x, @status_map ) }     
         end
 
         # quality 本质上和 status 在一个方法里面
@@ -87,7 +87,7 @@ module PPC
           # 伪装成百度接口
           process( response, 'creativeIdList' ){ 
             |x|  
-            [ { group_id:id, creative_ids:to_id_list( x==nil ? nil: x['item'] ) } ] 
+            [ { group_id:id, creative_ids:to_id_list(x) } ] 
           }     
         end
 

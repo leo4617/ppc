@@ -12,47 +12,74 @@ module PPC
   module API
     class Qihu
 
-      @@debug = false
+      extend ::PPC::API
 
-      def self.debug_on
-        @@debug = true
+      def self.request_uri(service:, method:)
+        URI("https://api.e.360.cn/2.0/#{service}/#{method}")
       end
 
-      def self.debug_off
-        @@debug = false
+      def self.request_http_header(auth)
+        {
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'apiKey' => auth[:api_key],
+          'accessToken' => auth[:token],
+          'serveToken' => Time.now.to_i.to_s
+        }
       end
 
-      def self.request( auth, service, method, params = {} )
-        url = "https://api.e.360.cn/2.0/#{service}/#{method}"
-        # 日后考虑将httpparty用Net/http代替
-        response = HTTParty.post(url, 
-                body: params,
-                headers: {'apiKey' => auth[:api_key], 
-                                'accessToken' => auth[:token], 
-                                'serveToken' => Time.now.to_i.to_s  }
-              )
-        p response if @@debug
-        response.parsed_response
+      def self.request_http_body(auth, params = {})
+        params["format"] = 'json'
+        params.map{|k,v| "#{k.to_s}=#{v.to_s}"}.join('&')
       end
+
+#      def self.request( auth, service, method, params = {} )
+#        p 123
+#        url = "https://api.e.360.cn/2.0/#{service}/#{method}"
+#        # 日后考虑将httpparty用Net/http代替
+#        response = HTTParty.post(url, 
+#                body: params,
+#                headers: {'apiKey' => auth[:api_key], 
+#                                'accessToken' => auth[:token], 
+#                                'serveToken' => Time.now.to_i.to_s  }
+#              )
+#        p response 
+#        response.parsed_response
+#      end
 
       def self.process( response, key, failure_key = '', &func )
-        response_key = response.keys[0]
-        content = response[ response_key ]
         # special case solution
-        if content == nil
-          return{ succ:true, failure:nil, result:nil }
-        end
-
+        # 只有account getInfo 的key 为 '',因为其特殊逻辑,单独处理
         result = { }
-        if content['failures'] != nil
-          result[:succ] = false
-          result[:failure] = content['failures']['item']
-          result[:result] = nil
-        else
+        if response == []
           result[:succ] = true
-          result[:result] = func[ key==''? content : content[ key ] ]
-          result[:failure] = failure_key == ''? nil : content[ failure_key ]
+          result[:failure] = nil
+          result[:result] = nil
+          return result
         end
+        if key == ''
+          if !response['failures'].nil?
+            result[:succ] = false
+            result[:result] = nil
+            result[:failure] = response['failures']
+            return result
+          end
+          result[:succ] = true
+          result[:failure] = nil
+          result[:result] = func[response]
+          return result
+        end
+        result[:result] = func[response[key]]
+        result[:failure] = response['failures']
+        result[:succ] = response['failures'].nil? || response['failures'].size.zero?
+        #if response['failures'] != nil
+        #  result[:succ] = false
+        #  result[:failure] = response['failures']['item']
+        #  result[:result] = nil
+        #else
+        #  result[:succ] = true
+        #  result[:result] = func[ key==''? response : response[ key ] ]
+        #  result[:failure] = failure_key == ''? nil : response[ failure_key ]
+        #end
         return result
       end
 

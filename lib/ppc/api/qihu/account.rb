@@ -64,20 +64,20 @@ module PPC
 
         def self.get_exclude_ip( auth )
           response = request( auth, Service, 'getExcludeIp' )
-          process( response, 'excludeIpList' ){ |x| x['item'] }
+          process( response, 'excludeIpList' ){ |x| x}
         end
 
         private
         def self.update_budget( auth, budget )
           response = request( auth, Service, 'updateBudget', { budget:budget })
-          process( response, 'affectedRecords' ){ | x | x.to_i==1?'success':'failure' }
+          process( response, 'affectedRecords' ){ | x | x.to_i==1 ? 'success' : 'failure' }
         end
 
         private
         def self.update_exclude_ip( auth, ips )
           ips = to_json_string( ips )
           response = request( auth, Service, 'updateExcludeIp', { excludeIpList: ips } )
-          process( response, 'excludeIpList' ){ | x | x }
+          process( response, '' ){|x| x}
         end
 
       end
