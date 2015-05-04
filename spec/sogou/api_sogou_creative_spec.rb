@@ -32,7 +32,7 @@ describe ::PPC::API::Sogou::Creative do
     response = ::PPC::API::Sogou::Creative::status( auth, test_creative_id)
     is_success(response)
     expect(response[:result]).not_to be_nil
-    expect(response[:result][0].keys).to eq [:id,:status]
+    expect(response[:result][0].keys).to eq [:cpc_grp_id, :title, :description1, :description2, :visit_url, :show_url, :pause, :opt, :id, :status]
   end
 
   it 'can update Creative' do
@@ -40,6 +40,7 @@ describe ::PPC::API::Sogou::Creative do
     response = ::PPC::API::Sogou::Creative::update( auth, update )
     is_success( response )
     expect(response[:result]).not_to be_nil
+    p response
   end
 
   it 'can delete Creative' do

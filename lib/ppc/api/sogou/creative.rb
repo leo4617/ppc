@@ -6,23 +6,23 @@ module PPC
         Service = 'CpcIdea'
 
         @map =[
-                [:id,:cpcIdeaId],
-                [:group_id,:cpcGrpId],
-                [:title,:title],
-                [:description1,:description1],
-                [:description2,:description2],
-                [:pc_destination,:visitUrl],
-                [:pc_display,:showUrl],
-                [:moile_destination,:mobileVisitUrl],
-                [:mobile_display,:mobileShowUrl],
-                [:pause,:pause],
-                [:status,:status] 
-              ]
+          [:id,:cpcIdeaId],
+          [:group_id,:cpcGrpId],
+          [:title,:title],
+          [:description1,:description1],
+          [:description2,:description2],
+          [:pc_destination,:visitUrl],
+          [:pc_display,:showUrl],
+          [:moile_destination,:mobileVisitUrl],
+          [:mobile_display,:mobileShowUrl],
+          [:pause,:pause],
+          [:status,:status] 
+        ]
 
         @status_map = [
-                        [:id,:cpcIdeaId],
-                        [:status,:status]
-                      ]
+          [:id,:cpcIdeaId],
+          [:status,:status]
+        ]
 
 
         def self.add( auth, creatives )

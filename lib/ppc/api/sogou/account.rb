@@ -20,6 +20,7 @@ module PPC
 
         def self.info(auth)
           response = request(auth,Service,'getAccountInfo'  )
+          p response
           return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end
 

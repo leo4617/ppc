@@ -11,16 +11,7 @@ module PPC
   module API
     class Sogou
 
-      @map = nil
-      @@debug = false
-
-      def self.debug_on
-        @@debug = true
-      end
-
-      def self.debug_off
-        @@debug = false
-      end
+      extend ::PPC::API
 
       def self.request( auth, service, method, params = {})
         '''
@@ -31,24 +22,24 @@ module PPC
         service = service + "Service"
         client = Savon.new( "http://api.agent.sogou.com:8080/sem/sms/v1/#{service}?wsdl" )
         operation = client.operation( service, service, method )
-            
+
         operation.header = { 
-            AuthHeader:{
-                username:   auth[:username],
-                password:   auth[:password],
-                token:      auth[:token]
-                              }
-                                        }
+          AuthHeader:{
+          username:   auth[:username],
+          password:   auth[:password],
+          token:      auth[:token]
+        }
+        }
         operation.body = {  (method+'Request').to_sym => params }
         # debug print
-        debug_print( operation ) if @@debug
+        debug_print( operation ) if @debug
         result = operation.call.hash[:envelope]
         #extract header and body
         response = { }
         response[:header] = result[:header][:res_header]
         response[:body] = result[:body][ (method + "Response").snake_case.to_sym ]
         # debug print
-        puts response if @@debug
+        puts response if @debug
         return response
       end
 
@@ -63,8 +54,6 @@ module PPC
         : param key : type name, we will transfer camel string 
                                into snake_case symbol inside the method
         '''
-        return response if @@debug
-
         result = {}
         result[:succ] = response[:header][:desc]=='success'? true : false
         result[:failure] = response[:header][:failures]
@@ -74,49 +63,54 @@ module PPC
         return result
       end
 
-     def self.make_type( params, map = @map)
-        '''
-        For more info visit ::PPC::API::sogou:make_type
-        '''
-        params = [ params ] unless params.is_a? Array
-
-        types = []
-        params.each do |param|
-          type = {}
-
-            map.each do |key|
-              value = param[ key[0] ]
-              type[ key[1] ] = value if value != nil
-            end
-
-          types << type
-        end
-        return types
-      end
-
-      def self.reverse_type( types, map = @map )
-        '''
-        For more info visit ::PPC::API::sogou:reverse_type
-        Here, the camel key will be turn into snake key
-        '''
+      #      def self.make_type( params, map = @map)
+      #        '''
+      #        For more info visit ::PPC::API::sogou:make_type
+      #        '''
+      #        params = [ params ] unless params.is_a? Array
+      #
+      #        types = []
+      #        params.each do |param|
+      #          type = {}
+      #
+      #          map.each do |key|
+      #            value = param[ key[0] ]
+      #            type[ key[1] ] = value if value != nil
+      #          end
+      #
+      #          types << type
+      #        end
+      #        return types
+      #      end
+      def self.reverse_type( types, maps = @map )
         types = [ types ] unless types.is_a? Array
-
-        params = []
-        types.each do |type|
-          param = {}
-          
-            map.each do |key|
-                # 这里做两次转换并不是十分高效的方法，考虑maintain两张map
-                value = type[ key[1].to_s.snake_case.to_sym ]
-                param[ key[0] ] = value if value != nil
-            end
-
-          params << param
+        types.map do |item| 
+          maps.each{|m| item.filter_and_replace_key(m[0],m[1].to_s.snake_case.to_sym)}
+          item
         end
-        return params
       end
 
+      #      def self.reverse_type( types, map = @map )
+      #        '''
+      #        For more info visit ::PPC::API::sogou:reverse_type
+      #        Here, the camel key will be turn into snake key
+      #        '''
+      #        types = [ types ] unless types.is_a? Array
+      #
+      #        params = []
+      #        types.each do |type|
+      #          param = {}
+      #
+      #          map.each do |key|
+      #            # 这里做两次转换并不是十分高效的方法，考虑maintain两张map
+      #            value = type[ key[1].to_s.snake_case.to_sym ]
+      #            param[ key[0] ] = value if value != nil
+      #          end
 
+      #          params << param
+      #        end
+      #        return params
+      #      end
 
     end
   end
