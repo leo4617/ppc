@@ -1,7 +1,7 @@
 module PPC
   module API
     class Sogou
-      class Account< Sogou
+      class Account < Sogou
         Service = 'Account'
 
         @map = [
@@ -20,8 +20,7 @@ module PPC
 
         def self.info(auth)
           response = request(auth,Service,'getAccountInfo'  )
-          p response
-          return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
+          process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end
 
         def self.update(auth, param = {})
@@ -34,7 +33,7 @@ module PPC
           infoType = make_type( param )[0]
           body = { accountInfoType: infoType }
           response = request(auth,Service,'updateAccountInfo', body)
-          return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
+          process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end
 
       end
