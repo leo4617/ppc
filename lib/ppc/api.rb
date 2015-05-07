@@ -86,6 +86,13 @@ module PPC
       raise 'you need build the response result'
     end
 
+    def is_no_quota(failure, code)
+      return false if failure.nil?
+      failure = [failure].flatten
+      return false if failure.size.zero?
+      return failure[0]["code"] == code
+    end
+
     def make_type( params, maps = @map)
       '''
         tranfesr ppc api to search engine api

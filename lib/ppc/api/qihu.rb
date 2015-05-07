@@ -54,6 +54,7 @@ module PPC
           result[:succ] = true
           result[:failure] = nil
           result[:result] = nil
+          result[:no_quota] = false
           return result
         end
         if key == ''
@@ -61,15 +62,18 @@ module PPC
             result[:succ] = false
             result[:result] = nil
             result[:failure] = response['failures']
+            result[:no_quota] = is_no_quota(response['failures'], '90401')
             return result
           end
           result[:succ] = true
           result[:failure] = nil
+          result[:no_quota] = false
           result[:result] = func[response]
           return result
         end
         result[:result] = func[response[key]]
         result[:failure] = response['failures']
+        result[:no_quota] = is_no_quota(response['failures'], '90401')
         result[:succ] = response['failures'].nil? || response['failures'].size.zero?
         #if response['failures'] != nil
         #  result[:succ] = false
