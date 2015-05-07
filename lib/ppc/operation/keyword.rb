@@ -8,7 +8,8 @@ module PPC
       end
 
       def update( type )
-        call( 'keyword' ).update( @auth, type.merge( id:@id) )
+        type.merge(id: @id) if type.is_a? Hash
+        call( 'keyword' ).update( @auth, type )
       end
 
       # Todo: Implement Activate method in Sogou API
