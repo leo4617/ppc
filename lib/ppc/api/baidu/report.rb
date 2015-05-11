@@ -126,7 +126,7 @@ module PPC
             p "Got report id:" + id.to_s if debug 
             loop do
               sleep 2 
-              break if get_state( auth, id )[:result] == 3
+              break if get_state( auth, id )[:result].to_s[/(Finished|3)/]
               p "Report is not generated, waiting..." if debug 
             end
 
