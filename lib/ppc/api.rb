@@ -33,7 +33,8 @@ module PPC
         header: {
           username:   auth[:username],
           password:   auth[:password],
-          token:      auth[:token]
+          token:      auth[:token],
+          target:     auth[:target]
         },
         body: params
       }.to_json
