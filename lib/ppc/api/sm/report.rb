@@ -124,7 +124,7 @@ module PPC
               p "Report is not generated, waiting..." if debug
             end
             fileId = get_fileId(auth, id)[:result]
-            return get_file(auth, fileId).force_encoding("GB2312").encode("UTF-8")
+            return get_file(auth, fileId).force_encoding("utf-8")
           else
             raise response[:failure][0]["message"]
           end
