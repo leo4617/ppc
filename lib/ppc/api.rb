@@ -116,6 +116,7 @@ module PPC
       '''
       params = [ params ] unless params.is_a? Array
       params.map do |item| 
+        item.select!{|key| maps.map{|m| m[0]}.include? key}
         maps.each{|m| item.filter_and_replace_key(m[1],m[0])}
         item
       end
