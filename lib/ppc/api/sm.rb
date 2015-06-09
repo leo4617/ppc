@@ -12,8 +12,8 @@ module PPC
 
       extend ::PPC::API
 
-      def self.request_uri(service:, method:)
-        URI("https://e.sm.cn/api/#{service}/#{method}")
+      def self.request_uri(param = {})
+        URI("https://e.sm.cn/api/#{param[:service]}/#{param[:method]}")
       end
 
       def self.process( response, key, &func)
