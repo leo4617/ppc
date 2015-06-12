@@ -38,7 +38,7 @@ module PPC
         type_list.each do |type|
           # type
           define_singleton_method type.to_sym do |auth, param|
-              abstract( auth, type, type, type+'List', param ){ |x| x['item']}
+              abstract( auth, type, type, type+'List', param ){ |x| x}
           end
           # typeCount
           define_singleton_method (type+'_count').to_sym do |auth, param|
