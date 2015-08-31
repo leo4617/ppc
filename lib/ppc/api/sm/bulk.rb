@@ -2,7 +2,7 @@ module PPC
   module API
     class Sm
       class Bulk < Sm
-        Service = 'BulkJob'
+        Service = 'bulkJob'
 
         def self.get_all_object( auth,params = {})
           
@@ -14,27 +14,15 @@ module PPC
 
           options = {
             campaignIds:              plan_ids              || []      ,
-            includeQuality:           params[:quality]      || true    ,
-            includeTemp:              params[:temp]         || false   ,
-            format:                   params[:format]       || 1       ,
-            newCreativeFiles:         params[:adcopy]       || 0       ,
-            includeTempNewCreatives:  params[:temp_adcopy]  || 0       ,
-            includePhraseType:        params[:phrase]       || 0       ,
-            extended:                 params[:extended]     || 0
           }
           response = request( auth, Service, 'getAllObjects',options )
+          process( response, 'taskId'){ |x| x }
+        end
+
+        def self.get_file_id( auth, id)
+          raise "empty id" if id.nil?
+          response = request(auth, 'task', 'getTaskState',{taskId: id})
           process( response, 'fileId'){ |x| x }
-        end
-
-        def self.state( auth, id)
-          raise "empty id" if id.nil? or id.empty?
-          response = request(auth, Service, 'getFileState',{fileId:id})
-          process( response, 'isGenerated'){ |x| x }
-        end
-
-        def self.path( auth, id)
-          response = request( auth, Service, 'getFilePath',{fileId:id})
-          process( response, 'filePaths' ){ |x| x }       
         end
 
         ###########################
@@ -43,32 +31,27 @@ module PPC
         def self.download( auth, params = {} )
           """
           """
-          params[:extended] = params[:extended] || 2
           begin
-            file_id = get_all_object( auth, params )
-            if file_id[:succ]
-              file_id = file_id[:result]
+            result = get_all_object( auth, params )
+            if result[:succ]
+              task_id = result[:result]
             else
-              raise file_id[:failure][0]['message']
+              raise "获取task id 失败"
             end
 
-            puts "file_id: #{file_id}" if @@debug
+            puts "task_id: #{task_id}" if @debug
 
             loop do
-              state = state( auth, file_id )[:result].to_s
-              raise "invalid file state: #{state}" unless %w(1 2 3 null).include? state
-              break if state == '3'
-              puts "waiting for #{file_id} to be ready. current state:#{state}" if @@debug
-              sleep 3
+              file_id = get_file_id( auth, task_id )[:result]
+              if file_id.nil?
+                sleep 15
+                next
+              end
+              return "https://e.sm.cn/api/file/download/#{file_id}"
             end
-
-            puts "#{file_id} is ready" if @@debug
-            return path( auth, file_id )
-
           rescue => e
             p "Error encounter:#{e.to_s}"
           end  
-          return false
         end
 
       end
