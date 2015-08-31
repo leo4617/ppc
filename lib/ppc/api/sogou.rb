@@ -4,6 +4,7 @@ require 'ppc/api/sogou/group'
 require 'ppc/api/sogou/keyword'
 require 'ppc/api/sogou/report'
 require 'ppc/api/sogou/creative'
+require 'ppc/api/sogou/bulk'
 
 module PPC
   module API
