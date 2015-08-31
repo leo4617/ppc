@@ -8,7 +8,8 @@ module PPC
       class Keyword< Sogou
         Service = 'Cpc'
 
-        Match_type  = { 'exact' => 0, 'wide' => 1,0 => 'exact', 1 => 'wide' } 
+        #Match_type  = { 'exact' => 0, 'wide' => 1,0 => 'exact', 1 => 'wide' } 
+        Match_type  = { 'exact' => 0, 'phrase' => 2, 'wide' => 1,'0' => 'exact', '2' => 'phrase', '1' => 'wide' } 
                 
         @map  = [
                   [:id,:cpcId],

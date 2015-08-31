@@ -12,7 +12,6 @@ module PPC
           [:name, :name ],
           [:price, :price ],
           # negateive为json格式，make_type要定制
-          [:negative, :negativeWords ],
           [:add_time, :addTime],
           [:update_time, :updateTime]
         ]
@@ -50,7 +49,12 @@ module PPC
         end
 
         def self.update( auth, group )
-          response = request( auth, Service, 'update', make_type( group )[0]  )
+          if group[:negative] || group[:exact_negative]
+            ng = {"exact" => group[:exact_negative], "phrase" => group[:negative]}.to_json
+          end
+          params = make_type(group)[0]
+          params.merge!({:negativeWords => ng}) if ng
+          response = request( auth, Service, 'update', params )
           # 保证接口一致性
           process( response, 'id' ){ |x|[ { id:x.to_i } ]  }
         end
@@ -84,27 +88,6 @@ module PPC
             response[:result] = [ { plan_id:id, groups:response[:result]}]
           end
           return response
-        end
-
-        # customize make type to convert negative word
-        def self.make_type( params, map = @map)
-          '''
-          '''
-          params = [ params ] unless params.is_a? Array
-
-          types = []
-          params.each do |param|
-            type = {}
-
-            map.each do |key|
-              # next line transfer negative param to json
-              key[0]==:negative&&param[:negative] ? value=param[:negative].to_json : value=param[key[0]]
-              type[ key[1] ] = value if value != nil
-            end
-
-            types << type
-          end
-          return types
         end
 
       end
