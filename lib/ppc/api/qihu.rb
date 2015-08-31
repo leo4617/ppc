@@ -14,8 +14,8 @@ module PPC
 
       extend ::PPC::API
 
-      def self.request_uri(service:, method:)
-        URI("https://api.e.360.cn/2.0/#{service}/#{method}")
+      def self.request_uri(param = {})
+        URI("https://api.e.360.cn/2.0/#{param[:service]}/#{param[:method]}")
       end
 
       def self.request_http_header(auth)

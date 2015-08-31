@@ -24,7 +24,7 @@ module PPC
       @debug = false
     end
 
-    def request_uri(service: , method: )
+    def request_uri(param = {})
       raise 'you need build the uri'
     end
 
