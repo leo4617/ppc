@@ -16,13 +16,13 @@ module PPC
         def self.get_file_state( auth, id )
           body = { 'accountFileId' => id }
           response = request( auth, Service, 'getAccountFileStatus' , body )
-          process( response, '' ){ |x| x }
+          process( response, 'isGenerated' ){ |x| x }
         end
 
         def self.get_file_path(auth, id)
           body = {'accountFileId' => id}
           response = request(auth, Service, 'getAccountFilePath', body)
-          process(response, ''){|x| x}
+          process(response, 'accountFilePath'){|x| x}
         end
 
         def self.download( auth, ids = nil)
@@ -30,7 +30,7 @@ module PPC
           field_id = result[:result]
           loop do 
             status = get_file_state(auth, field_id)
-            return get_file_path(auth, filed_id) if status[:result]['isGenerated'] == '1'
+            return get_file_path(auth, field_id) if status[:result] == '1'
             sleep 15
           end
         end
