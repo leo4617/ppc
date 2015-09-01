@@ -13,7 +13,9 @@ module PPC
           end
 
           options = {
-            campaignIds:              plan_ids              || []      ,
+            bulkJobRequestType: {
+              campaignIds:              plan_ids              || []      
+            }
           }
           response = request( auth, Service, 'getAllObjects',options )
           process( response, 'taskId'){ |x| x }
@@ -26,7 +28,7 @@ module PPC
         end
 
         def self.do_download(auth, id)
-          request(auth, 'file', 'download',{filed_id: id})
+          request(auth, 'file', 'download',{fileId: id})
         end
 
         ###########################
@@ -51,7 +53,9 @@ module PPC
                 sleep 15
                 next
               end
-              do_download(auth, file_id)
+              File.open("sm_#{file_id}.zip", "w") do |f|
+                f.puts do_download(auth, file_id)
+              end
               return
             end
           rescue => e
