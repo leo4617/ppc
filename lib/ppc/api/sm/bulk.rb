@@ -25,6 +25,10 @@ module PPC
           process( response, 'fileId'){ |x| x }
         end
 
+        def self.do_download(auth, id)
+          request(auth, 'file', 'download',{filed_id: id})
+        end
+
         ###########################
         # interface for operation #
         ###########################
@@ -47,7 +51,8 @@ module PPC
                 sleep 15
                 next
               end
-              return "https://e.sm.cn/api/file/download/#{file_id}"
+              do_download(auth, file_id)
+              return
             end
           rescue => e
             p "Error encounter:#{e.to_s}"
