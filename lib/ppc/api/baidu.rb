@@ -7,6 +7,7 @@ require 'ppc/api/baidu/keyword'
 require 'ppc/api/baidu/report'
 require 'ppc/api/baidu/creative'
 require 'ppc/api/baidu/phone_new_creative'
+require 'ppc/api/baidu/rank'
 
 module PPC
   module API
