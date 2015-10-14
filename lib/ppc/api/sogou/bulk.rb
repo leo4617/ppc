@@ -34,6 +34,35 @@ module PPC
             sleep 15
           end
         end
+
+        def self.get_cpc_rank(auth, device)
+          body = {'deviceType' => device}
+          response = request(auth, 'CpcRank', 'getCpcRankId', body)
+          process(response, 'rankId'){|x| x}
+        end
+
+        def self.get_cpc_rank_status(auth, rank_id)
+          body = {'rankId' => rank_id}
+          response = request(auth, 'CpcRank', 'getCpcRankStatus', body)
+          process(response, 'isGenerated' ){|x| x }
+        end
+
+        def self.get_cpc_rank_path(auth, rank_id)
+          body = {'rankId' => rank_id}
+          response = request(auth, 'CpcRank', 'getCpcRankPath', body)
+          process(response, 'rankPath'){|x| x}
+        end
+
+        def self.download_cpc_rank(auth, device = 0)
+          result = get_cpc_rank(auth, device)
+          rank_id = result[:result]
+          loop do 
+            status = get_cpc_rank_status(auth, rank_id)
+            return get_cpc_rank_path(auth, rank_id) if status[:result] == '1'
+            sleep 15
+          end
+        end
+
       end
     end
   end
