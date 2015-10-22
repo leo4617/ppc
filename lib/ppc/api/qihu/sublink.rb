@@ -37,7 +37,7 @@ module PPC
         # helper function for self.add() method
         private
         def self.to_id_hash_list( str )
-          reuturn [] if str == nil
+          return [] if str == nil
           str = [str] unless str.is_a?Array
           x= []
           str.each{ |i| x << { id: i.to_i } }
