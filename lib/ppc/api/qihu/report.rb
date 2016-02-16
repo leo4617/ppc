@@ -43,7 +43,7 @@ module PPC
           # typeCount
           define_singleton_method (type+'_count').to_sym do |auth, param|
               response = abstract( auth, type, type+'Count', '', param ){ |x| get_item(x) }
-              response[:result] = response[:result][0]
+              response[:result] = response[:result][0] rescue nil
               return response
           end
           # typeNow
@@ -77,23 +77,28 @@ module PPC
           # get page num
           if is_now
             method = (type+'_now_count').to_sym
-            count = send(method, auth, param)[:result]
+            response = send(method, auth, param)
+            count = response[:result]
             method = (type+'_now').to_sym
           else
             method = (type+'_count').to_sym
-            count = send(method, auth, param)[:result]
+            response = send(method, auth, param)
+            count = response[:result]
             method = type.to_sym
           end
           
-          report = []
-          count[:total_page].to_i.times do | page_i|
-            p "Start downloading #{page_i+1}th page, totally #{count[:total_page]} pages"
-            param[:page] = page_i +1
-            report_i = send(method, auth, param)[:result]
-            report += report_i
+          if count && count[:total_page]
+            report = []
+            count[:total_page].to_i.times do | page_i|
+              p "Start downloading #{page_i+1}th page, totally #{count[:total_page]} pages"
+              param[:page] = page_i +1
+              report_i = send(method, auth, param)[:result]
+              report += report_i
+            end
+            return report
+          else
+            return response
           end
-        
-          return report
         end
 
         ###################
