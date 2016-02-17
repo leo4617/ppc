@@ -3,7 +3,7 @@ require 'ppc/operation'
 require 'ppc/ext'
 module PPC
 
-  VERSION = "0.4.3"
+  VERSION = "0.4.4"
 
   protected
   def print_debug(var,varname=nil)
