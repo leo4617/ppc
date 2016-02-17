@@ -16,7 +16,7 @@ module PPC
       extend ::PPC::API
       
       def self.request_uri(param)
-        URI("https://api.baidu.com/json/sms/v3/#{param[:service]}Service/#{param[:method]}")
+        URI("https://api.baidu.com/json/sms/service/#{param[:service]}Service/#{param[:method]}")
       end
 
       def self.process(response, key, &func)
