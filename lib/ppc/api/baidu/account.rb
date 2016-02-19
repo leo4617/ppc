@@ -5,7 +5,7 @@ module PPC
         Service = 'Account'
 
         @map = [
-                  [:id,:userid],            
+                  [:id,:userId],            
                   [:balance,:balance],         
                   [:cost,:cost],               
                   [:payment,:payment],                          
@@ -24,7 +24,8 @@ module PPC
                 ]
 
         def self.info( auth )
-          response = request(auth,Service,'getAccountInfo'  )
+          body = {:accountFields => ["userId","cost","balance","excludeIp","regionTarget","dynamicCreativeParam","isDynamicCreative"]}
+          response = request(auth,Service,'getAccountInfo',body)
           return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end
 
