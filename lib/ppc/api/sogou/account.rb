@@ -7,8 +7,8 @@ module PPC
         @map = [
                 [:id,:accountid],            
                 [:balance,:balance],         
-                [:cost,:totalCost],               
-                [:payment,:totalPay],                          
+                [:cost,:total_cost],
+                [:payment,:total_pay],                          
                 [:budget_type,:type],                   
                 [:budget,:budget],                              
                 [:region,:regions],                    
