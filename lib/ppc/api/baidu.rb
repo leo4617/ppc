@@ -36,7 +36,7 @@ module PPC
         if (response['body']['data'][0] rescue false)
           result[:result] = func[ response['body']['data'][0] ]
         end
-        result[:result][:rquota] = response['header']['rquota'] if response['header']['rquota']
+        result[:rquota] = response['header']['rquota'] if response['header']['rquota']
         result[:no_quota] = is_no_quota(response['header']['failures'], '8501')
         return result
       end

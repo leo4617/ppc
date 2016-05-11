@@ -60,7 +60,7 @@ module PPC
         unless response[:body].nil? or response[:body][key.snake_case.to_sym].nil?
           result[:result] = func[ response[:body][ key.snake_case.to_sym ] ]
         end
-        result[:result][:rquota] = response[:header][:rquota] if response[:header][:rquota]
+        result[:rquota] = response[:header][:rquota] if response[:header][:rquota]
         return result
       end
 
