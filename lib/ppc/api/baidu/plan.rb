@@ -29,6 +29,12 @@ module PPC
                 [:rmkt_price_ratio, :rmktPriceRatio],
                ]
 
+        def self.info( auth, ids )
+          body = { campaignIds: ids, :campaignFields => %w(campaignId campaignName budget regionTarget priceRatio rmktStatus status campaignType isDynamicCreative isDynamicTagSublink isDynamicTitle isDynamicHotRedirect rmktPriceRatio)}
+          response = request(auth,Service,'getCampaign',body)
+          return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
+        end
+
         def self.all( auth )
           response = request( auth, Service, 'getAllCampaign' )
           process( response, 'campaignTypes' ){ |x| reverse_type(x) }
