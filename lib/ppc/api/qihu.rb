@@ -126,25 +126,6 @@ module PPC
         return types
       end
 
-      def self.reverse_type( types, map = @map )
-        '''
-        '''
-        types = [ types ] unless types.is_a? Array
-
-        params = []
-        types.each do |type|
-          param = {}
-          
-            map.each do |key|
-                value = type[ key[1].to_s ]
-                param[ key[0] ] = value if value != nil
-            end
-
-          params << param
-        end
-        return params
-      end
-
     end
   end
 end

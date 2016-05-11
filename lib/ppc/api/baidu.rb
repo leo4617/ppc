@@ -40,14 +40,6 @@ module PPC
         return result
       end
 
-      def self.reverse_type( types, maps = @map )
-        types = [ types ] unless types.is_a? Array
-        types.map do |item| 
-          maps.each{|m| item.filter_and_replace_key(m[0],m[1].to_s)}
-          item
-        end
-      end
-
     end # Baidu
   end # API
 end # PPC
