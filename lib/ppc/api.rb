@@ -135,7 +135,10 @@ module PPC
       '''
       types = [ types ] unless types.is_a? Array
       types.map do |item| 
-        maps.each{|key_new, key_old| item[key_new] = item.delete(key_old.to_s) if item[key_old.to_s]}
+        maps.each{|key_new, key_old| 
+          value = item.delete(key_old.to_s) || item.delete(key_old)
+          item[key_new] = value if value
+        }
         item
       end
     end
