@@ -22,7 +22,6 @@ module PPC
                 [:status,:status],
                 [:rmkt_status, :rmktStatus],
                 [:type, :campaignType],
-                [:isdynamic,:isDynamicCreative],
                 [:isdynamictagsublink, :isDynamicTagSublink],
                 [:isdynamichotredirect, :isDynamicHotRedirect],
                 [:isdynamictitle, :isDynamicTitle],
@@ -55,7 +54,7 @@ module PPC
         def self.add( auth, plans )
           campaigntypes = make_type( plans )
           # set extended = 1 to allow change of isDynamicCreative
-          body = { campaignTypes: campaigntypes, extended:1 }
+          body = { campaignTypes: campaigntypes.merge(isDynamicCreative: param[:is_dynamic] || true) }
           response = request( auth, Service, 'addCampaign', body)
           process( response, 'campaignTypes' ){ |x| reverse_type(x) }
         end
@@ -63,7 +62,7 @@ module PPC
         def self.update(auth,plans )
           campaigntypes = make_type( plans )
           # set extended = 1 to allow change of isDynamicCreative
-          body = { campaignTypes: campaigntypes, extended:1 }
+          body = { campaignTypes: campaigntypes.merge(isDynamicCreative: param[:is_dynamic] || true) }
           response = request( auth, Service, 'updateCampaign', body)
           process( response, 'campaignTypes' ){ |x| reverse_type(x) }
         end
