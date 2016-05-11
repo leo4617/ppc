@@ -42,7 +42,7 @@ module PPC
           """
           # for account service, there is not bulk operation
           infoType = make_type( param )[0]
-          body = { accountInfoType: infoType }
+          body = { accountInfo: infoType }
           response = request(auth,Service,'updateAccountInfo', body)
           return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end
