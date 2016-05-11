@@ -5,27 +5,27 @@ module PPC
         Service = 'Account'
 
         @map = [
-                  [:id,:userId],            
+                  [:id,:userId],
                   [:balance,:balance],
                   [:pc_balance, :pcBalance],
                   [:mobile_balance, :mobileBalance],
-                  [:cost,:cost],               
-                  [:payment,:payment],                          
-                  [:status,:userStat],                            
-                  [:budget_type,:budgetType],                   
-                  [:budget,:budget],                              
-                  [:region,:regionTarget],                    
-                  [:exclude_ip,:excludeIp],                        
+                  [:cost,:cost],
+                  [:payment,:payment],
+                  [:status,:userStat],
+                  [:budget_type,:budgetType],
+                  [:budget,:budget],
+                  [:region,:regionTarget],
+                  [:exclude_ip,:excludeIp],
                   [:isdynamic,:isDynamicCreative],
                   [:isdynamictagsublink, :isDynamicTagSublink],
                   [:isdynamichotredirect, :isDynamicHotRedirect],
                   [:isdynamictitle, :isDynamicTitle],
                   [:dynamic_param,:dynamicCreativeParam], 
-                  [:open_domains,:openDomains],                  
-                  [:reg_domain,:regDomain],                       
-                  [:offline_time,:budgetOfflineTime],         
-                  [:weekly_budget,:weeklyBudget],                
-                  [:opt,:opt]                                  
+                  [:open_domains,:openDomains],
+                  [:reg_domain,:regDomain],
+                  [:offline_time,:budgetOfflineTime],
+                  [:weekly_budget,:weeklyBudget],
+                  [:opt,:opt]
                 ]
 
         def self.info( auth )
