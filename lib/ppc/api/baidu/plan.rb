@@ -19,7 +19,14 @@ module PPC
                 [:price_ratio,:priceRatio], 
                 [:is_dynamic,:isDynamicCreative],
                 [:pause,:pause],
-                [:status,:status]
+                [:status,:status],
+                [:rmkt_status, :rmktStatus],
+                [:type, :campaignType],
+                [:isdynamic,:isDynamicCreative],
+                [:isdynamictagsublink, :isDynamicTagSublink],
+                [:isdynamichotredirect, :isDynamicHotRedirect],
+                [:isdynamictitle, :isDynamicTitle],
+                [:rmkt_price_ratio, :rmktPriceRatio],
                ]
 
         def self.all( auth )
