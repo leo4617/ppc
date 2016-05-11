@@ -14,7 +14,12 @@ module PPC
                         [:exact_negative, :exactNegativeWords],
                         [:pause, :pause],
                         [:status, :status],
-                        [:reserved, :reserved]
+                        [:reserved, :reserved],
+                        [:price_ratio, :priceRatio],
+                        [:accu_price_factor, :accuPriceFactor],
+                        [:word_price_factor, :wordPriceFactor],
+                        [:wide_price_factor, :widePriceFactor],
+                        [:match_price_status, :matchPriceStatus],
                       ]
 
         def self.ids(auth )
