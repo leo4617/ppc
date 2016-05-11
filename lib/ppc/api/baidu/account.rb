@@ -6,7 +6,9 @@ module PPC
 
         @map = [
                   [:id,:userId],            
-                  [:balance,:balance],         
+                  [:balance,:balance],
+                  [:pc_balance, :pcBalance],
+                  [:mobile_balance, :mobileBalance],
                   [:cost,:cost],               
                   [:payment,:payment],                          
                   [:status,:userStat],                            
@@ -14,7 +16,10 @@ module PPC
                   [:budget,:budget],                              
                   [:region,:regionTarget],                    
                   [:exclude_ip,:excludeIp],                        
-                  [:isdynamic,:isDynamicCreative],         
+                  [:isdynamic,:isDynamicCreative],
+                  [:isdynamictagsublink, :isDynamicTagSublink],
+                  [:isdynamichotredirect, :isDynamicHotRedirect],
+                  [:isdynamictitle, :isDynamicTitle],
                   [:dynamic_param,:dynamicCreativeParam], 
                   [:open_domains,:openDomains],                  
                   [:reg_domain,:regDomain],                       
@@ -24,7 +29,7 @@ module PPC
                 ]
 
         def self.info( auth )
-          body = {:accountFields => ["userId","cost","balance","excludeIp","regionTarget","dynamicCreativeParam","isDynamicCreative"]}
+          body = {:accountFields => ["userId","cost","balance","pcBalance","mobileBalance","excludeIp","regionTarget","dynamicCreativeParam","isDynamicCreative","userStat"]}
           response = request(auth,Service,'getAccountInfo',body)
           return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end
