@@ -48,7 +48,10 @@ module PPC
         end
 
         def self.get( auth, ids )
-          self.info(auth, ids)
+          ids = [ ids ] unless ids.is_a? Array
+          body = { campaignIds: ids, campaignFields: PlanType.values}
+          response = request(auth,Service,'getCampaign',body)
+          return process( response, 'campaignType' ){ |x| reverse_type(x)}
         end
 
         def self.add( auth, plans )

@@ -48,9 +48,9 @@ module PPC
 
         def self.get( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          body = { adgroupIds: ids }
-          response = request(auth, Service, "getAdgroupByAdgroupId",body )
-          process( response, 'adgroupTypes' ){ |x| reverse_type(x) }
+          body = {ids: ids, idType: 5, adgroupFields: GroupType.values}
+          response = request(auth, Service, "getAdgroup",body )
+          process( response, 'adgroupTypes' ){ |x| reverse_type( x ) }
         end
 
         def self.add( auth, groups )

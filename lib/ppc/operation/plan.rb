@@ -8,6 +8,10 @@ module PPC
         call('plan').info(@auth,@id)
       end
 
+      def get
+        call('plan').get(@auth, @id)
+      end
+
       def update( plan )
         call('plan').update( @auth, plan.merge( id:@id ) )
       end

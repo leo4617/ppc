@@ -7,6 +7,10 @@ module PPC
         call('group').info(@auth, @id)
       end
 
+      def get
+        call('group').get(@auth, @id)
+      end
+
       def update( info )
         info[:id] = @id if (info.is_a? Hash) && info[:id].nil?
         call('group').update(@auth, info)
