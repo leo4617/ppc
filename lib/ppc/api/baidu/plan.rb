@@ -42,7 +42,7 @@ module PPC
         end
 
         def self.ids( auth )
-          body = { campaignIds: nil, campaignFields: [:campaignId]}
+          body = { campaignIds: nil, campaignFields: ["campaignId"]}
           response = request(auth,Service,'getCampaign',body)
           return process( response, 'campaignIds' ){ |x|reverse_type(x) }
         end
