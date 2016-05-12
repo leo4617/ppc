@@ -23,6 +23,13 @@ module PPC
         }
         @map = GroupType
 
+        def self.info( auth, ids)
+          ids = [ ids ] unless ids.is_a? Array
+          body = {ids: ids, idType: 5, adgroupFields: GroupType.values}
+          response = request(auth, Service, "getAdgroup",body )
+          process( response, 'adgroupType' ){ |x| reverse_type( x )[0] }
+        end
+
         def self.ids(auth )
           """
           @return : Array of campaignAdgroupIds

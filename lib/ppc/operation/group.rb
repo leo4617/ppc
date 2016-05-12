@@ -4,7 +4,7 @@ module PPC
       include ::PPC::Operation
       
       def info()
-        call('group').get(@auth, @id)
+        call('group').info(@auth, @id)
       end
 
       def update( info )
