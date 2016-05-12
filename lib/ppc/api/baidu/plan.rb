@@ -33,7 +33,7 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           body = { campaignIds: ids, campaignFields: PlanType.values}
           response = request(auth,Service,'getCampaign',body)
-          return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
+          return process( response, 'campaignType' ){ |x|reverse_type(x)[0] }
         end
 
         def self.all( auth )
