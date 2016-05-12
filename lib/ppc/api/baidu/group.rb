@@ -29,12 +29,21 @@ module PPC
           process( response, 'adgroupType' ){ |x| reverse_type( x )[0] }
         end
 
-        def self.ids(auth )
+        def self.all( auth, ids )
+          ids = [ ids ] unless ids.is_a? Array
+          body = { ids: ids, idType: 3, adgroupFields: GroupType.values}
+          response = request(auth,Service,'getCampaign',body)
+          return process( response, 'campaignAdgroups' ){ |x|reverse_type(x) }
+        end
+
+        def self.ids( auth, ids )
           """
           @return : Array of campaignAdgroupIds
           """
-          response = request( auth, Service , "getAllAdgroupId" )
-          process( response, 'campaignAdgroupIds' ){ |x| make_planGroupIds( x ) }
+          ids = [ ids ] unless ids.is_a? Array
+          body = {ids: ids, idType: 3, adgroupFields: [:adgroupId]}
+          response = request(auth, Service, "getAdgroup",body )
+          process( response, 'campaignAdgroupIds' ){ |x| reverse_type( x ) }
         end
 
         def self.get( auth, ids )
@@ -77,20 +86,6 @@ module PPC
           body = { adgroupIds: ids }
           response = request( auth, Service,"deleteAdgroup", body )
           process( response, 'nil' ){ |x|  x  }
-        end
-
-        def self.search_by_plan_id( auth, ids )
-          ids = [ ids ] unless ids.class == Array
-          body = { campaignIds: ids }
-          response = request( auth, Service ,"getAdgroupByCampaignId",  body )
-          process( response, 'campaignAdgroups' ){ |x| make_planGroups( x ) }
-        end
-
-        def self.search_id_by_plan_id( auth, ids )
-          ids = [ ids ] unless ids.class == Array
-          body = { campaignIds: ids }
-          response = request( auth, Service ,"getAdgroupIdByCampaignId",  body )
-          process( response, 'campaignAdgroupIds' ){ |x| make_planGroupIds( x ) }
         end
 
         private

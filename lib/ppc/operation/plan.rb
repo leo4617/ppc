@@ -13,15 +13,11 @@ module PPC
       end
 
       def groups()
-        result = call('group').search_by_plan_id(@auth, @id)
-        result[:result] = result[:result][0][:groups] rescue nil
-        return result
+        call('group').all(@auth, @id)
       end
 
       def group_ids()
-        result = call('group').search_id_by_plan_id(@auth, @id)
-        result[:result] = result[:result][0][:group_ids] rescue nil
-        return result
+        call('group').ids(@auth, @id)
       end
 
       # group opeartion
