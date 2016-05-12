@@ -36,20 +36,19 @@ module PPC
         end
 
         def self.all( auth )
-          response = request( auth, Service, 'getAllCampaign' )
-          process( response, 'campaignTypes' ){ |x| reverse_type(x) }
+          body = { campaignIds: nil, campaignFields: PlanType.values}
+          response = request(auth,Service,'getCampaign',body)
+          return process( response, 'campaignType' ){ |x|reverse_type(x) }
         end
 
         def self.ids( auth )
-          response = request( auth, Service, 'getAllCampaignId' )
-          process( response, 'campaignIds' ){ |x| x }
+          body = { campaignIds: nil, campaignFields: [:campaignId]}
+          response = request(auth,Service,'getCampaign',body)
+          return process( response, 'campaignIds' ){ |x|reverse_type(x) }
         end
 
         def self.get( auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { campaignIds: ids }
-          response = request( auth, Service, 'getCampaignByCampaignId', body)
-          process( response, 'campaignTypes' ){ |x| reverse_type(x) }
+          self.info(auth, ids)
         end
 
         def self.add( auth, plans )
