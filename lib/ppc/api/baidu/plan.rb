@@ -9,7 +9,6 @@ module PPC
           name:                 :campaignName,
           budget:               :budget,
           region:               :regionTarget,
-          ip:                   :excludeIp,
           negative:             :negativeWords,
           exact_negative:       :exactNegativeWords,
           schedule:             :schedule,
