@@ -4,8 +4,6 @@ module PPC
     class Sm
       class Keyword < Sm
         Service = 'keyword'
-
-        Match_type  = { 'exact' => 0, 'phrase' => 1, 'wide' => 2, 0 => 'exact', 1 => 'phrase' , 2 => 'wide'  }
         
         KeywordType = {
           id:                 :keywordId,
@@ -83,48 +81,6 @@ module PPC
             group_keywords << group_keyword
           end
           return group_keywords
-        end
-
-        # Override
-       def self.make_type( params, map = @map)
-          params = [ params ] unless params.is_a? Array
-          types = []
-          params.each do |param|
-            type = {}
-              map.each do |key|
-                # 增加对matchtype的自动转换
-                if key[0] == :match_type
-                   value = param[ key[0] ]
-                  type[ key[1] ] = Match_type[ value ] if value                 
-                else
-                  value = param[ key[0] ]
-                  type[ key[1] ] = value if value
-                end
-              end
-            types << type
-          end
-          return types
-        end
-
-        # Overwrite
-        def self.reverse_type( types, map = @map )
-          types = [ types ] unless types.is_a? Array
-          params = []
-          types.each do |type|
-            param = {}
-             # 增加对matchtype的自动转换
-              map.each do |key|
-                if key[0] == :match_type
-                   value = type[ key[1].to_s ]
-                  param[ key[0] ] = Match_type[ value ] if value                 
-                else
-                  value = type[ key[1].to_s ]
-                  param[ key[0] ] = value if value
-                end
-              end # map.each
-            params << param
-          end # types.each
-          return params
         end
 
       end # keyword

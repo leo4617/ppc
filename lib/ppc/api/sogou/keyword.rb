@@ -8,9 +8,6 @@ module PPC
       class Keyword< Sogou
         Service = 'Cpc'
 
-        #Match_type  = { 'exact' => 0, 'wide' => 1,0 => 'exact', 1 => 'wide' } 
-        Match_type  = { 'exact' => 0, 'phrase' => 2, 'wide' => 1,'0' => 'exact', '2' => 'phrase', '1' => 'wide' } 
-                
         KeywordType = {
           id:                 :cpcId,
           group_id:           :cpcGrpId,
@@ -140,48 +137,6 @@ module PPC
             group_keywords << group_keyword
           end
           return group_keywords
-        end
-
-        # Override
-       def self.make_type( params, map = @map)
-          params = [ params ] unless params.is_a? Array
-          types = []
-          params.each do |param|
-            type = {}
-              map.each do |key|
-                # 增加对matchtype的自动转换
-                if key[0] == :match_type
-                   value = param[ key[0] ]
-                  type[ key[1] ] = Match_type[ value ] if value                 
-                else
-                  value = param[ key[0] ]
-                  type[ key[1] ] = value if value != nil
-                end
-              end
-            types << type
-          end
-          return types
-        end
-
-        # Overwrite
-        def self.reverse_type( types, map = @map )
-          types = [ types ] unless types.is_a? Array
-          params = []
-          types.each do |type|
-            param = {}
-             # 增加对matchtype的自动转换
-              map.each do |key|
-                if key[0] == :match_type
-                  value = type[ key[1].to_s.snake_case.to_sym]
-                  param[ key[0] ] = Match_type[ value ] if value                 
-                else
-                  value = type[ key[1].to_s.snake_case.to_sym ]
-                  param[ key[0] ] = value if value != nil
-                end
-              end # map.each
-            params << param
-          end # types.each
-          return params
         end
 
       end # keyword

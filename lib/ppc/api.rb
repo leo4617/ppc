@@ -13,6 +13,8 @@ require 'ppc/api/sm'
 module PPC
   module API
 
+    Match_type  = { 'exact' => 0, 'phrase' => 2, 'wide' => 1,'0' => 'exact', '2' => 'phrase', '1' => 'wide' } 
+
     @map = nil
     @debug = false
 
@@ -116,8 +118,8 @@ module PPC
       '''
       params = [ params ] unless params.is_a? Array
       params.map do |item| 
-        item.select!{|key| maps.map{|m| m[0]}.include? key}
-        maps.each{|key_new, key_old| item[key_old] = item.delete(key_new) if item[key_new] }
+        item.select!{|key| maps.any?{|m| m[0] == key} }
+        maps.each{|key_new, key_old| item[key_old] = (key_old == :match_type ? Match_type[item.delete(key_new)] : item.delete(key_new)) if item[key_new] }
         item
       end
     end
@@ -137,7 +139,7 @@ module PPC
       types.map do |item| 
         maps.each{|key_new, key_old| 
           value = item.delete(key_old.to_s) || item.delete(key_old)
-          item[key_new] = value if value
+          item[key_new] = (key_new == :match_type ? Match_type[value] : value) if value
         }
         item
       end
