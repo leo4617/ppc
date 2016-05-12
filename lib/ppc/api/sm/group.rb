@@ -5,7 +5,7 @@ module PPC
       class Group < Sm
         Service = 'adgroup'
 
-        GroupType = {}
+        GroupType = {
           plan_id:        :campaignId,
           id:             :adgroupId,
           name:           :adgroupName,
