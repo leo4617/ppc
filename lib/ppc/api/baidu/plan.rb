@@ -55,15 +55,13 @@ module PPC
         end
 
         def self.add( auth, plans )
-          campaigntypes = make_type( plans )
-          body = { campaignTypes: campaigntypes.merge(isDynamicCreative: param[:is_dynamic] || true) }
+          body = { campaignTypes: make_type( plans ) }
           response = request( auth, Service, 'addCampaign', body)
           process( response, 'campaignTypes' ){ |x| reverse_type(x) }
         end
 
         def self.update(auth,plans )
-          campaigntypes = make_type( plans )
-          body = { campaignTypes: campaigntypes.merge(isDynamicCreative: param[:is_dynamic] || true) }
+          body = { campaignTypes: make_type( plans ) }
           response = request( auth, Service, 'updateCampaign', body)
           process( response, 'campaignTypes' ){ |x| reverse_type(x) }
         end
