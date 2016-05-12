@@ -4,29 +4,30 @@ module PPC
       class Account< Baidu
         Service = 'Account'
 
-        @map = [
-                  [:id,:userId],
-                  [:balance,:balance],
-                  [:pc_balance, :pcBalance],
-                  [:mobile_balance, :mobileBalance],
-                  [:cost,:cost],
-                  [:payment,:payment],
-                  [:status,:userStat],
-                  [:budget_type,:budgetType],
-                  [:budget,:budget],
-                  [:region,:regionTarget],
-                  [:exclude_ip,:excludeIp],
-                  [:isdynamic,:isDynamicCreative],
-                  [:isdynamictagsublink, :isDynamicTagSublink],
-                  [:isdynamichotredirect, :isDynamicHotRedirect],
-                  [:isdynamictitle, :isDynamicTitle],
-                  [:dynamic_param,:dynamicCreativeParam], 
-                  [:open_domains,:openDomains],
-                  [:reg_domain,:regDomain],
-                  [:offline_time,:budgetOfflineTime],
-                  [:weekly_budget,:weeklyBudget],
-                  [:opt,:opt]
-                ]
+        AccountInfoType = {
+          id:                   :userId,
+          balance:              :balance,
+          pc_balance:           :pcBalance,
+          mobile_balance:       :mobileBalance,
+          cost:                 :cost,
+          payment:              :payment,
+          status:               :userStat,
+          budget_type:          :budgetType,
+          budget:               :budget,
+          region:               :regionTarget,
+          exclude_ip:           :excludeIp,
+          isdynamic:            :isDynamicCreative,
+          isdynamictagsublink:  :isDynamicTagSublink,
+          isdynamichotredirect: :isDynamicHotRedirect,
+          isdynamictitle:       :isDynamicTitle,
+          dynamic_param:        :dynamicCreativeParam,
+          open_domains:         :openDomains,
+          reg_domain:           :regDomain,
+          offline_time:         :budgetOfflineTime,
+          weekly_budget:        :weeklyBudget,
+          opt:                  :opt,
+        }
+        @map = AccountInfoType
 
         def self.info( auth )
           body = {:accountFields => ["userId","cost","balance","pcBalance","mobileBalance","excludeIp","regionTarget","dynamicCreativeParam","isDynamicCreative","userStat"]}

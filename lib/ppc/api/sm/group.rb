@@ -5,17 +5,18 @@ module PPC
       class Group < Sm
         Service = 'adgroup'
 
-        @map =[
-               [:plan_id, :campaignId],
-               [:id, :adgroupId],
-               [:name, :adgroupName],
-               [:price, :maxPrice],
-               [:negative, :negativeWords],
-               [:exact_negative, :exactNegativeWords],
-               [:pause, :pause],
-               [:status, :status],
-               [:os, :adPlatformOS]
-              ]
+        GroupType = {}
+          plan_id:        :campaignId,
+          id:             :adgroupId,
+          name:           :adgroupName,
+          price:          :maxPrice,
+          negative:       :negativeWords,
+          exact_negative: :exactNegativeWords,
+          pause:          :pause,
+          status:         :status,
+          os:             :adPlatformOS,
+        }
+        @map = GroupType
 
         def self.ids( auth )
           response = request(auth, Service, "getAllAdgroupId")

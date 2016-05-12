@@ -4,20 +4,21 @@ module PPC
       class Plan < Sm
         Service = 'campaign'
 
-        @map = [
-                [:id,:campaignId],
-                [:name,:campaignName],
-                [:budget,:budget], 
-                [:region,:regionTarget],
-                [:ip,:excludeIp] ,
-                [:negative,:negativeWords],
-                [:exact_negative,:exactNegativeWords],
-                [:schedule,:schedule], 
-                [:budget_offline_time,:budgetOfflineTime],
-                [:show_prob,:showProb],   
-                [:pause,:pause],
-                [:status,:status]
-               ]
+        PlanType = {
+          id:                   :campaignId,
+          name:                 :campaignName,
+          budget:               :budget,
+          region:               :regionTarget,
+          ip:                   :excludeIp,
+          negative:             :negativeWords,
+          exact_negative:       :exactNegativeWords,
+          schedule:             :schedule,
+          budget_offline_time:  :budgetOfflineTime,
+          show_prob:            :showProb,  
+          pause:                :pause,
+          status:               :status,
+        }
+        @map = PlanType
 
         def self.all( auth )
           response = request( auth, Service, 'getAllCampaign' )

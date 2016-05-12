@@ -4,29 +4,30 @@ module PPC
       class Plan< Baidu
         Service = 'Campaign'
 
-        @map = [
-                [:id,:campaignId],
-                [:name,:campaignName],
-                [:budget,:budget], 
-                [:region,:regionTarget],
-                [:ip,:excludeIp] ,
-                [:negative,:negativeWords],
-                [:exact_negative,:exactNegativeWords],
-                [:schedule,:schedule], 
-                [:budget_offline_time,:budgetOfflineTime],
-                [:show_prob,:showProb],   
-                [:device,:device],
-                [:price_ratio,:priceRatio], 
-                [:is_dynamic,:isDynamicCreative],
-                [:pause,:pause],
-                [:status,:status],
-                [:rmkt_status, :rmktStatus],
-                [:type, :campaignType],
-                [:isdynamictagsublink, :isDynamicTagSublink],
-                [:isdynamichotredirect, :isDynamicHotRedirect],
-                [:isdynamictitle, :isDynamicTitle],
-                [:rmkt_price_ratio, :rmktPriceRatio],
-               ]
+        PlanType = {
+          id:                   :campaignId,
+          name:                 :campaignName,
+          budget:               :budget,
+          region:               :regionTarget,
+          ip:                   :excludeIp,
+          negative:             :negativeWords,
+          exact_negative:       :exactNegativeWords,
+          schedule:             :schedule,
+          budget_offline_time:  :budgetOfflineTime,
+          show_prob:            :showProb,
+          device:               :device,
+          price_ratio:          :priceRatio,
+          is_dynamic:           :isDynamicCreative,
+          pause:                :pause,
+          status:               :status,
+          rmkt_status:          :rmktStatus,
+          type:                 :campaignType,
+          isdynamictagsublink:  :isDynamicTagSublink,
+          isdynamichotredirect: :isDynamicHotRedirect,
+          isdynamictitle:       :isDynamicTitle,
+          rmkt_price_ratio:     :rmktPriceRatio,
+        }
+        @map = PlanType
 
         def self.info( auth, ids )
           ids = [ ids ] unless ids.is_a? Array

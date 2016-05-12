@@ -7,23 +7,24 @@ module PPC
       class Report< Qihu
         Service = 'report'
 
-        @map =[
-                [:queryword,:queryword],
-                [:plan_id,:campaignId],
-                [:creative_id,:creativeId],
-                [:keyword,:keyword],
-                [:views,:views],
-                [:clicks,:clicks],
-                [:startDate,:startDate],
-                [:endDate,:endDate],
-                [:date,:date],
-                [:keyword_id,:keywordId],
-                [:group_id,:groupId],
-                [:cost,:totalCost],
-                [:position,:avgPosition],
-                [:total_num,:totalNumber],
-                [:total_page,:totalPage]
-              ]
+        ReportType = {
+          queryword:    :queryword,
+          plan_id:      :campaignId,
+          creative_id:  :creativeId,
+          keyword:      :keyword,
+          views:        :views,
+          clicks:       :clicks,
+          startDate:    :startDate,
+          endDate:      :endDate,
+          date:         :date,
+          keyword_id:   :keywordId,
+          group_id:     :groupId,
+          cost:         :totalCost,
+          position:     :avgPosition,
+          total_num:    :totalNumber,
+          total_page:   :totalPage,
+        }
+        @map = ReportType
 
         ###################
         # API abstraction #

@@ -4,19 +4,20 @@ module PPC
       class Account < Sogou
         Service = 'Account'
 
-        @map = [
-                [:id,:accountid],            
-                [:balance,:balance],         
-                [:cost,:total_cost],
-                [:payment,:total_pay],                          
-                [:budget_type,:type],                   
-                [:budget,:budget],                              
-                [:region,:regions],                    
-                [:exclude_ip,:excludeIps],                        
-                [:open_domains,:domains],                  
-                [:offline_time,:budgetOfflineTime],         
-                [:opt,:opt]                                  
-              ]
+        AccountType = {
+          id:           :accountid,
+          balance:      :balance,
+          cost:         :total_cost,
+          payment:      :total_pay,
+          budget_type:  :type,
+          budget:       :budget,
+          region:       :regions,
+          exclude_ip:   :excludeIps,
+          open_domains: :domains,
+          offline_time: :budgetOfflineTime,
+          opt:          :opt,
+        }
+        @map = AccountType
 
         def self.info(auth)
           response = request(auth,Service,'getAccountInfo'  )

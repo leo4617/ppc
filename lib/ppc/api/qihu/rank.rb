@@ -4,14 +4,15 @@ module PPC
       class Rank < Qihu
         Service = 'tool'
 
-        @map = [
-                 [:id,:id] ,
-                 [:group_id, :groupId],
-                 [:anchor,:text],
-                 [:url, :link],
-                 [:image, :image],
-                 [:status, :status]
-                ]
+        RankType = {
+          id:       :id,
+          group_id: :groupId,
+          anchor:   :text,
+          url:      :link,
+          image:    :image,
+          status:   :status,
+        }
+        @map = RankType
 
         def self.getRank( auth, region, queryInfo )
           body  = {'region'=> region, 'queryInfo' => queryInfo}

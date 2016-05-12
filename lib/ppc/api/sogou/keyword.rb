@@ -11,27 +11,29 @@ module PPC
         #Match_type  = { 'exact' => 0, 'wide' => 1,0 => 'exact', 1 => 'wide' } 
         Match_type  = { 'exact' => 0, 'phrase' => 2, 'wide' => 1,'0' => 'exact', '2' => 'phrase', '1' => 'wide' } 
                 
-        @map  = [
-                  [:id,:cpcId],
-                  [:group_id,:cpcGrpId],
-                  [:keyword,:cpc],
-                  [:price,:price],
-                  [:pc_destination,:visitUrl],
-                  [:mobile_destination,:mobileVisitUrl],
-                  [:match_type,:matchType],
-                  [:pause,:pause],
-                  [:status,:status],
-                  [:quality,:cpcQuality]
-                ]
-        @quality_map = [
-                          [:id,:cpcId],
-                          [:quality,:cpcQuality]
-                        ]
+        KeywordType = {
+          id:                 :cpcId,
+          group_id:           :cpcGrpId,
+          keyword:            :cpc,
+          price:              :price,
+          pc_destination:     :visitUrl,
+          mobile_destination: :mobileVisitUrl,
+          match_type:         :matchType,
+          pause:              :pause,
+          status:             :status,
+          quality:            :cpcQuality,
+        }
+        @map = KeywordType
 
-        @status_map = [
-                        [:id,:cpcId],
-                        [:status,:status]
-                      ]
+        @quality_map = {
+          id:       :cpcId,
+          quality:  :cpcQuality,
+        }
+
+        @status_map = {
+          id:     :cpcId,
+          status: :status,
+        }
 
         # 后面改成info方法
         def self.get( auth, ids )

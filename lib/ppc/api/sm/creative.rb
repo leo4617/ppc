@@ -5,16 +5,17 @@ module PPC
       class Creative< Sm
         Service = 'creative'
 
-        @map =[
-                [:id, :creativeId],
-                [:group_id, :adgroupId],
-                [:title, :title],
-                [:description1, :description1],
-                [:pause, :pause],
-                [:mobile_destination, :destinationUrl],
-                [:mobile_display, :displayUrl],
-                [:status, :status]
-              ]     
+        CreativeType = {
+          id:                 :creativeId,
+          group_id:           :adgroupId,
+          title:              :title,
+          description1:       :description1,
+          pause:              :pause,
+          mobile_destination: :destinationUrl,
+          mobile_display:     :displayUrl,
+          status:             :status,
+        }
+        @map = CreativeType
 
         def self.add(auth, creatives)
           body = {creativeTypes: make_type(creatives)}

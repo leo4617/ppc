@@ -4,20 +4,21 @@ module PPC
       class Account < Sm
         Service = 'account'
 
-        @map = [
-                  [:id,:userId],
-                  [:balance,:balance],
-                  [:cost,:cost],
-                  [:payment,:payment],
-                  [:budget_type,:budgetType],
-                  [:budget,:budget],
-                  [:region,:regionTarget],
-                  [:exclude_ip,:excludeIp],
-                  [:open_domains,:openDomains],
-                  [:reg_domain,:regDomain],
-                  [:offline_time,:budgetOfflineTime],
-                  [:weekly_budget,:weeklyBudget]
-                ]
+        AccountType = {
+          id:             :userId,
+          balance:        :balance,
+          cost:           :cost,
+          payment:        :payment,
+          budget_type:    :budgetType,
+          budget:         :budget,
+          region:         :regionTarget,
+          exclude_ip:     :excludeIp,
+          open_domains:   :openDomains,
+          reg_domain:     :regDomain,
+          offline_time:   :budgetOfflineTime,
+          weekly_budget:  :weeklyBudget,
+        }
+        @map = AccountType
 
         def self.info( auth )
           response = request(auth, Service, 'getAccount', {requestData: ["account_all"]})

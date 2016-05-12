@@ -5,19 +5,20 @@ module PPC
       class Creative< Baidu
         Service = 'Creative'
 
-        @map =[
-                [:id,:creativeId],
-                [:group_id,:adgroupId],
-                [:title,:title],
-                [:description1,:description1],
-                [:description2,:description2],
-                [:pc_destination,:pcDestinationUrl],
-                [:pc_display,:pcDisplayUrl],
-                [:mobile_destination,:mobileDestinationUrl],
-                [:mobile_display,:mobileDisplayUrl],
-                [:pause,:pause],
-                [:preference,:devicePreference] 
-              ]     
+        CreativeType = {
+          id:                 :creativeId,
+          group_id:           :adgroupId,
+          title:              :title,
+          description1:       :description1,
+          description2:       :description2,
+          pc_destination:     :pcDestinationUrl,
+          pc_display:         :pcDisplayUrl,
+          mobile_destination: :mobileDestinationUrl,
+          mobile_display:     :mobileDisplayUrl,
+          pause:              :pause,
+          preference:         :devicePreference,
+        }
+        @map = CreativeType
 
         def self.add( auth, creatives )
           body = { creativeTypes: make_type( creatives ) }

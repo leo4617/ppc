@@ -5,16 +5,17 @@ module PPC
       class Group < Qihu
         Service = 'group'
 
-        @map = [
-          [:id, :id ],
-          [:plan_id, :campaignId],
-          [:status, :status ],
-          [:name, :name ],
-          [:price, :price ],
+        GroupType = {
+          id:           :id,
+          plan_id:      :campaignId,
+          status:       :status,
+          name:         :name,
+          price:        :price,
           # negateive为json格式，make_type要定制
-          [:add_time, :addTime],
-          [:update_time, :updateTime]
-        ]
+          add_time:     :addTime,
+          update_time:  :updateTime,
+        }
+        @map = GroupType
 
         # 再次封装提供all和ids
         def self.ids( auth )

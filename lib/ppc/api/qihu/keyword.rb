@@ -5,22 +5,23 @@ module PPC
       class Keyword< Qihu
         Service = 'keyword'
 
-        @map = [
-                  [:id, :id],
-                  [:group_id, :groupId],
-                  [:keyword, :word],
-                  [:price, :price],
-                  [:match_type, :matchType],
-                  [:pc_destination, :url],
-                  [:mobile_destination, :mobileUrl],
-                  [:status, :status]
-                ]
+        KeywordType = {
+          id:                 :id,
+          group_id:           :groupId,
+          keyword:            :word,
+          price:              :price,
+          match_type:         :matchType,
+          pc_destination:     :url,
+          mobile_destination: :mobileUrl,
+          status:             :status,
+        }
+        @map = KeywordType
 
-        @status_map = [ 
-                        [:id,:id], 
-                        [:quality,:qualityScore],
-                        [:status,:status]
-                      ]
+        @status_map = {
+          id:       :id,
+          quality:  :qualityScore,
+          status:   :status,
+        }
 
         def self.get( auth, ids )
           ids = to_json_string( ids )

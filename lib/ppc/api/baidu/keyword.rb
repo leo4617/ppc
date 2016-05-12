@@ -9,32 +9,33 @@ module PPC
         Device      = { 'pc' => 0, 'mobile' => 1, 'all' => 2 }
         Type        = { 'plan' => 3, 'group' => 5, 'keyword' => 11 }
         
-        @map  = [
-                  [:id,:keywordId],
-                  [:group_id,:adgroupId],
-                  [:keyword,:keyword],
-                  [:price,:price],
-                  [:pc_destination,:pcDestinationUrl],
-                  [:mobile_destination,:mobileDestinationUrl],
-                  [:match_type,:matchType],
-                  [:phrase_type,:phraseType],
-                  [:status,:status],
-                  [:pause,:pause]
-                ]
+        KeywordType  = {
+          id:                 :keywordId,
+          group_id:           :adgroupId,
+          keyword:            :keyword,
+          price:              :price,
+          pc_destination:     :pcDestinationUrl,
+          mobile_destination: :mobileDestinationUrl,
+          match_type:         :matchType,
+          phrase_type:        :phraseType,
+          status:             :status,
+          pause:              :pause,
+        }
+        @map = KeywordType
 
-        @quality10_map = [
-                          [ :id, :id ],
-                          [ :group_id, :adgroupId ],
-                          [ :plan_id, :Campaigned ],
-                          [ :pc_quality, :pcQuality ],
-                          [ :pc_reliable, :pcReliable ],
-                          [ :pc_reason, :pcReason ],
-                          [ :pc_scale, :pcScale ],
-                          [ :mobile_quality, :mobileQuality ],
-                          [ :mobile_reliable, :mobileReliable ],
-                          [ :mobile_reason, :mobileReason ],
-                          [ :mobile_scale, :mobileScale ]
-                          ]
+        @quality10_map = {
+          id:               :id,
+          group_id:         :adgroupId,
+          plan_id:          :Campaigned,
+          pc_quality:       :pcQuality,
+          pc_reliable:      :pcReliable,
+          pc_reason:        :pcReason,
+          pc_scale:         :pcScale,
+          mobile_quality:   :mobileQuality,
+          mobile_reliable:  :mobileReliable,
+          mobile_reason:    :mobileReason,
+          mobile_scale:     :mobileScale,
+        }
 
         # 后面改成info方法
         def self.get( auth, ids )

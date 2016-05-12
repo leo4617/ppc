@@ -5,18 +5,18 @@ module PPC
       class Plan < Qihu
         Service = 'campaign'
 
-        @map = [
-          [:id, :id],
-          [:name,:name],
-          [:budget, :budget],
-          [:region, :region],
-          [:schedule, :schedule],
-          [:startDate, :startDate],
-          [:endDate, :endDate ],
-          [:status,:status], 
-          [:extend_ad_type,:extendAdType]
-        ]
-
+        PlanType = {
+          id:             :id,
+          name:           :name,
+          budget:         :budget,
+          region:         :region,
+          schedule:       :schedule,
+          startDate:      :startDate,
+          endDate:        :endDate,
+          status:         :status,
+          extend_ad_type: :extendAdType,
+        }
+        @map = PlanType
 
         def self.get(auth, ids)
           '''

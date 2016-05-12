@@ -5,13 +5,14 @@ module PPC
       class Phone < Sm
         Service = 'NewCreative'
 
-        @map =[
-                [:id,:phoneId],
-                [:group_id,:adgroupId],
-                [:phone_num,:phoneNum],
-                [:pause,:pause],
-              ]     
-
+        PhoneType = {
+          id:         :phoneId,
+          group_id:   :adgroupId,
+          phone_num:  :phoneNum,
+          pause:      :pause,
+        }
+        @map = PhoneType
+               
         def self.update( auth, phones )
           '''
           根据实际使用情况，更新的时候creative title为必填选

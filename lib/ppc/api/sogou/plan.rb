@@ -4,23 +4,24 @@ module PPC
       class Plan< Sogou
         Service = 'CpcPlan'
 
-        @map = [
-                          [:id,:cpcPlanId],
-                          [:name,:cpcPlanName],
-                          [:budget,:budget], 
-                          [:region,:regions],
-                          [:ip,:excludeIps] ,
-                          [:negative,:negativeWords],
-                          [:exact_negative,:exactNegativeWords],
-                          [:schedule,:schedule], 
-                          [:budget_offline_time,:budgetOfflineTime],
-                          [:show_prob,:showProb],   
-                          [:join_union ,:joinUnion],
-                          [:device,:device],
-                          [:price_ratio,:mobilePriceRate ], 
-                          [:pause,:pause],
-                          [:status,:status],
-                        ]
+        PlanType = {
+          id:                   :cpcPlanId,
+          name:                 :cpcPlanName,
+          budget:               :budget, 
+          region:               :regions,
+          ip:                   :excludeIps,
+          negative:             :negativeWords,
+          exact_negative:       :exactNegativeWords,
+          schedule:             :schedule, 
+          budget_offline_time:  :budgetOfflineTime,
+          show_prob:            :showProb,  
+          join_union:           :joinUnion,
+          device:               :device,
+          price_ratio:          :mobilePriceRate,
+          pause:                :pause,
+          status:               :status,
+        }
+        @map = PlanType
 
         def self.all( auth )
           response = request( auth, Service, 'getAllCpcPlan' )

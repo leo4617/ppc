@@ -5,12 +5,13 @@ module PPC
       class Phone < Baidu
         Service = 'NewCreative'
 
-        @map =[
-                [:id,:phoneId],
-                [:group_id,:adgroupId],
-                [:phone_num,:phoneNum],
-                [:pause,:pause],
-              ]     
+        PhoneType = {
+          id:        :phoneId,
+          group_id:  :adgroupId,
+          phone_num: :phoneNum,
+          pause:     :pause,
+        }
+        @map = PhoneType
 
         def self.update( auth, phones )
           '''

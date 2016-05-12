@@ -5,14 +5,15 @@ module PPC
       class Sublink< Qihu
         Service = 'sublink'
 
-        @map = [
-                 [:id,:id] ,
-                 [:group_id, :groupId],
-                 [:anchor,:text],
-                 [:url, :link],
-                 [:image, :image],
-                 [:status, :status]
-                ]
+        SublinkType = {
+          id:       :id,
+          group_id: :groupId,
+          anchor:   :text,
+          url:      :link,
+          image:    :image,
+          status:   :status,
+        }
+        @map = SublinkType
 
         def self.get( auth, ids )
           body  = { 'idList' => to_json_string( ids ) }

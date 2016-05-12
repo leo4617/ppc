@@ -7,16 +7,17 @@ module PPC
 
         Match_type  = { 'exact' => 0, 'phrase' => 1, 'wide' => 2, 0 => 'exact', 1 => 'phrase' , 2 => 'wide'  }
         
-        @map  = [
-                  [:id, :keywordId],
-                  [:group_id, :adgroupId],
-                  [:keyword, :keyword],
-                  [:price, :price],
-                  [:mobile_destination, :destinationUrl],
-                  [:match_type, :matchType],
-                  [:status, :status],
-                  [:pause, :pause]
-                ]
+        KeywordType = {
+          id:                 :keywordId,
+          group_id:           :adgroupId,
+          keyword:            :keyword,
+          price:              :price,
+          mobile_destination: :destinationUrl,
+          match_type:         :matchType,
+          status:             :status,
+          pause:              :pause,
+        }
+        @map = KeywordType
 
         def self.get(auth, ids)
           ids = [ids] unless ids.is_a? Array

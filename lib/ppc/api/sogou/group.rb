@@ -5,17 +5,18 @@ module PPC
       class Group< Sogou
         Service = 'CpcGrp'
 
-        @map =[
-                [:plan_id, :cpcPlanId],
-                [:id, :cpcGrpId],
-                [:name, :cpcGrpName],
-                [:price, :maxPrice],
-                [:negative, :negativeWords],
-                [:exact_negative, :exactNegativeWords],
-                [:pause, :pause],
-                [:status, :status],
-                [:opt, :opt]
-              ]
+        GroupType = {
+          plan_id:        :cpcPlanId,
+          id:             :cpcGrpId,
+          name:           :cpcGrpName,
+          price:          :maxPrice,
+          negative:       :negativeWords,
+          exact_negative: :exactNegativeWords,
+          pause:          :pause,
+          status:         :status,
+          opt:            :opt,
+        }
+        @map = GroupType
 
         def self.ids( auth )
           """

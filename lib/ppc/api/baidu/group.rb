@@ -5,22 +5,23 @@ module PPC
       class Group< Baidu
         Service = 'Adgroup'
 
-        @map =[
-                        [:plan_id, :campaignId],
-                        [:id, :adgroupId],
-                        [:name, :adgroupName],
-                        [:price, :maxPrice],
-                        [:negative, :negativeWords],
-                        [:exact_negative, :exactNegativeWords],
-                        [:pause, :pause],
-                        [:status, :status],
-                        [:reserved, :reserved],
-                        [:price_ratio, :priceRatio],
-                        [:accu_price_factor, :accuPriceFactor],
-                        [:word_price_factor, :wordPriceFactor],
-                        [:wide_price_factor, :widePriceFactor],
-                        [:match_price_status, :matchPriceStatus],
-                      ]
+        GroupType = {
+          plan_id:            :campaignId,
+          id:                 :adgroupId,
+          name:               :adgroupName,
+          price:              :maxPrice,
+          negative:           :negativeWords,
+          exact_negative:     :exactNegativeWords,
+          pause:              :pause,
+          status:             :status,
+          reserved:           :reserved,
+          price_ratio:        :priceRatio,
+          accu_price_factor:  :accuPriceFactor,
+          word_price_factor:  :wordPriceFactor,
+          wide_price_factor:  :widePriceFactor,
+          match_price_status: :matchPriceStatus,
+        }
+        @map = GroupType
 
         def self.ids(auth )
           """
