@@ -14,7 +14,6 @@ module PPC
           exact_negative:     :exactNegativeWords,
           pause:              :pause,
           status:             :status,
-          reserved:           :reserved,
           price_ratio:        :priceRatio,
           accu_price_factor:  :accuPriceFactor,
           word_price_factor:  :wordPriceFactor,
