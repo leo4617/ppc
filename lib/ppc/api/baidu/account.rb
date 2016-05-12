@@ -30,7 +30,7 @@ module PPC
         @map = AccountInfoType
 
         def self.info( auth )
-          body = {:accountFields => ["userId","cost","balance","pcBalance","mobileBalance","excludeIp","regionTarget","dynamicCreativeParam","isDynamicCreative","userStat"]}
+          body = {:accountFields => AccountInfoType.values}
           response = request(auth,Service,'getAccountInfo',body)
           return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end

@@ -31,7 +31,7 @@ module PPC
 
         def self.info( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          body = { campaignIds: ids, campaignFields: %w(campaignId campaignName budget negativeWords exactNegativeWords regionTarget priceRatio rmktStatus status campaignType isDynamicCreative isDynamicTagSublink isDynamicTitle isDynamicHotRedirect rmktPriceRatio)}
+          body = { campaignIds: ids, campaignFields: PlanType.values}
           response = request(auth,Service,'getCampaign',body)
           return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end
