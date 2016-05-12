@@ -5,7 +5,7 @@ module PPC
       include ::PPC::Operation
 
       def info
-        call('plan').get(@auth,@id)
+        call('plan').info(@auth,@id)
       end
 
       def update( plan )
