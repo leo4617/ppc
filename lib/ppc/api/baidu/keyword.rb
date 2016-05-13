@@ -72,13 +72,20 @@ module PPC
           return process(response, 'result' ){|x| x }
         end
 
-        def self.activate( auth, ids )
-          """
-          """
+        def self.enable( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          body = { keywordIds: ids }
-          response = request( auth, Service, 'activateKeyword', body)
-          return process(response, 'keywordTypes' ){|x| reverse_type(x)  }
+          keywords = ids.map{|id| {keywordId: id, pause: false} }
+          self.update( auth, keywords )
+        end
+
+        def self.activate( auth, ids )
+          self.enable( auth, ids )
+        end
+
+        def self.pause( auth, ids )
+          ids = [ ids ] unless ids.is_a? Array
+          keywords = ids.map{|id| {keywordId: id, pause: true} }
+          self.update( auth, keywords )
         end
 
         def self.search_by_group_id( auth, group_ids  )

@@ -72,6 +72,22 @@ module PPC
           response = request( auth, Service, 'deleteCampaign', body)
           process( response, 'result' ){ |x| x }
         end
+
+        def self.enable( auth, ids )
+          ids = [ ids ] unless ids.is_a? Array
+          plans = ids.map{|id| {campaignId: id, pause: false} }
+          self.update( auth, plans )
+        end
+
+        def self.activate( auth, ids )
+          self.enable( auth, ids )
+        end
+
+        def self.pause( auth, ids )
+          ids = [ ids ] unless ids.is_a? Array
+          plans = ids.map{|id| {campaignId: id, pause: true} }
+          self.update( auth, plans )
+        end
        
       end # Service
     end # baidu

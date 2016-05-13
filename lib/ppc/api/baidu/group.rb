@@ -88,6 +88,22 @@ module PPC
           process( response, 'nil' ){ |x|  x  }
         end
 
+        def self.enable( auth, ids )
+          ids = [ ids ] unless ids.is_a? Array
+          groups = ids.map{|id| {adgroupId: id, pause: false} }
+          self.update( auth, groups )
+        end
+
+        def self.activate( auth, ids )
+          self.enable( auth, ids )
+        end
+
+        def self.pause( auth, ids )
+          ids = [ ids ] unless ids.is_a? Array
+          groups = ids.map{|id| {keywordId: id, pause: true} }
+          self.update( auth, groups )
+        end
+
         private
         def self.make_planGroupIds( campaignAdgroupIds )
           planGroupIds = []
