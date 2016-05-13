@@ -75,7 +75,7 @@ module PPC
 
         def self.enable( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          plans = ids.map{|id| {campaignId: id, pause: false} }
+          plans = ids.map{|id| {id: id, pause: false} }
           self.update( auth, plans )
         end
 
@@ -85,7 +85,7 @@ module PPC
 
         def self.pause( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          plans = ids.map{|id| {campaignId: id, pause: true} }
+          plans = ids.map{|id| {id: id, pause: true} }
           self.update( auth, plans )
         end
        

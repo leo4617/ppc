@@ -74,7 +74,7 @@ module PPC
 
         def self.enable( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          keywords = ids.map{|id| {keywordId: id, pause: false} }
+          keywords = ids.map{|id| {id: id, pause: false} }
           self.update( auth, keywords )
         end
 
@@ -84,7 +84,7 @@ module PPC
 
         def self.pause( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          keywords = ids.map{|id| {keywordId: id, pause: true} }
+          keywords = ids.map{|id| {id: id, pause: true} }
           self.update( auth, keywords )
         end
 
