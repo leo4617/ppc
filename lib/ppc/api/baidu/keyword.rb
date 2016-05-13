@@ -39,41 +39,36 @@ module PPC
         }
         @quality10_map = KeywordQualityType
 
-        # 后面改成info方法
-        def self.get( auth, ids )
-          '''
-          getKeywordByKeywordId
-          '''
+        def self.info( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          body = { keywordIds: ids}
-          response = request( auth, Service, 'getKeywordByKeywordId', body )
+          body = { ids: ids, idType: 11, wordFields: KeywordType.values}
+          response = request( auth, Service, 'getWord', body )
+          return process(response, 'keywordType' ){|x| reverse_type( x )[0] }
+        end
+
+        def self.get( auth, ids )
+          ids = [ ids ] unless ids.is_a? Array
+          body = { ids: ids, idType: 11, wordFields: KeywordType.values}
+          response = request( auth, Service, 'getWord', body )
           return process(response, 'keywordTypes' ){|x| reverse_type( x ) }
         end
 
         def self.add( auth, keywords )
-          '''
-          '''
-          keywordtypes = make_type( keywords ) 
-          body = { keywordTypes: keywordtypes }
-          response = request( auth, Service, "addKeyword", body )
+          body = { keywordTypes: make_type( keywords ) }
+          response = request( auth, Service, "addWord", body )
           return process(response, 'keywordTypes' ){|x| reverse_type(x)  }
         end
 
         def self.update( auth, keywords  )
-          '''
-          '''
-          keywordtypes = make_type( keywords ) 
-          body = { keywordTypes: keywordtypes }
-          response = request( auth, Service, "updateKeyword", body )
+          body = { keywordTypes: make_type( keywords ) }
+          response = request( auth, Service, "updateWord", body )
           return process(response, 'keywordTypes' ){|x| reverse_type(x)  }
         end
 
         def self.delete( auth, ids )
-          """
-          """
           ids = [ ids ] unless ids.is_a? Array
           body = { keywordIds: ids}
-          response = request( auth, Service, 'deleteKeyword', body )
+          response = request( auth, Service, 'deleteWord', body )
           return process(response, 'result' ){|x| x }
         end
 
