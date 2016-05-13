@@ -37,9 +37,6 @@ module PPC
         end
 
         def self.ids( auth, ids )
-          """
-          @return : Array of campaignAdgroupIds
-          """
           ids = [ ids ] unless ids.is_a? Array
           body = {ids: ids, idType: 3, adgroupFields: [:adgroupId]}
           response = request(auth, Service, "getAdgroup",body )
@@ -54,10 +51,6 @@ module PPC
         end
 
         def self.add( auth, groups )
-          """
-          @ input : one or list of AdgroupType
-          @ output : list of AdgroupType
-          """
           adgrouptypes = make_type( groups )
 
           body = {adgroupTypes:  adgrouptypes }
@@ -67,10 +60,6 @@ module PPC
         end
 
         def self.update( auth, groups )
-          """
-          @ input : one or list of AdgroupType
-          @ output : list of AdgroupType
-          """
           adgrouptypes = make_type( groups )
           body = {adgroupTypes: adgrouptypes}
           
@@ -79,9 +68,6 @@ module PPC
         end
 
         def self.delete( auth, ids )
-          """
-          delete group body has no message
-          """
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids }
           response = request( auth, Service,"deleteAdgroup", body )
@@ -102,30 +88,6 @@ module PPC
           ids = [ ids ] unless ids.is_a? Array
           groups = ids.map{|id| {id: id, pause: true} }
           self.update( auth, groups )
-        end
-
-        private
-        def self.make_planGroupIds( campaignAdgroupIds )
-          planGroupIds = []
-          campaignAdgroupIds.each do |campaignAdgroupId|
-            planGroupId = { }
-            planGroupId[:plan_id] = campaignAdgroupId['campaignId']
-            planGroupId[:group_ids] = campaignAdgroupId['adgroupIds']
-            planGroupIds << planGroupId
-          end
-          return planGroupIds
-        end
-
-        private
-        def self.make_planGroups( campaignAdgroups )
-          planGroups = []
-          campaignAdgroups.each do |campaignAdgroup|
-            planGroup = {}
-            planGroup[:plan_id] = campaignAdgroup['campaignId']
-            planGroup[:groups] = reverse_type( campaignAdgroup['adgroupTypes'] )
-            planGroups << planGroup
-          end
-          return planGroups
         end
 
       end # class group
