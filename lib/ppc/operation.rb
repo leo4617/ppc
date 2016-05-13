@@ -100,6 +100,15 @@ module PPC
       def delete_plan( ids )
         call('plan').delete(@auth,ids)
       end
+
+      def enable_plan( ids )
+        call('plan').enable(@auth,ids)
+      end
+
+      def pause_plan( ids )
+        call('plan').pause(@auth,ids)
+      end
+
     end
 
     # +++++ Group opeartion funcitons +++++ #
@@ -119,6 +128,15 @@ module PPC
       def delete_group( ids )
         call('group').delete( @auth, ids )
       end
+
+      def enable_group( ids )
+        call('group').enable(@auth,ids)
+      end
+
+      def pause_group( ids )
+        call('group').pause(@auth,ids)
+      end
+
     end
 
     # +++++ Keyword opeartion funcitons +++++ #
@@ -138,6 +156,15 @@ module PPC
       def delete_keyword( ids )
          call('keyword').delete( @auth, ids )
       end
+
+      def enable_keyword( ids )
+        call('keyword').enable(@auth,ids)
+      end
+
+      def pause_keyword( ids )
+        call('keyword').pause(@auth,ids)
+      end
+
     end
 
     # +++++ Creative opeartion funcitons +++++ #
