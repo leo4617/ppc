@@ -24,6 +24,14 @@ module PPC
         call('group').ids(@auth, @id)
       end
 
+      def enable
+        call('plan').enable(@auth, @id)
+      end
+
+      def pause
+        call('plan').pause(@auth, @id)
+      end
+
       # group opeartion
       include ::PPC::Operation::Group_operation
 

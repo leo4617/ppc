@@ -16,6 +16,14 @@ module PPC
       def activate()
         call( 'keyword' ).activate( @auth, @id )
       end
+
+      def enable
+        call('keyword').enable(@auth, @id)
+      end
+
+      def pause
+        call('keyword').pause(@auth, @id)
+      end
       
       def status()
         call( 'keyword' ).status( @auth, @id )

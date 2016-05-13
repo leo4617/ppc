@@ -33,6 +33,14 @@ module PPC
         call( 'creative' ).search_id_by_group_id( @auth, @id )
       end
 
+      def enable
+        call('group').enable(@auth, @id)
+      end
+
+      def pause
+        call('group').pause(@auth, @id)
+      end
+
       # keyword opeartion
       include ::PPC::Operation::Keyword_operation
 
