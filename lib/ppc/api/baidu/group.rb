@@ -32,7 +32,7 @@ module PPC
         def self.all( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
           body = { ids: ids, idType: 3, adgroupFields: GroupType.values}
-          response = request(auth,Service,'getCampaign',body)
+          response = request(auth,Service,'getAdgroup',body)
           return process( response, 'campaignAdgroups' ){ |x|reverse_type(x) }
         end
 
