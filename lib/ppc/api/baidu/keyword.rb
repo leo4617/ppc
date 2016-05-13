@@ -11,6 +11,7 @@ module PPC
         KeywordType  = {
           id:                 :keywordId,
           group_id:           :adgroupId,
+          plan_id:            :campaignId,
           keyword:            :keyword,
           price:              :price,
           pc_destination:     :pcDestinationUrl,
@@ -19,13 +20,14 @@ module PPC
           phrase_type:        :phraseType,
           status:             :status,
           pause:              :pause,
+          wmatchprefer:       :wmatchprefer,
         }
         @map = KeywordType
 
-        @quality10_map = {
+        KeywordQualityType = {
           id:               :id,
           group_id:         :adgroupId,
-          plan_id:          :Campaigned,
+          plan_id:          :campaignId,
           pc_quality:       :pcQuality,
           pc_reliable:      :pcReliable,
           pc_reason:        :pcReason,
@@ -35,6 +37,7 @@ module PPC
           mobile_reason:    :mobileReason,
           mobile_scale:     :mobileScale,
         }
+        @quality10_map = KeywordQualityType
 
         # 后面改成info方法
         def self.get( auth, ids )
