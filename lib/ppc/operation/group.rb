@@ -18,11 +18,11 @@ module PPC
 
       # =============================== #
       def keywords()
-        call( 'keyword' ).search_by_group_id( @auth, @id )
+        call( 'keyword' ).all( @auth, @id )
       end
 
       def keyword_ids()
-        call( 'keyword' ).search_id_by_group_id( @auth, @id )
+        call( 'keyword' ).ids( @auth, @id )
       end
 
       def creatives()
