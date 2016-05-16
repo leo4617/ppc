@@ -47,14 +47,14 @@ module PPC
           return process(response, 'result'){|x| x }
         end
 
-        def self.search_by_group_id(auth, group_ids)
+        def self.all(auth, group_ids)
           group_ids = [group_ids] unless group_ids.is_a? Array
           body = {adgroupIds: group_ids}
           response = request(auth, Service, "getKeywordByAdgroupId", body)
           return process(response, 'groupKeywords'){|x| make_groupKeywords(x)}
         end
 
-        def self.search_id_by_group_id(auth, group_ids)
+        def self.ids(auth, group_ids)
           group_ids = [group_ids] unless group_ids.is_a? Array
           body = {adgroupIds: group_ids}
           response = request(auth, Service, "getKeywordIdByAdgroupId", body)

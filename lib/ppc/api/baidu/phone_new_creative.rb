@@ -22,7 +22,7 @@ module PPC
           process( response, 'phoneTypes' ){ |x| reverse_type(x) }
         end
 
-        def self.search_id_by_group_id( auth, ids, getTemp = 0 )
+        def self.ids( auth, ids, getTemp = 0 )
           '''
           \'getPhoneIdByAdgroupId\'
           @ input: group ids

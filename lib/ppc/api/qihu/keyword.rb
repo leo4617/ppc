@@ -79,7 +79,7 @@ module PPC
           status( auth, ids)
         end
         
-        def self.search_id_by_group_id( auth, id, status = nil, match_type = nil )
+        def self.ids( auth, id, status = nil, match_type = nil )
           # 处理条件  
           body = {}
           body['status'] = status if status
@@ -94,8 +94,8 @@ module PPC
         end
 
         # combine search_id and get to provide another method
-        def self.search_by_group_id( auth, id )
-          keyword_ids = search_id_by_group_id( auth, id )[:result][0][:keyword_ids]
+        def self.all( auth, id )
+          keyword_ids = self.ids( auth, id )[:result][0][:keyword_ids]
           response = get( auth, keyword_ids )
           if response[:succ]
             # 伪装成百度接口

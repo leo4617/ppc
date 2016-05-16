@@ -43,7 +43,7 @@ module PPC
           process(response, 'result'){|x| x}
         end
 
-        def self.search_id_by_group_id(auth, ids)
+        def self.ids(auth, ids)
           ids = [ids] unless ids.is_a? Array
           body = {adgroupIds: ids}
           response = request(auth, Service, 'getCreativeIdByAdgroupId', body)

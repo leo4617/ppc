@@ -79,7 +79,7 @@ module PPC
           status( auth, ids)
         end
 
-        def self.search_id_by_group_id( auth, id, status = nil)
+        def self.ids( auth, id, status = nil)
           # 处理条件  
           body = {}
           body['status'] = status if status
@@ -93,8 +93,8 @@ module PPC
         end
 
         # combine two methods to provide another mether
-        def self.search_by_group_id( auth, id )
-          creative_ids = search_id_by_group_id( auth, id )
+        def self.all( auth, id )
+          creative_ids = self.ids( auth, id )
           response = get( auth , creative_ids )
           # 伪装成百度接口
           if response[:succ]

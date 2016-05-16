@@ -66,7 +66,7 @@ module PPC
           process( response, 'cpcIdeaTypes' ){ |x| reverse_type(x, @status_map) }
         end
 
-        def self.search_id_by_group_id( auth, ids,  getTemp = 0 )
+        def self.ids( auth, ids,  getTemp = 0 )
           '''
           \'getCreativeIdByAdgroupId\'
           @ input: group ids

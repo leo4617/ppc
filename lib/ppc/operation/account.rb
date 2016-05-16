@@ -25,11 +25,11 @@ module PPC
       
       # some useful keyword operations
       def keywords(group_id)
-        call( 'keyword' ).search_by_group_id( @auth, group_id )
+        call( 'keyword' ).all( @auth, group_id )
       end
 
       def keyword_ids(group_id)
-        call( 'keyword' ).search_id_by_group_id( @auth, group_id )
+        call( 'keyword' ).ids( @auth, group_id )
       end
       
       # plan operations

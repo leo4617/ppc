@@ -77,7 +77,7 @@ module PPC
           process( response, 'CreativeStatus' ){ |x| x }
         end
 
-        def self.search_id_by_group_id( auth, ids, getTemp = 0 )
+        def self.ids( auth, ids, getTemp = 0 )
           '''
           \'getCreativeIdByAdgroupId\'
           @ input: group ids
@@ -89,7 +89,7 @@ module PPC
           process( response, 'groupCreativeIds' ){ |x| make_groupCreativeIds( x ) }
         end
 
-        def self.search_by_group_id( auth, ids, getTemp = 0 )
+        def self.all( auth, ids, getTemp = 0 )
           ids = [ ids ] unless ids.is_a? Array
           body = { adgroupIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCreativeByAdgroupId', body )

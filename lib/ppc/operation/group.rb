@@ -26,11 +26,11 @@ module PPC
       end
 
       def creatives()
-        call( 'creative' ).search_by_group_id( @auth, @id )
+        call( 'creative' ).all( @auth, @id )
       end
 
       def creative_ids()
-        call( 'creative' ).search_id_by_group_id( @auth, @id )
+        call( 'creative' ).ids( @auth, @id )
       end
 
       def enable
