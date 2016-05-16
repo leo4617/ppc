@@ -29,16 +29,16 @@ module PPC
           process( response, 'adgroupType' ){ |x| reverse_type( x )[0] }
         end
 
-        def self.all( auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { ids: ids, idType: 3, adgroupFields: GroupType.values}
+        def self.all( auth, plan_ids )
+          plan_ids = [ plan_ids ] unless plan_ids.is_a? Array
+          body = { ids: plan_ids, idType: 3, adgroupFields: GroupType.values}
           response = request(auth,Service,'getAdgroup',body)
           return process( response, 'campaignAdgroups' ){ |x|reverse_type(x) }
         end
 
-        def self.ids( auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
-          body = {ids: ids, idType: 3, adgroupFields: [:adgroupId]}
+        def self.ids( auth, plan_ids )
+          plan_ids = [ plan_ids ] unless plan_ids.is_a? Array
+          body = {ids: plan_ids, idType: 3, adgroupFields: [:adgroupId]}
           response = request(auth, Service, "getAdgroup",body )
           process( response, 'campaignAdgroupIds' ){ |x| reverse_type( x ) }
         end
@@ -51,18 +51,13 @@ module PPC
         end
 
         def self.add( auth, groups )
-          adgrouptypes = make_type( groups )
-
-          body = {adgroupTypes:  adgrouptypes }
-          
+          body = {adgroupTypes:  make_type( groups ) }
           response = request( auth, Service, "addAdgroup", body  )
           process( response, 'adgroupTypes' ){ |x| reverse_type(x) }
         end
 
         def self.update( auth, groups )
-          adgrouptypes = make_type( groups )
-          body = {adgroupTypes: adgrouptypes}
-          
+          body = {adgroupTypes: make_type( groups )}
           response = request( auth, Service, "updateAdgroup",body )
           process( response, 'adgroupTypes' ){ |x| reverse_type(x) }
         end
