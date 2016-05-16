@@ -41,28 +41,28 @@ module PPC
 
         def self.info( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          body = { ids: ids, idType: 11, wordFields: KeywordType.values}
+          body = { ids: ids, idType: 11, keywordTypes: KeywordType.values}
           response = request( auth, Service, 'getWord', body )
           return process(response, 'keywordType' ){|x| reverse_type( x )[0] }
         end
 
-        def self.all( auth, ids  )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { ids: ids, idType: 5, wordFields: KeywordType.values}
+        def self.all( auth, group_ids )
+          group_ids = [ group_ids ] unless group_ids.is_a? Array
+          body = { ids: group_ids, idType: 5, keywordTypes: KeywordType.values}
           response = request( auth, Service, 'getWord', body )
           return process(response, 'groupKeywords' ){|x| reverse_type( x ) }
         end
 
-        def self.ids( auth, ids  )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { ids: ids, idType: 5, wordFields: [:adgroupId]}
+        def self.ids( auth, group_ids )
+          group_ids = [ group_ids ] unless group_ids.is_a? Array
+          body = { ids: group_ids, idType: 5, keywordTypes: [:adgroupId]}
           response = request( auth, Service, 'getWord', body )
           return process(response, 'groupKeywords' ){|x| reverse_type( x ) }
         end
 
         def self.get( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          body = { ids: ids, idType: 11, wordFields: KeywordType.values}
+          body = { ids: ids, idType: 11, keywordTypes: KeywordType.values}
           response = request( auth, Service, 'getWord', body )
           return process(response, 'keywordTypes' ){|x| reverse_type( x ) }
         end
@@ -104,14 +104,14 @@ module PPC
 
         def self.status( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          body = { ids: group_ids, idType: 11, wordFields: [:status]}
+          body = { ids: ids, idType: 11, keywordTypes: [:status]}
           response = request( auth, Service, 'getWord', body )
           return process(response, 'groupKeywords' ){|x| reverse_type( x ) }
         end
 
-        def self.quality( auth ,ids )
+        def self.quality( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          body = { ids: group_ids, idType: 11, wordFields: KeywordQualityType.values}
+          body = { ids: ids, idType: 11, keywordTypes: KeywordQualityType.values}
           response = request( auth, Service, 'getWord', body )
           return process(response, 'groupKeywords' ){|x| reverse_type( x , KeywordQualityType) }
         end
