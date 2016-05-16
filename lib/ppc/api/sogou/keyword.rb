@@ -8,6 +8,8 @@ module PPC
       class Keyword< Sogou
         Service = 'Cpc'
 
+        Match_type  = { 'exact' => 0, 'phrase' => 2, 'wide' => 1,'0' => 'exact', '2' => 'phrase', '1' => 'wide' }
+        @match_types = Match_type
         KeywordType = {
           id:                 :cpcId,
           group_id:           :cpcGrpId,
