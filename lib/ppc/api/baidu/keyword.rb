@@ -106,7 +106,7 @@ module PPC
 
         def self.status( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          body = { ids: ids, idType: 11, keywordTypes: [:status]}
+          body = { ids: ids, idType: 11, keywordTypes: [:keywordId, :status]}
           response = request( auth, Service, 'getWord', body )
           return process(response, 'groupKeywords' ){|x| reverse_type( x ) }
         end
