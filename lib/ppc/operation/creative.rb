@@ -4,6 +4,10 @@ module PPC
       include ::PPC::Operation
 
       def info()
+        call( 'creative' ).info( @auth, @id )
+      end
+
+      def get()
         call( 'creative' ).get( @auth, @id )
       end
 
