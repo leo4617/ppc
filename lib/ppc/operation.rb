@@ -156,11 +156,11 @@ module PPC
         call('creative').delete( @auth, ids )
       end
 
-      def enable_keyword( ids )
+      def enable_creative( ids )
         call('creative').enable(@auth,ids)
       end
 
-      def pause_keyword( ids )
+      def pause_creative( ids )
         call('creative').pause(@auth,ids)
       end
     end
