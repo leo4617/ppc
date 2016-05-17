@@ -54,7 +54,7 @@ module PPC
                                into snake_case symbol inside the method
         '''
         result = {}
-        result[:succ] = response[:header][:desc]=='success'? true : false
+        result[:succ]   = response[:header][:desc] == 'success'
         result[:failure] = response[:header][:failures]
         result[:no_quota] = is_no_quota(response[:header][:failures], '18')
         unless response[:body].nil? or response[:body][key.snake_case.to_sym].nil?
