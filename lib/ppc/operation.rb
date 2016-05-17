@@ -59,34 +59,10 @@ module PPC
       eval "::PPC::API::#{@se.capitalize}::#{service.capitalize}"
     end
 
-    # ++++++++ #
-    # Lazy Code #
-    # ++++++++ #
-
-    # helper fucntion
-    def get_obj( ids, service )
-        '''
-        Return service object. 
-        Providing single id, return single object.
-        Providing multiple ids, return Array of objects
-        '''
-        class_obj =  eval "::PPC::Opeartion::#{service.capitalize}"
-        param = @auth
-        param[:se] = @se
-        objs = []
-
-        ids.each do |id|
-          param[:id] = id
-          objs << class_obj.new( param )
-        end
-
-        return objs.length == 1 ? objs[0] : objs 
-    end
-
     # +++++ Plan opeartion funcitons +++++ #
     module Plan_operation
       def get_plan( ids )
-        ::PPC::Opeartion::get_obj( ids, 'plan')
+        call("plan").get(@auth,ids)
       end
 
       def add_plan( plans )
@@ -114,7 +90,7 @@ module PPC
     # +++++ Group opeartion funcitons +++++ #
     module Group_operation
       def get_group( ids )
-        ::PPC::Opeartion::get_obj( ids, 'group')
+        call("group").get(@auth,ids)
       end
 
       def add_group( groups )
@@ -142,7 +118,7 @@ module PPC
     # +++++ Keyword opeartion funcitons +++++ #
     module Keyword_operation
       def get_keyword( ids )
-        ::PPC::Opeartion::get_obj( ids, 'keyword')
+        call("keyword").get(@auth,ids)
       end
       
       def add_keyword( keywords )
@@ -170,7 +146,7 @@ module PPC
     # +++++ Creative opeartion funcitons +++++ #
     module Creative_operation
       def get_creative( ids )
-        ::PPC::Opeartion::get_obj( ids, 'creative')
+        call("creative").get(@auth,ids)
       end
       
       def add_creative( creatives )
