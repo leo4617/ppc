@@ -4,12 +4,9 @@ module PPC
     attr_accessor :id
     
     def initialize( params )
-      
-      if params[:se] == nil
-        raise 'please specific a search engine'
-      else 
-        @se = params[:se]
-      end
+      raise 'please specific a search engine'                     if params[:se].nil?
+
+      @se = params[:se]
       @id = params[:id]
       @auth = {
         username: params[:username],
@@ -20,13 +17,11 @@ module PPC
       }
       # add support for qihu360
       if @se == 'qihu'
-        raise "you are using qihu service, please enter api_key" if params[:api_key].nil?
-        @auth[:api_key] = params[:api_key]
-      end
-      if @se == 'qihu' && params[:token].nil? 
+        raise "you are using qihu service, please enter api_key"    if params[:api_key].nil?
         raise "you are using qihu service, please enter api_secret" if params[:api_secret].nil?
-        @auth[:api_secret] = params[:api_secret]
-        @auth[:token] = qihu_refresh_token
+        @auth[:api_key]     = params[:api_key]
+        @auth[:api_secret]  = params[:api_secret]
+        @auth[:token]       = qihu_refresh_token if params[:token].nil? 
       end
     end
 
