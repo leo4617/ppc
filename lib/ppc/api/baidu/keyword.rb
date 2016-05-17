@@ -59,7 +59,7 @@ module PPC
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { ids: group_ids, idType: 5, wordFields: [:keywordId]}
           response = request( auth, Service, 'getWord', body )
-          return process(response, 'groupKeywords' ){|x| reverse_type( x ) }
+          return process(response, 'groupKeywordIds' ){|x| reverse_type( x ) }
         end
 
         def self.get( auth, ids )

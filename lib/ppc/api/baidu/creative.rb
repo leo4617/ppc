@@ -40,7 +40,7 @@ module PPC
           group_ids = [ group_ids ] unless group_ids.is_a? Array
           body = { ids: group_ids, idType: 5, creativeFields: [:creativeId]}
           response = request( auth, Service, 'getCreative', body )
-          return process(response, 'groupCreatives' ){|x| reverse_type( x ) }
+          return process(response, 'groupCreativeIds' ){|x| reverse_type( x ) }
         end
 
         def self.add( auth, creatives )
