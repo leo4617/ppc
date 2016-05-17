@@ -17,8 +17,31 @@ module PPC
           mobile_display:     :mobileDisplayUrl,
           pause:              :pause,
           preference:         :devicePreference,
+          status:             :status,
+          device_preference:  :devicePreference,
         }
         @map = CreativeType
+
+        def self.info( auth, ids )
+          ids = [ ids ] unless ids.is_a? Array
+          body = { ids: ids, idType: 7, creativeFields: CreativeType.values }
+          response = request( auth, Service, 'getCreative', body )
+          return process(response, 'creativeType' ){|x| reverse_type( x )[0] }
+        end
+
+        def self.all( auth, group_ids )
+          group_ids = [ group_ids ] unless group_ids.is_a? Array
+          body = { ids: group_ids, idType: 5, creativeFields: CreativeType.values}
+          response = request( auth, Service, 'getCreative', body )
+          return process(response, 'groupCreatives' ){|x| reverse_type( x ) }
+        end
+
+        def self.ids( auth, group_ids )
+          group_ids = [ group_ids ] unless group_ids.is_a? Array
+          body = { ids: group_ids, idType: 5, creativeFields: [:creativeId]}
+          response = request( auth, Service, 'getCreative', body )
+          return process(response, 'groupCreatives' ){|x| reverse_type( x ) }
+        end
 
         def self.add( auth, creatives )
           body = { creativeTypes: make_type( creatives ) }
@@ -26,22 +49,14 @@ module PPC
           process( response, 'creativeTypes' ){ |x| reverse_type(x) }
         end
 
-        def self.get( auth, ids, getTemp = 0 )
-          '''
-          \'getCreativeByCreativeId\'
-          @ input : creative ids
-          @ output: creative informations
-          '''
+        def self.get( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          body = { creativeIds: ids, getTemp: getTemp }
-          response = request( auth, Service, 'getCreativeByCreativeId', body )
+          body = { ids: ids, idType: 7, creativeFields: CreativeType.values }
+          response = request( auth, Service, 'getCreative', body )
           process( response, 'creativeTypes' ){ |x| reverse_type(x) }
         end
 
         def self.update( auth, creatives )
-          '''
-          根据实际使用情况，更新的时候creative title为必填选
-          '''
           body = { creativeTypes: make_type( creatives ) }
           response = request( auth, Service, 'updateCreative', body )
           process( response, 'creativeTypes' ){ |x| reverse_type(x) }
@@ -54,70 +69,27 @@ module PPC
           process( response, 'result' ){ |x| x }
         end
 
+        def self.enable( auth, ids )
+          ids = [ ids ] unless ids.is_a? Array
+          creatives = ids.map{|id| {id: id, pause: false} }
+          self.update( auth, creatives )
+        end
+
         def self.activate( auth, ids )
+          self.enable( auth, ids )
+        end
+
+        def self.pause( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          body = { creativeIds: ids }
-          response = request( auth, Service, 'activateCreative', body )
-          process( response, 'creativeTypes' ){ |x| reverse_type(x) }
+          creatives = ids.map{|id| {id: id, pause: true} }
+          self.update( auth, creatives )
         end
 
-        def self.status( auth, ids, type )
+        def self.status( auth, ids )
           ids = [ ids ] unless ids.is_a? Array
-          
-          type = case type
-            when  'plan'      then    3 
-            when  'group'     then    5
-            when  'creative'  then    7
-            else
-              Exception.new( 'type must among: \'plan\',\'group\' and \'key\' ')            
-          end
-
-          body = { ids: ids, type: type }
-          response = request( auth, Service, 'getCreativeStatus', body )
-          process( response, 'CreativeStatus' ){ |x| x }
-        end
-
-        def self.ids( auth, ids, getTemp = 0 )
-          '''
-          \'getCreativeIdByAdgroupId\'
-          @ input: group ids
-          @ output:  groupCreativeIds
-          '''
-          ids = [ ids ] unless ids.is_a? Array
-          body = { adgroupIds: ids, getTemp: getTemp }
-          response = request( auth, Service, 'getCreativeIdByAdgroupId', body )
-          process( response, 'groupCreativeIds' ){ |x| make_groupCreativeIds( x ) }
-        end
-
-        def self.all( auth, ids, getTemp = 0 )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { adgroupIds: ids, getTemp: getTemp }
-          response = request( auth, Service, 'getCreativeByAdgroupId', body )
-          process( response, 'groupCreatives' ){ |x| make_groupCreatives( x ) }
-        end
-
-        private
-        def self.make_groupCreativeIds( groupCreativeIds )
-          group_creative_ids = []
-          groupCreativeIds.each do |groupCreativeId|
-            group_creative_id = { }
-            group_creative_id[:group_id] = groupCreativeId['adgroupIds']
-            group_creative_id[:creative_ids] = groupCreativeId['creativeIds']
-            group_creative_ids << group_creative_id
-          end
-          return group_creative_ids
-        end
-
-        private
-        def self.make_groupCreatives( groupCreatives )
-          group_creatives = []
-          groupCreatives.each do |groupCreative |
-            group_creative = {}
-            group_creative[:group_id] = groupCreative['adgroupId']
-            group_creative[:creatives] = reverse_type( groupCreative['creativeTypes'] )
-            group_creatives << group_creative
-          end
-          return group_creatives
+          body = { ids: ids, idType: 7, creativeFields: [:creativeId, :status]}
+          response = request( auth, Service, 'getCreative', body )
+          return process(response, 'groupCreatives' ){|x| reverse_type( x ) }
         end
 
       end

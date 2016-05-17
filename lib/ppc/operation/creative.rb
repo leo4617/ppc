@@ -15,6 +15,14 @@ module PPC
         call( 'creative' ).activate( @auth, @id )
       end
 
+      def enable
+        call( 'creative' ).enable( @auth, @id )
+      end
+
+      def pause
+        call( 'creative' ).pause( @auth, @id )
+      end
+
       def status()
         call( 'creative' ).status( @auth, @id )
       end

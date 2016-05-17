@@ -184,6 +184,14 @@ module PPC
       def delete_creative( ids )
         call('creative').delete( @auth, ids )
       end
+
+      def enable_keyword( ids )
+        call('creative').enable(@auth,ids)
+      end
+
+      def pause_keyword( ids )
+        call('creative').pause(@auth,ids)
+      end
     end
 
   end # Opeartion
