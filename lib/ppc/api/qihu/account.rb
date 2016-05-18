@@ -7,16 +7,20 @@ module PPC
         Service = 'account'
 
         AccountType = {
-          id:           :uid,
-          name:         :userName,
-          email:        :email,
-          company:      :companyName,
-          industry1:    :industry1,
-          industry2:    :industry2,
-          balance:      :balance,
-          budget:       :budget,
-          resources:    :resources,
-          open_domains: :allowDomain,
+          id:                 :uid,
+          name:               :userName,
+          email:              :email,
+          category:           :category,
+          company:            :companyName,
+          industry1:          :industry1,
+          industry2:          :industry2,
+          balance:            :balance,
+          budget:             :budget,
+          mv_budget:          :mvBudget,
+          resources:          :Resources,
+          status:             :status,
+          open_mobile_domain: :allowMobileDomain,
+          open_domains:       :allowDomain,
         }
         @map = AccountType
                 
