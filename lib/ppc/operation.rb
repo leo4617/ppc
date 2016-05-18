@@ -54,6 +54,21 @@ module PPC
       eval "::PPC::API::#{@se.capitalize}::#{service.capitalize}"
     end
 
+    def method_missing(method_name, *args, &block)
+      method = method_name.to_s
+      unit   = self.class.to_s.downcase[/(account|plan|group|keyword|creative|sublink)/]
+      case method
+        when "info", "get", "delete", "enable", "pause", "status", "quality"
+          call( unit ).send( method, @auth, [@id].flatten )
+        when "update"
+          call( unit ).send( method, @auth, [args.merge(id: @id)].flatten )
+        when "activate"
+          call( unit ).enable( @auth, [@id].flatten )
+        else
+          super
+      end
+    end
+
     # +++++ Plan opeartion funcitons +++++ #
     module Plan_operation
 

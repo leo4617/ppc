@@ -3,15 +3,6 @@ module PPC
     class Account
       include ::PPC::Operation
 
-      # self operations
-      def info
-        call( "account" ).info( @auth )
-      end
-
-      def update( account )
-        call( "account" ).update( @auth, account )
-      end
-
       def plans
         call( "plan" ).all( @auth )
       end

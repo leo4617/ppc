@@ -2,18 +2,6 @@ module PPC
   module Operation
     class Group
       include ::PPC::Operation
-      
-      def info
-        call( "group" ).info( @auth, [@id].flatten )
-      end
-
-      def get
-        call( "group" ).get( @auth, [@id].flatten )
-      end
-
-      def update( group )
-        call( "group" ).update( @auth, [group.merge(id: @id)].flatten )
-      end
 
       def keywords
         call( "keyword" ).all( @auth, [@id].flatten )
@@ -29,22 +17,6 @@ module PPC
 
       def creative_ids
         call( "creative" ).ids( @auth, [@id].flatten )
-      end
-
-      def delete
-        call( "group" ).delete( @auth, [@id].flatten )
-      end
-
-      def activate
-        call( "keyword" ).enable( @auth, [@id].flatten )
-      end
-
-      def enable
-        call( "group" ).enable( @auth, [@id].flatten )
-      end
-
-      def pause
-        call( "group" ).pause( @auth, [@id].flatten )
       end
 
       # keyword opeartion
