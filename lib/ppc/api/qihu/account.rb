@@ -31,36 +31,35 @@ module PPC
           对奇虎两个update的在封装。如果所有操作成功，succ为true，否则为false
           failure中以字符串方式返回失败的操作
           '''
-          result = {}
-          result[:succ] = true
-          result[:failure] = []
-          result[:result] = []
+          result = {
+            succ:     true,
+            failure:  [],
+            result:   [],
+          }
 
-          if params[:budget] != nil
+          if params[:budget]
             budget_result = update_budget( auth, params[:budget] )
             result[:succ] = result[:succ] && budget_result[:succ]
             result[:failure] << 'budget' unless budget_result[:succ]
           end
 
-          if params[:exclude_ip] != nil
+          if params[:exclude_ip]
             ip_result = update_exclude_ip( auth, params[:exclude_ip] )
             result[:succ] = result[:succ] && ip_result[:succ]
             result[:failure] << 'exclude_ip' unless budget_result[:succ]
           end
 
-          return result
+          result
         end
 
         def self.get_all_object( auth, ids )
           #文档上面写的输入类型是String？
-          body = { 'idList' =>  ids }
-          response = request( auth, Service, 'getAllObjects' )
+          response = request( auth, Service, 'getAllObjects', { 'idList' =>  ids } )
           process( response, 'account_getAllObjects_response' ){ |x| x }
         end
 
         def self.get_file_state( auth, id )
-          body = { 'fileId' => id }
-          response = request( auth, Service, 'getAllObjects' , body )
+          response = request( auth, Service, 'getAllObjects' , { 'fileId' => id } )
           process( response, 'account_getFileState_response' ){ |x| x }
         end
 
@@ -71,14 +70,13 @@ module PPC
 
         private
         def self.update_budget( auth, budget )
-          response = request( auth, Service, 'updateBudget', { budget:budget })
+          response = request( auth, Service, 'updateBudget', { budget: budget })
           process( response, 'affectedRecords' ){ | x | x.to_i==1 ? 'success' : 'failure' }
         end
 
         private
         def self.update_exclude_ip( auth, ips )
-          ips = to_json_string( ips )
-          response = request( auth, Service, 'updateExcludeIp', { excludeIpList: ips } )
+          response = request( auth, Service, 'updateExcludeIp', { excludeIpList: ips.map(&:to_s) } )
           process( response, '' ){|x| x}
         end
 

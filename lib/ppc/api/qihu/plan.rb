@@ -6,56 +6,72 @@ module PPC
         Service = 'campaign'
 
         PlanType = {
-          id:             :id,
-          name:           :name,
-          budget:         :budget,
-          region:         :region,
-          schedule:       :schedule,
-          startDate:      :startDate,
-          endDate:        :endDate,
-          status:         :status,
-          extend_ad_type: :extendAdType,
+          id:                 :id,
+          name:               :name,
+          budget:             :budget,
+          region:             :region,
+          search_intention:   :searchIntention
+          schedule:           :schedule,
+          start_date:         :startDate,
+          end_date:           :endDate,
+          pause:              :status,
+          add_time:           :addTime,
+          update_time:        :updateTime,
+          price_ratio:        :mobilePriceRate,
+          extend_adtype:      :extendAdType,
+          status:             :sysStatus,
+          negative:           :negtiveWords,
+          exact_negative:     :exactNegtiveWords,
+          device:             :device,
+          is_precise:         :isPrecise,
         }
         @map = PlanType
 
-        def self.get(auth, ids)
-          '''
-          :Type ids: ( Array of ) String or integer
-          '''
-          ids = to_json_string( ids )    
-          body = {'idList' => ids}
+        def self.info(auth, ids)
+          body = {'idList' => ids.map(&:to_s) }
           response = request( auth, Service, 'getInfoByIdList', body )
-          process( response, 'campaignList' ){ |x| reverse_type(x) }
+          process( response, 'campaignList' ){ |x| reverse_type(x)[0] }
         end
-
-        # move getCampaignId to plan module for operation call
-        def self.ids( auth )
-          response = request( auth, 'account', 'getCampaignIdList' )
-          process( response, 'campaignIdList' ){ |x| to_id_list(x)}
-        end 
 
         # combine two original method to provice new method
         def self.all( auth )
-          plan_ids = ids( auth )[:result]
-          get( auth, plan_ids )
+          self.get( auth, self.ids( auth )[:result] )
+        end
+
+         # move getCampaignId to plan module for operation call
+        def self.ids( auth )
+          response = request( auth, 'account', 'getCampaignIdList' )
+          process( response, 'campaignIdList' ){ |x| x.map(&:to_i) }
+        end 
+
+        def self.get(auth, ids)
+          body = {'idList' => ids.map(&:to_s) }
+          response = request( auth, Service, 'getInfoByIdList', body )
+          process( response, 'campaignList' ){ |x| reverse_type(x) }
         end
 
         # 奇虎计划API不提供批量服务
         def self.add( auth, plan )
           response = request( auth, Service, 'add', make_type( plan )[0])
-          # 这里将返回的简单int做一个array和hash的封装一保证接口和百度，搜狗的一致性
           process( response, 'id' ){ |x| [ { id:x.to_i } ] }
         end
 
         def self.update( auth, plan ) 
           response = request( auth, Service, 'update', make_type( plan )[0])
-          #同上，保证接口一致性
           process( response, 'id' ){ |x| [ { id:x.to_i } ] }
         end
 
         def self.delete( auth, id )
-          response = request( auth, Service, 'deleteById', { id: id } )
+          response = request( auth, Service, 'deleteById', { id: id[0] } )
           process( response, 'affectedRecords' ){ |x|  x == '1'? 'success' : 'fail' }
+        end
+
+        def self.enable( auth, id )
+          self.update(auth, {id: id[0], status: "enable"})
+        end
+
+        def self.pause( auth, id )
+          self.update(auth, {id: id[0], status: "pause"})
         end
 
       end

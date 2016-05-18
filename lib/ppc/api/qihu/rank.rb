@@ -16,8 +16,7 @@ module PPC
 
         def self.getRank( auth, region, queryInfo )
           body  = {'region'=> region, 'queryInfo' => queryInfo}
-          response = request(auth, Service, 'realTimeQueryResult', body)
-          # process( response, 'sublinkList'){ |x| reverse_type( x['item'] ) }
+          request(auth, Service, 'realTimeQueryResult', body)
         end
 
       end

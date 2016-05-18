@@ -7,6 +7,7 @@ module PPC
 
         CreativeType = {
           id:                 :id,
+          plan_id:            :campaignId,
           group_id:           :groupId,
           title:              :title,
           description1:       :description1,
@@ -15,92 +16,79 @@ module PPC
           pc_display:         :displayUrl,
           mobile_destination: :mobileDestinationUrl,
           mobile_display:     :mobileDisplayUrl,
+          pause:              :status,
+          mobile_pause:       :mobileStatus,
+          add_time:           :addTime,
+          updateTime:         :updateTime,
         }
         @map = CreativeType
 
         @status_map = {
           id:       :id,
           quality:  :qualityScore,
-          status:   :status,
+          pause:    :status,
         }
 
+        def self.info( auth, ids )
+          body  = { 'idList' => ids.map(&:to_s) }
+          response = request( auth, Service, 'getInfoByIdList', body )
+          process( response, 'creativeList'){ |x| reverse_type(x)[0] }
+        end
+
+        # combine two methods to provide another mether
+        def self.all( auth, id )
+          creative_ids = self.ids( auth, id )[:result][0][:creative_ids]
+          response = self.get( auth , creative_ids )
+          response[:result] = [ { group_id: id, creatives: response[:result ] } ] if response[:succ]
+          response
+        end
+
+        def self.ids( auth, id )
+          response = request( auth, Service, 'getIdListByGroupId', {"groupId" => id[0]} )
+          process( response, 'creativeIdList' ){ |x| { group_id: id, creative_ids: x.map(&:to_i) } }
+        end
+
         def self.get( auth, ids )
-          body  = { 'idList' => to_json_string( ids ) }
+          body  = { 'idList' => ids.map(&:to_s) }
           response = request( auth, Service, 'getInfoByIdList', body )
           process( response, 'creativeList'){ |x| reverse_type(x) }
         end
 
         def self.add( auth,  creatives )
-          creative_types = make_type( creatives ).to_json
-          body = { 'creatives' => creative_types}
+          body = { 'creatives' => make_type( creatives ).to_json}
           response = request( auth, Service, 'add', body )
-          process( response, 'creativeIdList'){ |x| to_id_hash_list(x) }
-        end
-
-        # helper function for self.add() method
-        private
-        def self.to_id_hash_list( str )
-          return [] if str == nil
-          str = [str] unless str.is_a?Array
-          x= []
-          str.each{ |i| x << { id: i.to_i } }
-          return x
+          process( response, 'creativeIdList'){ |x| x.map{|tmp| { id: i.to_i } } }
         end
 
         def self.update( auth, creatives )
-          creative_types = make_type( creatives ).to_json
-          body = { 'creatives' => creative_types}
+          body = { 'creatives' => make_type( creatives ).to_json}
           response = request( auth, Service, 'update', body )
-          process( response, 'affectedRecords', 'failCreativeIds' ){ |x| x }        
+          process( response, 'affectedRecords', 'failCreativeIds' ){ |x| x }
         end
 
-        # 对update的再封装实现activate方法,未测试
-        def self.activate( auth, ids )
-          creatives = []
-          ids.each{ |id| creatives << { id: id, status:'enable'} }
-          update( auth, creatives )
-        end       
-
         def self.delete( auth, ids )
-          ids = to_json_string( ids )
-          body = { 'idList' => ids }
+          body = { 'idList' => ids.map(&:to_s) }
           response = request( auth, Service, 'deleteByIdList', body )
-          process( response, 'affectedRecords' ){ |x|x }     
+          process( response, 'affectedRecords' ){ |x|x }
+        end
+
+        def self.enable( auth, ids )
+          self.update( auth, ids.map{ |id| { id: id, status: "enable"} } )
+        end
+
+        def self.pause( auth, ids )
+          self.update( auth, ids.map{ |id| { id: id, status: "pause"} } )
         end
 
         def self.status( auth, ids )
-          body = { idList: to_json_string( ids ) }
+          body = { idList: ids.map(&:to_s) }
           response = request( auth, Service, 'getStatusByIdList', body )
-          process( response, 'creativeList' ){ |x| reverse_type( x, @status_map ) }     
+          process( response, 'creativeList' ){ |x| reverse_type( x, @status_map ) }
         end
 
         # quality 本质上和 status 在一个方法里面
         def self.quality( auth, ids )
-          status( auth, ids)
-        end
-
-        def self.ids( auth, id, status = nil)
-          # 处理条件  
-          body = {}
-          body['status'] = status if status
-          body['groupId'] = id
-          response = request( auth, Service, 'getIdListByGroupId', body )
-          # 伪装成百度接口
-          process( response, 'creativeIdList' ){ 
-            |x|  
-            [ { group_id:id, creative_ids:to_id_list(x) } ] 
-          }     
-        end
-
-        # combine two methods to provide another mether
-        def self.all( auth, id )
-          creative_ids = self.ids( auth, id )
-          response = get( auth , creative_ids )
-          # 伪装成百度接口
-          if response[:succ]
-            response[:result] = [ { group_id:id, creatives:response[:result ] } ]
-          end
-          return response
+          self.status( auth, ids)
         end
 
       end

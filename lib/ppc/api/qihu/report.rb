@@ -30,20 +30,18 @@ module PPC
         # API abstraction #
         ###################
         def self.abstract( auth, type_name, method_name, key, param = nil, &func )
-          body = make_type( param )
-          response = request( auth, Service, method_name, body )
+          response = request( auth, Service, method_name, make_type( param ) )
           process( response, key ){ |x| func[ x ] }
         end
 
-        type_list = ['keyword', 'query', 'creative', 'sublink']
-        type_list.each do |type|
+        %w(keyword query creative sublink).each do |type|
           # type
           define_singleton_method type.to_sym do |auth, param|
               abstract( auth, type, type, type+'List', param ){ |x| x}
           end
           # typeCount
           define_singleton_method (type+'_count').to_sym do |auth, param|
-              response = abstract( auth, type, type+'Count', '', param ){ |x| get_item(x) }
+              response = abstract( auth, type, type+'Count', '', param ){ |x| x || reverse_type( x ) }
               response[:result] = response[:result][0] rescue nil
               return response
           end
@@ -53,7 +51,7 @@ module PPC
           end
           # typeNowCount
           define_singleton_method (type+'_now_count').to_sym do |auth, param|
-              response = abstract( auth, type, type+'NowCount', '', param ){ |x| get_item(x) }
+              response = abstract( auth, type, type+'NowCount', '', param ){ |x| x || reverse_type( x ) }
               response[:result] = response[:result][0]
               return response
           end
@@ -72,33 +70,22 @@ module PPC
         
         def self.download_report(auth, type, param, debug = false)
           # deal_with time
-          now = Time.now.to_s[0...10]
-          is_now = now==parse_date(param[:startDate])
+          is_now = Time.now.to_s[0...10] == parse_date(param[:startDate])
         
           # get page num
-          if is_now
-            method = (type+'_now_count').to_sym
-            response = send(method, auth, param)
-            count = response[:result]
-            method = (type+'_now').to_sym
-          else
-            method = (type+'_count').to_sym
-            response = send(method, auth, param)
-            count = response[:result]
-            method = type.to_sym
-          end
+          method    = (type+ (is_now ? '_now' : '') + '_count').to_sym
+          response  = send(method, auth, param)
+          count     = response[:result]
+          method    = (type+ (is_now ? '_now' : '')).to_sym
           
           if count && count[:total_page]
-            report = []
-            count[:total_page].to_i.times do | page_i|
+            count[:total_page].to_i.times.map do | page_i|
               p "Start downloading #{page_i+1}th page, totally #{count[:total_page]} pages"
               param[:page] = page_i +1
-              report_i = send(method, auth, param)[:result]
-              report += report_i
+              send(method, auth, param)[:result]
             end
-            return report
           else
-            return response
+            response
           end
         end
 
@@ -106,57 +93,15 @@ module PPC
         # Helper Function #
         ###################
         # incase idlist == nil
-        private
-        def self.get_item( params )
-          return nil if params == nil
-          return reverse_type( params ) 
-        end
 
         private 
         def self.make_type( param )
-          type = {}
-          # add option
-          type[:level] = param[:level] || 'account'
-          type[:page] = param[:page] || 1
-          # add ids
-          if param[:ids] != nil
-            ids = param[:ids] 
-            ids = [ ids ] unless ids.is_a? Array
-            type[:IdList] = ids.to_json
-          end
-          # add date
-          if param[:startDate]==nil || param[:endDate]==nil
-            type[:startDate], type[:endDate] = get_date()
-          else
-            type[:startDate] = parse_date( param[:startDate] )
-            type[:endDate] = parse_date( param[:endDate] )
-          end
-
-          return type
-        end
-
-        private
-        def self.get_date()
-            endDate = Time.now.to_s[0,10]
-            startDate = (Time.now - 24*3600).to_s[0,10]
-          return startDate,endDate
-        end
-
-        private 
-        def self.parse_date( date )
-          """
-          Cast string to time:
-          'YYYYMMDD' => Time
-          """
-          if date
-            y = date[0..3]
-            m = date[4..5]
-            d = date[6..7]
-            date = Time.new( y, m, d )
-          else
-            date = (Time.now - 24*3600)
-          end
-          date.to_s[0,10]
+          param[:level]   ||= 'account'
+          param[:page]    ||= 1
+          param[:IdList]    = [param.delete(:ids)].flatten.map(&:to_s)
+          param[:startDate] = Time.parse(param[:startDate]).strftime("%Y-%m-%d") rescue Time.now.strftime("%Y-%m-%d")
+          param[:endDate]   = Time.parse(param[:endDate]).strftime("%Y-%m-%d")   rescue (Time.now - 24*3600).strftime("%Y-%m-%d")
+          param
         end
 
       end # Report

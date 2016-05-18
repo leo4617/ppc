@@ -8,8 +8,7 @@ module PPC
 
         def self.get_all_object( auth, ids )
           #文档上面写的输入类型是String？
-          body = nil
-          body = { 'idList' =>  to_json_string(ids) } if ids
+          body = { 'idList' =>  ids.map(&:to_s) }
           response = request( auth, Service, 'getAllObjects', body )
           process( response, 'fileId' ){ |x| x }
         end

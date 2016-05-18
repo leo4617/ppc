@@ -48,82 +48,13 @@ module PPC
 #      end
 
       def self.process( response, key, failure_key = '', &func )
-        # special case solution
-        # 只有account getInfo 的key 为 '',因为其特殊逻辑,单独处理
-        result = { }
-        if response == []
-          result[:succ] = true
-          result[:failure] = nil
-          result[:result] = nil
-          result[:no_quota] = false
-          return result
-        end
-        if key == ''
-          if !response['failures'].nil?
-            result[:succ] = false
-            result[:result] = nil
-            result[:failure] = response['failures']
-            result[:no_quota] = is_no_quota(response['failures'], '90401')
-            return result
-          end
-          result[:succ] = true
-          result[:failure] = nil
-          result[:no_quota] = false
-          result[:result] = func[response]
-          return result
-        end
-        result[:result] = func[response[key]]
-        result[:failure] = response['failures']
-        result[:no_quota] = is_no_quota(response['failures'], '90401')
-        result[:succ] = response['failures'].nil? || response['failures'].size.zero?
-        #if response['failures'] != nil
-        #  result[:succ] = false
-        #  result[:failure] = response['failures']['item']
-        #  result[:result] = nil
-        #else
-        #  result[:succ] = true
-        #  result[:result] = func[ key==''? response : response[ key ] ]
-        #  result[:failure] = failure_key == ''? nil : response[ failure_key ]
-        #end
-        return result
-      end
-
-      def self.to_json_string( items )
-        '''
-        convert list of string/int to list of json string
-        '''
-        return '' if items == nil
-        items = [items] unless items.is_a? Array
-        items_str = []
-        items.each{ |x| items_str << x.to_s }
-        items_str.to_json
-      end
-
-      def self.to_id_list( ids_str )
-        return [] if ids_str == nil
-        ids_str = [ids_str] unless ids_str.is_a? Array
-        ids_i = []
-        ids_str.each{ |id| ids_i<<id.to_i }
-        ids_i
-      end
-
-      def self.make_type( params, map = @map)
-        '''
-        '''
-        params = [ params ] unless params.is_a? Array
-
-        types = []
-        params.each do |param|
-          type = {}
-
-            map.each do |key|
-              value = param[ key[0] ]
-              type[ key[1] ] = value if value != nil
-            end
-
-          types << type
-        end
-        return types
+        result = {}
+        result[:succ]     = response['failures'].nil? || response['failures'].size.zero?
+        result[:failure]  = response['failures']
+        result[:result]   = func[response[key]] rescue nil
+        result[:result] ||= func[response]
+        result[:no_quota] = is_no_quota(response['failures'], '90401') rescue false
+        result
       end
 
     end
