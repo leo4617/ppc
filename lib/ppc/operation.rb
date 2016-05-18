@@ -57,27 +57,27 @@ module PPC
     # +++++ Plan opeartion funcitons +++++ #
     module Plan_operation
       def get_plan( ids )
-        call("plan").get(@auth,ids)
+        call("plan").get(@auth,[ids].flatten)
       end
 
       def add_plan( plans )
-        call('plan').add(@auth,plans)
+        call('plan').add(@auth,[plans].flatten)
       end
 
       def update_plan( plans )
-        call('plan').update(@auth,plans)
+        call('plan').update(@auth,[plans].flatten)
       end
 
       def delete_plan( ids )
-        call('plan').delete(@auth,ids)
+        call('plan').delete(@auth,[ids].flatten)
       end
 
       def enable_plan( ids )
-        call('plan').enable(@auth,ids)
+        call('plan').enable(@auth,[ids].flatten)
       end
 
       def pause_plan( ids )
-        call('plan').pause(@auth,ids)
+        call('plan').pause(@auth,[ids].flatten)
       end
 
     end
@@ -85,27 +85,27 @@ module PPC
     # +++++ Group opeartion funcitons +++++ #
     module Group_operation
       def get_group( ids )
-        call("group").get(@auth,ids)
+        call("group").get(@auth,[ids].flatten)
       end
 
       def add_group( groups )
-        call('group').add(@auth,groups )
+        call('group').add(@auth,[groups].flatten )
       end
 
       def update_group( groups )
-        call('group').update( @auth, groups )
+        call('group').update( @auth, [groups].flatten )
       end
 
       def delete_group( ids )
-        call('group').delete( @auth, ids )
+        call('group').delete( @auth, [ids].flatten)
       end
 
       def enable_group( ids )
-        call('group').enable(@auth,ids)
+        call('group').enable(@auth,[ids].flatten)
       end
 
       def pause_group( ids )
-        call('group').pause(@auth,ids)
+        call('group').pause(@auth,[ids].flatten)
       end
 
     end
@@ -113,27 +113,27 @@ module PPC
     # +++++ Keyword opeartion funcitons +++++ #
     module Keyword_operation
       def get_keyword( ids )
-        call("keyword").get(@auth,ids)
+        call("keyword").get(@auth,[ids].flatten)
       end
       
       def add_keyword( keywords )
-        call('keyword').add( @auth, keywords )
+        call('keyword').add( @auth, [keywords].flatten )
       end
 
       def update_keyword( keywords)
-        call('keyword').update( @auth, keywords )
+        call('keyword').update( @auth, [keywords].flatten )
       end
 
       def delete_keyword( ids )
-         call('keyword').delete( @auth, ids )
+         call('keyword').delete( @auth, [ids].flatten)
       end
 
       def enable_keyword( ids )
-        call('keyword').enable(@auth,ids)
+        call('keyword').enable(@auth,[ids].flatten)
       end
 
       def pause_keyword( ids )
-        call('keyword').pause(@auth,ids)
+        call('keyword').pause(@auth,[ids].flatten)
       end
 
     end
@@ -141,27 +141,27 @@ module PPC
     # +++++ Creative opeartion funcitons +++++ #
     module Creative_operation
       def get_creative( ids )
-        call("creative").get(@auth,ids)
+        call("creative").get(@auth,[ids].flatten)
       end
       
       def add_creative( creatives )
-        call('creative').add( @auth, creatives )
+        call('creative').add( @auth, [creatives].flatten )
       end
 
       def update_creative( creatives )
-        call('creative').update( @auth, creatives )
+        call('creative').update( @auth, [creatives].flatten )
       end
 
       def delete_creative( ids )
-        call('creative').delete( @auth, ids )
+        call('creative').delete( @auth, [ids].flatten)
       end
 
       def enable_creative( ids )
-        call('creative').enable(@auth,ids)
+        call('creative').enable(@auth,[ids].flatten)
       end
 
       def pause_creative( ids )
-        call('creative').pause(@auth,ids)
+        call('creative').pause(@auth,[ids].flatten)
       end
     end
 
