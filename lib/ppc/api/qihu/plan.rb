@@ -10,7 +10,7 @@ module PPC
           name:               :name,
           budget:             :budget,
           region:             :region,
-          search_intention:   :searchIntention
+          search_intention:   :searchIntention,
           schedule:           :schedule,
           start_date:         :startDate,
           end_date:           :endDate,
