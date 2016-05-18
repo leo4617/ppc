@@ -52,12 +52,16 @@ module PPC
 
         # 奇虎计划API不提供批量服务
         def self.add( auth, plan )
-          response = request( auth, Service, 'add', make_type( plan )[0])
+          params = make_type(plan)[0]
+          params.merge!({:negativeWords => {"exact" => plan[:exact_negative], "phrase" => plan[:negative]}.to_json}) if plan[:negative] || plan[:exact_negative]
+          response = request( auth, Service, 'add', params )
           process( response, 'id' ){ |x| [ { id:x.to_i, name: plan[0][:name]} ] }
         end
 
         def self.update( auth, plan ) 
-          response = request( auth, Service, 'update', make_type( plan )[0])
+          params = make_type(plan)[0]
+          params.merge!({:negativeWords => {"exact" => plan[:exact_negative], "phrase" => plan[:negative]}.to_json}) if plan[:negative] || plan[:exact_negative]
+          response = request( auth, Service, 'update', params )
           process( response, 'id' ){ |x| [ { id:x.to_i } ] }
         end
 
