@@ -53,7 +53,7 @@ module PPC
         # 奇虎计划API不提供批量服务
         def self.add( auth, plan )
           response = request( auth, Service, 'add', make_type( plan )[0])
-          process( response, 'id' ){ |x| [ { id:x.to_i } ] }
+          process( response, 'id' ){ |x| [ { id:x.to_i, name: plan[0][:name]} ] }
         end
 
         def self.update( auth, plan ) 
