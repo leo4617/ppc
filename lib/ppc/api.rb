@@ -115,8 +115,7 @@ module PPC
         @ output:
           types : list of hash that complying with search engine api
       '''
-      params = [ params ] unless params.is_a? Array
-      params.map do |item| 
+      [ params ].flatten.map do |item| 
         item.select!{|key| maps.any?{|m| m[0] == key} }
         maps.each{|key_new, key_old| item[key_old] = (key_new == :match_type ? @match_types[item.delete(key_new)] : item.delete(key_new)) if item[key_new] }
         item
@@ -134,8 +133,7 @@ module PPC
         @ output:
           params : list of hash complying with PPC gem api  
       '''
-      types = [ types ] unless types.is_a? Array
-      types.map do |item| 
+      [ types ].flatten.map do |item| 
         maps.each{|key_new, key_old| 
           value = item.delete(key_old.to_s) || item.delete(key_old)
           item[key_new] = (key_new == :match_type ? @match_types[value] : value) if value
