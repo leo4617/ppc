@@ -60,12 +60,12 @@ module PPC
 
         def self.get_all_object( auth, ids )
           #文档上面写的输入类型是String？
-          response = request( auth, Service, 'getAllObjects', { 'idList' =>  ids } )
+          response = request( auth, Service, 'getAllObjects', { idList:  ids } )
           process( response, 'account_getAllObjects_response' ){ |x| x }
         end
 
         def self.get_file_state( auth, id )
-          response = request( auth, Service, 'getAllObjects' , { 'fileId' => id } )
+          response = request( auth, Service, 'getAllObjects' , { fileId: id } )
           process( response, 'account_getFileState_response' ){ |x| x }
         end
 
@@ -82,7 +82,7 @@ module PPC
 
         private
         def self.update_exclude_ip( auth, ips )
-          response = request( auth, Service, 'updateExcludeIp', { excludeIpList: ips.map(&:to_s) } )
+          response = request( auth, Service, 'updateExcludeIp', { excludeIpList: ips } )
           process( response, '' ){|x| x}
         end
 

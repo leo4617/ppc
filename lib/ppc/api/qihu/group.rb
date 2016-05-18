@@ -19,24 +19,24 @@ module PPC
         @map = GroupType
 
         def self.info( auth, ids )
-          response = request( auth, Service, 'getInfoByIdList', { 'idList' => ids.map(&:to_s) }  )
+          response = request( auth, Service, 'getInfoByIdList', { idList: ids } )
           process( response, 'groupList' ){ |x| reverse_type(x)[0] }
         end
 
-        def self.all( auth )
-          group_ids = self.ids( auth, id )[:result][0][:group_ids]
+        def self.all( auth, plan_id )
+          group_ids = self.ids( auth, plan_id )[:result][0][:group_ids]
           response = self.get( auth, group_ids )
           response[:result] = [ { plan_id:id, groups:response[:result]}] if response[:succ]
           response
         end
 
-        def self.ids( auth, id )
-          response = request( auth, Service, 'getIdListByCampaignId', { 'campaignId' => id.to_s })
-          process( response, 'groupIdList' ){ |x| { plan_id:id, group_ids: x.map(&:to_i) } }
+        def self.ids( auth, plan_id )
+          response = request( auth, Service, 'getIdListByCampaignId', { campaignId: plan_id } )
+          process( response, 'groupIdList' ){ |x| { plan_id: id, group_ids: x.map(&:to_i) } }
         end
 
         def self.get( auth, ids )
-          response = request( auth, Service, 'getInfoByIdList', { 'idList' => ids.map(&:to_s) }  )
+          response = request( auth, Service, 'getInfoByIdList', { idList: ids } )
           process( response, 'groupList' ){ |x| reverse_type(x) }
         end
 
@@ -48,7 +48,7 @@ module PPC
         # 奇虎组服务不提供批量delete和update方法
         def self.update( auth, group )
           params = make_type(group)[0]
-          params.merge!({:negativeWords => {"exact" => group[:exact_negative], "phrase" => group[:negative]}.to_json}) if group[:negative] || group[:exact_negative]
+          params.merge!(negativeWords: {exact: group[:exact_negative], phrase: group[:negative]} ) if group[:negative] || group[:exact_negative]
           response = request( auth, Service, 'update', params )
           process( response, 'id' ){ |x|[ { id: x.to_i } ]  }
         end

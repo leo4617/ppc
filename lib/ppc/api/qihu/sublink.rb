@@ -16,8 +16,7 @@ module PPC
         @map = SublinkType
 
         def self.info( auth, ids )
-          body  = { 'idList' => ids.map(&:to_s) }
-          response = request( auth, Service, 'getInfoByIdList', body )
+          response = request( auth, Service, 'getInfoByIdList', { idList: ids } )
           process( response, 'sublinkList'){ |x| reverse_type( x['item'] )[0] }
         end
 
@@ -34,32 +33,27 @@ module PPC
         end
 
         def self.get( auth, ids )
-          body  = { 'idList' => ids.map(&:to_s) }
-          response = request( auth, Service, 'getInfoByIdList', body )
+          response = request( auth, Service, 'getInfoByIdList', { idList: ids } )
           process( response, 'sublinkList'){ |x| reverse_type( x['item'] ) }
         end
 
         def self.add( auth, sublinks )
-          body = { 'sublinks' => make_type( sublinks ).to_json}
-          response = request( auth, Service, 'add', body )
+          response = request( auth, Service, 'add', { sublinks: make_type( sublinks ) } )
           process( response, 'sublinkIdList'){ |x| x['item'].map(&:to_i) }
         end
 
         def self.delete( auth, ids )
-          body = { 'idList' => ids.map(&:to_s) }
-          response = request( auth, Service, 'deleteByIdList', body )
+          response = request( auth, Service, 'deleteByIdList', { idList: ids } )
           process( response, 'affectedRecords' ){ |x|x }     
         end
 
         def self.update( auth, sublinks )
-          body = { 'sublinks' => make_type( sublinks ).to_json}
-          response = request( auth, Service, 'update', body )
+          response = request( auth, Service, 'update', { sublinks: make_type( sublinks ) } )
           process( response, 'affectedRecords', 'failKeywordIds' ){ |x| x }        
         end
 
         def self.delete( auth, ids )
-          body = { 'idList' => ids.map(&:to_s) }
-          response = request( auth, Service, 'deleteByIdList', body )
+          response = request( auth, Service, 'deleteByIdList', { idList: ids } )
           process( response, 'affectedRecords' ){ |x|x }     
         end
 

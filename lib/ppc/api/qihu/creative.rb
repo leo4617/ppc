@@ -30,45 +30,40 @@ module PPC
         }
 
         def self.info( auth, ids )
-          body  = { 'idList' => ids.map(&:to_s) }
-          response = request( auth, Service, 'getInfoByIdList', body )
+          response = request( auth, Service, 'getInfoByIdList', { idList: ids } )
           process( response, 'creativeList'){ |x| reverse_type(x)[0] }
         end
 
         # combine two methods to provide another mether
-        def self.all( auth, id )
-          creative_ids = self.ids( auth, id )[:result][0][:creative_ids]
+        def self.all( auth, group_id )
+          creative_ids = self.ids( auth, group_id )[:result][0][:creative_ids]
           response = self.get( auth , creative_ids )
           response[:result] = [ { group_id: id, creatives: response[:result ] } ] if response[:succ]
           response
         end
 
-        def self.ids( auth, id )
-          response = request( auth, Service, 'getIdListByGroupId', {"groupId" => id[0]} )
+        def self.ids( auth, group_id )
+          response = request( auth, Service, 'getIdListByGroupId', {"groupId" => group_id[0]} )
           process( response, 'creativeIdList' ){ |x| { group_id: id, creative_ids: x.map(&:to_i) } }
         end
 
         def self.get( auth, ids )
-          body  = { 'idList' => ids.map(&:to_s) }
-          response = request( auth, Service, 'getInfoByIdList', body )
+          response = request( auth, Service, 'getInfoByIdList', { idList: ids } )
           process( response, 'creativeList'){ |x| reverse_type(x) }
         end
 
         def self.add( auth,  creatives )
-          body = { 'creatives' => make_type( creatives ).to_json}
-          response = request( auth, Service, 'add', body )
+          response = request( auth, Service, 'add', { creatives: make_type( creatives ) } )
           process( response, 'creativeIdList'){ |x| x.map{|tmp| { id: i.to_i } } }
         end
 
         def self.update( auth, creatives )
-          body = { 'creatives' => make_type( creatives ).to_json}
-          response = request( auth, Service, 'update', body )
+          response = request( auth, Service, 'update', { creatives: make_type( creatives ) } )
           process( response, 'affectedRecords', 'failCreativeIds' ){ |x| x }
         end
 
         def self.delete( auth, ids )
-          body = { 'idList' => ids.map(&:to_s) }
-          response = request( auth, Service, 'deleteByIdList', body )
+          response = request( auth, Service, 'deleteByIdList', { idList: ids } )
           process( response, 'affectedRecords' ){ |x|x }
         end
 
@@ -81,8 +76,7 @@ module PPC
         end
 
         def self.status( auth, ids )
-          body = { idList: ids.map(&:to_s) }
-          response = request( auth, Service, 'getStatusByIdList', body )
+          response = request( auth, Service, 'getStatusByIdList', { idList: ids } )
           process( response, 'creativeList' ){ |x| reverse_type( x, @status_map ) }
         end
 

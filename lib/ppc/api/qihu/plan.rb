@@ -28,8 +28,7 @@ module PPC
         @map = PlanType
 
         def self.info(auth, ids)
-          body = {'idList' => ids.map(&:to_s) }
-          response = request( auth, Service, 'getInfoByIdList', body )
+          response = request( auth, Service, 'getInfoByIdList', {idList: ids} )
           process( response, 'campaignList' ){ |x| reverse_type(x)[0] }
         end
 
@@ -45,22 +44,21 @@ module PPC
         end 
 
         def self.get(auth, ids)
-          body = {'idList' => ids.map(&:to_s) }
-          response = request( auth, Service, 'getInfoByIdList', body )
+          response = request( auth, Service, 'getInfoByIdList', {idList: ids} )
           process( response, 'campaignList' ){ |x| reverse_type(x) }
         end
 
         # 奇虎计划API不提供批量服务
         def self.add( auth, plan )
           params = make_type(plan)[0]
-          params.merge!({:negativeWords => {"exact" => plan[:exact_negative], "phrase" => plan[:negative]}.to_json}) if plan[:negative] || plan[:exact_negative]
+          params.merge!(negativeWords: {exact: plan[:exact_negative], phrase: plan[:negative]} ) if plan[:negative] || plan[:exact_negative]
           response = request( auth, Service, 'add', params )
           process( response, 'id' ){ |x| [ { id:x.to_i, name: plan[0][:name]} ] }
         end
 
         def self.update( auth, plan ) 
           params = make_type(plan)[0]
-          params.merge!({:negativeWords => {"exact" => plan[:exact_negative], "phrase" => plan[:negative]}.to_json}) if plan[:negative] || plan[:exact_negative]
+          params.merge!(negativeWords: {exact: plan[:exact_negative], phrase: plan[:negative]} ) if plan[:negative] || plan[:exact_negative]
           response = request( auth, Service, 'update', params )
           process( response, 'id' ){ |x| [ { id:x.to_i } ] }
         end
