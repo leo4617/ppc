@@ -18,7 +18,7 @@ module PPC
 
       # Todo: Implement Activate method in Sogou API
       def activate()
-        call( 'keyword' ).activate( @auth, @id )
+        call( 'keyword' ).enable( @auth, @id )
       end
 
       def enable

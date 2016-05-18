@@ -75,10 +75,6 @@ module PPC
           self.update( auth, plans )
         end
 
-        def self.activate( auth, ids )
-          self.enable( auth, ids )
-        end
-
         def self.pause( auth, ids )
           plans = ids.map{|id| {id: id, pause: true} }
           self.update( auth, plans )

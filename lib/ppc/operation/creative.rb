@@ -16,7 +16,7 @@ module PPC
       end
 
       def activate()
-        call( 'creative' ).activate( @auth, @id )
+        call( 'creative' ).enable( @auth, @id )
       end
 
       def enable

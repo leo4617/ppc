@@ -24,6 +24,10 @@ module PPC
         call('group').ids(@auth, @id)
       end
 
+      def activate()
+        call( 'keyword' ).enable( @auth, @id )
+      end
+
       def enable
         call('plan').enable(@auth, @id)
       end

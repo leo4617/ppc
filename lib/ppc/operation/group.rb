@@ -33,6 +33,10 @@ module PPC
         call( 'creative' ).ids( @auth, @id )
       end
 
+      def activate()
+        call( 'keyword' ).enable( @auth, @id )
+      end
+
       def enable
         call('group').enable(@auth, @id)
       end
