@@ -136,6 +136,7 @@ module PPC
       [ types ].flatten.map do |item| 
         maps.each{|key_new, key_old| 
           value = item.delete(key_old.to_s) || item.delete(key_old)
+          value = value[/pause/] ? true : false if key_new == :pause && key_old == :status
           item[key_new] = (key_new == :match_type ? @match_types[value] : value) if value
         }
         item
