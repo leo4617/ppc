@@ -73,11 +73,11 @@ module PPC
         end
 
         def self.enable( auth, ids )
-          self.update( auth, ids.map{ |id| { id: id, status: "enable"} } )
+          self.update( auth, ids.map{ |id| { id: id, pause: "enable"} } )
         end
 
         def self.pause( auth, ids )
-          self.update( auth, ids.map{ |id| { id: id, status: "pause"} } )
+          self.update( auth, ids.map{ |id| { id: id, pause: "pause"} } )
         end
 
         def self.status( auth, ids )

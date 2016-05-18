@@ -71,11 +71,11 @@ module PPC
         end
 
         def self.enable( auth, id )
-          self.update(auth, {id: id[0], status: "enable"})
+          self.update(auth, {id: id[0], pause: "enable"})
         end
 
         def self.pause( auth, id )
-          self.update(auth, {id: id[0], status: "pause"})
+          self.update(auth, {id: id[0], pause: "pause"})
         end
 
       end
