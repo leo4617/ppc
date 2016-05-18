@@ -29,7 +29,6 @@ module PPC
         @map = PlanType
 
         def self.info( auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
           body = { campaignIds: ids, campaignFields: PlanType.values}
           response = request(auth,Service,'getCampaign',body)
           return process( response, 'campaignType' ){ |x|reverse_type(x)[0] }
@@ -48,7 +47,6 @@ module PPC
         end
 
         def self.get( auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
           body = { campaignIds: ids, campaignFields: PlanType.values}
           response = request(auth,Service,'getCampaign',body)
           return process( response, 'campaignTypes' ){ |x| reverse_type(x)}
@@ -67,14 +65,12 @@ module PPC
         end
 
         def self.delete(auth, ids )
-          ids = [ ids ] unless ids.class == Array
           body = { campaignIds: ids }
           response = request( auth, Service, 'deleteCampaign', body)
           process( response, 'result' ){ |x| x }
         end
 
         def self.enable( auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
           plans = ids.map{|id| {id: id, pause: false} }
           self.update( auth, plans )
         end
@@ -84,7 +80,6 @@ module PPC
         end
 
         def self.pause( auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
           plans = ids.map{|id| {id: id, pause: true} }
           self.update( auth, plans )
         end
