@@ -5,35 +5,39 @@ module PPC
       include ::PPC::Operation
 
       def info
-        call('plan').info(@auth,@id)
+        call( "plan" ).info( @auth, [@id].flatten )
       end
 
       def get
-        call('plan').get(@auth, @id)
+        call( "plan" ).get( @auth, [@id].flatten )
       end
 
       def update( plan )
-        call('plan').update( @auth, plan.merge( id:@id ) )
+        call( "plan" ).update( @auth, [plan.merge(id: @id)].flatten )
       end
 
-      def groups()
-        call('group').all(@auth, @id)
+      def groups
+        call( "group" ).all( @auth, [@id].flatten )
       end
 
-      def group_ids()
-        call('group').ids(@auth, @id)
+      def group_ids
+        call( "group" ).ids( @auth, [@id].flatten )
       end
 
-      def activate()
-        call( 'keyword' ).enable( @auth, @id )
+      def delete
+        call( "plan" ).delete( @auth, [@id].flatten )
+      end
+
+      def activate
+        call( "plan" ).enable( @auth, [@id].flatten )
       end
 
       def enable
-        call('plan').enable(@auth, @id)
+        call( "plan" ).enable( @auth, [@id].flatten )
       end
 
       def pause
-        call('plan').pause(@auth, @id)
+        call( "plan" ).pause( @auth, [@id].flatten )
       end
 
       # group opeartion
@@ -41,18 +45,9 @@ module PPC
 
       # Overwirte add_group method to provide more function
       def add_group( groups )
-        call('group').add( @auth, add_plan_id( groups ) )
+        call( "group" ).add( @auth, groups.map{|group| group.merge(plan_id: @id)} )
       end
 
-      # Auxilary function
-      private
-      def add_plan_id( types )
-        types = [types] unless types.is_a? Array
-        types.each do |type|
-          type.merge!({plan_id:@id})
-        end
-        return types
-      end
 
     end # class plan
   end # mudole Opeartion

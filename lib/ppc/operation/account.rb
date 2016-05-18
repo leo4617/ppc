@@ -5,31 +5,27 @@ module PPC
 
       # self operations
       def info
-        info = call('account').info(@auth)
-        @id = info[:result][:id] if @id == nil
-        return info
+        call( "account" ).info( @auth )
       end
 
-      def update(account)
-        call('account').update(@auth,account)
+      def update( account )
+        call( "account" ).update( @auth, account )
       end
 
-      # subobject(plan) operations
       def plans
-        call('plan').all(@auth)
+        call( "plan" ).all( @auth )
       end
 
       def plan_ids
-        call('plan').ids(@auth)
+        call( "plan" ).ids( @auth )
       end
       
-      # some useful keyword operations
-      def keywords(group_id)
-        call( 'keyword' ).all( @auth, group_id )
+      def keywords( group_id )
+        call( "keyword" ).all( @auth, group_id )
       end
 
-      def keyword_ids(group_id)
-        call( 'keyword' ).ids( @auth, group_id )
+      def keyword_ids( group_id )
+        call( "keyword" ).ids( @auth, group_id )
       end
       
       # plan operations

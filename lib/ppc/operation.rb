@@ -30,7 +30,7 @@ module PPC
         cipher_aes.encrypt
         cipher_aes.key = @auth[:api_secret][0,16]
         cipher_aes.iv = @auth[:api_secret][16,16]
-        encrypted = (cipher_aes.update(Digest::MD5.hexdigest(@auth[:password])) + cipher_aes.final).unpack('H*').join
+        encrypted = (cipher_aes.update(Digest::MD5.hexdigest( @auth[:password])) + cipher_aes.final).unpack('H*').join
         url = "https://api.e.360.cn/account/clientLogin"
         response = HTTParty.post(url,
           :body => {
@@ -56,28 +56,29 @@ module PPC
 
     # +++++ Plan opeartion funcitons +++++ #
     module Plan_operation
+
       def get_plan( ids )
-        call("plan").get(@auth,[ids].flatten)
+        call( "plan" ).get( @auth, [ids].flatten )
       end
 
       def add_plan( plans )
-        call('plan').add(@auth,[plans].flatten)
+        call( "plan" ).add( @auth, [plans].flatten )
       end
 
       def update_plan( plans )
-        call('plan').update(@auth,[plans].flatten)
+        call( "plan" ).update( @auth, [plans].flatten )
       end
 
       def delete_plan( ids )
-        call('plan').delete(@auth,[ids].flatten)
+        call( "plan" ).delete( @auth, [ids].flatten )
       end
 
       def enable_plan( ids )
-        call('plan').enable(@auth,[ids].flatten)
+        call( "plan" ).enable( @auth, [ids].flatten )
       end
 
       def pause_plan( ids )
-        call('plan').pause(@auth,[ids].flatten)
+        call( "plan" ).pause( @auth, [ids].flatten )
       end
 
     end
@@ -85,27 +86,27 @@ module PPC
     # +++++ Group opeartion funcitons +++++ #
     module Group_operation
       def get_group( ids )
-        call("group").get(@auth,[ids].flatten)
+        call( "group" ).get( @auth, [ids].flatten )
       end
 
       def add_group( groups )
-        call('group').add(@auth,[groups].flatten )
+        call( "group" ).add( @auth, [groups].flatten )
       end
 
       def update_group( groups )
-        call('group').update( @auth, [groups].flatten )
+        call( "group" ).update( @auth, [groups].flatten )
       end
 
       def delete_group( ids )
-        call('group').delete( @auth, [ids].flatten)
+        call( "group" ).delete( @auth, [ids].flatten ) 
       end
 
       def enable_group( ids )
-        call('group').enable(@auth,[ids].flatten)
+        call( "group" ).enable( @auth, [ids].flatten )
       end
 
       def pause_group( ids )
-        call('group').pause(@auth,[ids].flatten)
+        call( "group" ).pause( @auth, [ids].flatten )
       end
 
     end
@@ -113,27 +114,27 @@ module PPC
     # +++++ Keyword opeartion funcitons +++++ #
     module Keyword_operation
       def get_keyword( ids )
-        call("keyword").get(@auth,[ids].flatten)
+        call( "keyword" ).get(@auth, [ids].flatten )
       end
       
       def add_keyword( keywords )
-        call('keyword').add( @auth, [keywords].flatten )
+        call( "keyword" ).add( @auth, [keywords].flatten )
       end
 
       def update_keyword( keywords)
-        call('keyword').update( @auth, [keywords].flatten )
+        call( "keyword" ).update( @auth, [keywords].flatten )
       end
 
       def delete_keyword( ids )
-         call('keyword').delete( @auth, [ids].flatten)
+        call( "keyword" ).delete( @auth, [ids].flatten )
       end
 
       def enable_keyword( ids )
-        call('keyword').enable(@auth,[ids].flatten)
+        call( "keyword" ).enable( @auth, [ids].flatten )
       end
 
       def pause_keyword( ids )
-        call('keyword').pause(@auth,[ids].flatten)
+        call( "keyword" ).pause( @auth, [ids].flatten )
       end
 
     end
@@ -141,27 +142,27 @@ module PPC
     # +++++ Creative opeartion funcitons +++++ #
     module Creative_operation
       def get_creative( ids )
-        call("creative").get(@auth,[ids].flatten)
+        call( "creative" ).get( @auth, [ids].flatten )
       end
       
       def add_creative( creatives )
-        call('creative').add( @auth, [creatives].flatten )
+        call( "creative" ).add( @auth, [creatives].flatten )
       end
 
       def update_creative( creatives )
-        call('creative').update( @auth, [creatives].flatten )
+        call( "creative" ).update( @auth, [creatives].flatten )
       end
 
       def delete_creative( ids )
-        call('creative').delete( @auth, [ids].flatten)
+        call( "creative" ).delete( @auth, [ids].flatten )
       end
 
       def enable_creative( ids )
-        call('creative').enable(@auth,[ids].flatten)
+        call( "creative" ).enable( @auth, [ids].flatten )
       end
 
       def pause_creative( ids )
-        call('creative').pause(@auth,[ids].flatten)
+        call( "creative" ).pause( @auth, [ids].flatten )
       end
     end
 
