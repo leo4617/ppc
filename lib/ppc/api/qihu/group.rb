@@ -32,7 +32,7 @@ module PPC
 
         def self.ids( auth, plan_id )
           response = request( auth, Service, 'getIdListByCampaignId', { campaignId: plan_id } )
-          process( response, 'groupIdList' ){ |x| { plan_id: id, group_ids: x.map(&:to_i) } }
+          process( response, 'groupIdList' ){ |x| { plan_id: plan_id, group_ids: x.map(&:to_i) } }
         end
 
         def self.get( auth, ids )
