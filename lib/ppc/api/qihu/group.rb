@@ -24,7 +24,7 @@ module PPC
         end
 
         def self.all( auth, plan_id )
-          group_ids = self.ids( auth, plan_id )[:result][0][:group_ids]
+          group_ids = self.ids( auth, plan_id[0] )[:result][0][:group_ids]
           response = self.get( auth, group_ids )
           response[:result] = [ { plan_id:id, groups:response[:result]}] if response[:succ]
           response
