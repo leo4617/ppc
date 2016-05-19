@@ -40,15 +40,16 @@ module PPC
           process( response, 'groupList' ){ |x| reverse_type(x) }
         end
 
-        def self.add( auth, group )
-          response = request( auth, Service, 'batchAdd', make_type( group ) )
+        def self.add( auth, groups )
+          groups.each{ |group| group[:negative] = {exact: group.delete(:exact_negative), phrase: group.delete(:negative)}.to_json if group[:exact_negative] || group[:negative] }
+          response = request( auth, Service, 'batchAdd', make_type( groups ) )
           process( response, 'id' ){ |x| [ { id: x.to_i } ]    }
         end
 
         # 奇虎组服务不提供批量delete和update方法
         def self.update( auth, group )
+          group[0][:negative] = {exact: group[0].delete(:exact_negative), phrase: group[0].delete(:negative)}.to_json if group[0][:exact_negative] || group[0][:negative]
           params = make_type(group)[0]
-          params.merge!(negativeWords: {exact: group[:exact_negative], phrase: group[:negative]} ) if group[:negative] || group[:exact_negative]
           response = request( auth, Service, 'update', params )
           process( response, 'id' ){ |x|[ { id: x.to_i } ]  }
         end
