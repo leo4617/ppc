@@ -20,8 +20,8 @@ module PPC
           update_time:        :updateTime,
           price_ratio:        :mobilePriceRate,
           extend_adtype:      :extendAdType,
-          negative:           :negtiveWords,
-          exact_negative:     :exactNegtiveWords,
+          negative:           :negativeWords,
+          exact_negative:     :exactNegativeWords,
           device:             :device,
           is_precise:         :isPrecise,
         }
