@@ -6,14 +6,19 @@ module PPC
         Service = 'keyword'
 
         KeywordType = {
-          id:                 :id,
-          group_id:           :groupId,
-          keyword:            :word,
-          price:              :price,
-          match_type:         :matchType,
-          pc_destination:     :url,
-          mobile_destination: :mobileUrl,
-          pause:              :status,
+          id:                     :id,
+          group_id:               :groupId,
+          keyword:                :word,
+          price:                  :price,
+          match_type:             :matchType,
+          pc_destination:         :url,
+          "pc_destination"     => :destinationUrl,
+          mobile_destination:     :mobileUrl,
+          "mobile_destination" => :mobileDestinationUrl,
+          pause:                  :status,
+          mobile_pause:           :mobileStatus,
+          add_time:               :addTime,
+          update_time:            :updateTime,
         }
         @map = KeywordType
 
@@ -34,15 +39,13 @@ module PPC
 
         # combine search_id and get to provide another method
         def self.all( auth, group_id )
-          keyword_ids = self.ids( auth, group_id )[:result][0][:keyword_ids]
-          response = get( auth, keyword_ids )
-          response[:result] = [ { group_id:id, keywords:response[:result] } ] if response[:succ]
-          response
+          keyword_ids = self.ids( auth, group_id )[:result][:keyword_ids]
+          self.get( auth, keyword_ids )
         end
 
         def self.ids( auth, group_id )
           response = request( auth, Service, 'getIdListByGroupId', {'groupId' => group_id[0]} )
-          process( response, 'keywordIdList' ){ |x| {group_id:id, keyword_ids: x.map(&:to_i) } }
+          process( response, 'keywordIdList' ){ |x| {group_id: group_id, keyword_ids: x.map(&:to_i) } }
         end
 
         def self.get( auth, ids )
@@ -52,17 +55,17 @@ module PPC
 
         def self.add( auth,  keywords )
           response = request( auth, Service, 'add', { keywords: make_type( keywords )} )
-          process( response, 'keywordIdList'){ |x| x.map{|tmp| { id: i.to_i } } }
+          process( response, 'keywordIdList'){ |x| x.map.with_index{|id, index| {id: id, keyword: keywords[index][:word]}} }
         end
 
         def self.update( auth, keywords )
           response = request( auth, Service, 'update', { keywords: make_type( keywords )} )
-          process( response, 'affectedRecords', 'failKeywordIds' ){ |x| x }
+          process( response, 'affectedRecords', 'failKeywordIds' ){ |x| x == keywords.size ? keywords.map{|keyword| {id: keyword[:id]}} : nil }
         end
 
         def self.delete( auth, ids )
           response = request( auth, Service, 'deleteByIdList', { idList: ids } )
-          process( response, 'affectedRecords' ){ |x|  x  }     
+          process( response, 'affectedRecords' ){ |x|  x == keywords.size ? keywords.map{|keyword| {id: keyword[:id]}} : nil  }     
         end
 
         def self.enable( auth, ids )
