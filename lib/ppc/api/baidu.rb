@@ -38,8 +38,8 @@ module PPC
           result[:result] ||= func[ response['body']['data'] ]
         end
         result[:rquota] = response['header']['rquota'] if response['header']['rquota']
-        result[:no_quota] = is_no_quota(response['header']['failures'], '8501')
-        return result
+        result[:no_quota] = (response['header']['failures']['code'] == '8501') rescue true
+        result
       end
 
     end # Baidu

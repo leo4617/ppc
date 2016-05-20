@@ -51,7 +51,7 @@ module PPC
         result[:succ]     = response['failures'].nil? || response['failures'].size.zero?
         result[:failure]  = response['failures'] || response["failure_key"]
         result[:result]   = func[response[key]] rescue nil
-        result[:no_quota] = is_no_quota(response['failures'], '90401') rescue false
+        result[:no_quota] = (response['failures']['code'] == '90401') rescue false
         result
       end
 
