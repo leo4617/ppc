@@ -29,8 +29,7 @@ module PPC
       end
 
       def self.request_http_body(auth, params = {})
-        params["format"] = 'json'
-        params.map{|k,v| "#{k.to_s}=#{v.to_s}"}.join('&')
+        "format=json&" + params.map{|k,v| "#{k.to_s}=#{v.is_a?(Array) ? v.to_json : v}"}.join('&')
       end
 
 #      def self.request( auth, service, method, params = {} )
