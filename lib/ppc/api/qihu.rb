@@ -49,9 +49,8 @@ module PPC
       def self.process( response, key, failure_key = '', &func )
         result = {}
         result[:succ]     = response['failures'].nil? || response['failures'].size.zero?
-        result[:failure]  = response['failures']
+        result[:failure]  = response['failures'] || response["failure_key"]
         result[:result]   = func[response[key]] rescue nil
-        result[:result] ||= func[response]
         result[:no_quota] = is_no_quota(response['failures'], '90401') rescue false
         result
       end
