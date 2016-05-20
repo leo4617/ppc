@@ -26,15 +26,13 @@ module PPC
         end
 
         def self.all( auth, plan_id )
-          group_ids = self.ids( auth, plan_id[0] )[:result][0][:group_ids]
-          response = self.get( auth, group_ids )
-          response[:result] = [ { plan_id:id, groups:response[:result]}] if response[:succ]
-          response
+          group_ids = self.ids( auth, plan_id )[:result][:group_ids]
+          self.get( auth, group_ids )
         end
 
         def self.ids( auth, plan_id )
-          response = request( auth, Service, 'getIdListByCampaignId', { campaignId: plan_id } )
-          process( response, 'groupIdList' ){ |x| { plan_id: plan_id, group_ids: x.map(&:to_i) } }
+          response = request( auth, Service, 'getIdListByCampaignId', { campaignId: plan_id[0] } )
+          process( response, 'groupIdList' ){ |x| { plan_id: plan_id[0], group_ids: x.map(&:to_i) } }
         end
 
         def self.get( auth, ids )
@@ -43,9 +41,9 @@ module PPC
         end
 
         def self.add( auth, groups )
-          groups.each{ |group| group[:negative] = {exact: group.delete(:exact_negative), phrase: group.delete(:negative)}.to_json if group[:exact_negative] || group[:negative] }
-          response = request( auth, Service, 'batchAdd', make_type( groups ) )
-          process( response, 'id' ){ |x| [ { id: x.to_i } ]    }
+          groups.each{ |group| group[:negative] = {exact: group.delete(:exact_negative), phrase: group.delete(:negative)} if group[:exact_negative] || group[:negative] }
+          response = request( auth, Service, 'batchAdd', {groups: make_type( groups )} )
+          process( response, 'groupIdList' ){ |x| x.map.with_index{|id, index| {id: id, name: groups[index][:name]}} }
         end
 
         # 奇虎组服务不提供批量delete和update方法
@@ -53,20 +51,20 @@ module PPC
           group[0][:negative] = {exact: group[0].delete(:exact_negative), phrase: group[0].delete(:negative)}.to_json if group[0][:exact_negative] || group[0][:negative]
           params = make_type(group)[0]
           response = request( auth, Service, 'update', params )
-          process( response, 'id' ){ |x|[ { id: x.to_i } ]  }
+          process( response, 'groupIdList' ){ |x| [{id: x["id"], name: group[0][:name]}] }
         end
 
         def self.delete( auth, id )
-          response = request( auth, Service, 'deleteById', {id: id}  )
+          response = request( auth, Service, 'deleteById', {id: id[0]}  )
           process( response, 'affectedRecords' ){ |x| x == '1' }
         end
 
         def self.enable( auth, id )
-          self.update(auth, {id: id[0], pause: "enable"})
+          self.update(auth, [{id: id[0], pause: "enable"}])
         end
 
         def self.pause( auth, id )
-          self.update(auth, {id: id[0], pause: "pause"})
+          self.update(auth, [{id: id[0], pause: "pause"}])
         end
 
       end
