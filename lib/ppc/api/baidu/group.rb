@@ -30,8 +30,8 @@ module PPC
 
         def self.all( auth, plan_ids )
           body = { ids: plan_ids, idType: 3, adgroupFields: GroupType.values}
-          response = request(auth,Service,'getAdgroup',body)
-          return process( response, 'campaignAdgroups' ){ |x|reverse_type(x) }
+          response = request(auth, Service, 'getAdgroup', body)
+          process( response, 'campaignAdgroups' ){ |x|reverse_type(x) }
         end
 
         def self.ids( auth, plan_ids )
