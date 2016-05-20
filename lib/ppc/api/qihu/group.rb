@@ -6,15 +6,17 @@ module PPC
         Service = 'group'
 
         GroupType = {
-          id:           :id,
-          plan_id:      :campaignId,
-          pause:        :status,
-          name:         :name,
-          price:        :price,
+          id:             :id,
+          plan_id:        :campaignId,
+          pause:          :status,
+          name:           :name,
+          price:          :price,
           # negateive为json格式，make_type要定制
-          add_time:     :addTime,
-          update_time:  :updateTime,
-          from_time:    :fromTime,
+          negative:       :negativeWords,
+          exact_negative: :exactNegativeWords,
+          add_time:       :addTime,
+          update_time:    :updateTime,
+          from_time:      :fromTime,
         }
         @map = GroupType
 
