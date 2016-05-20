@@ -117,7 +117,7 @@ module PPC
       '''
       [ params ].flatten.map do |item| 
         item.select!{|key| maps.any?{|m| m[0] == key} }
-        maps.each{|key_new, key_old| item[key_old] = (key_new == :match_type ? @match_types[item.delete(key_new)] : item.delete(key_new)) if item[key_new] }
+        maps.each{|key_new, key_old| item[key_old] = (key_new == :match_type && @match_type ? @match_types[item.delete(key_new)] : item.delete(key_new)) if item[key_new] }
         item
       end
     end
@@ -136,8 +136,14 @@ module PPC
       [ types ].flatten.map do |item| 
         maps.each{|key_new, key_old| 
           value = item.delete(key_old.to_s) || item.delete(key_old)
-          value = value[/pause/] ? true : false if value && key_new == :pause && key_old == :status
-          item[key_new.to_sym] = (key_new == :match_type ? @match_types[value] : value) unless value.nil?
+          if value && key_new == :pause && key_old == :status
+            if value[/(pause|enable)/]
+              value = value[/pause/] ? true : false
+            else
+              key_new = :status
+            end
+          end
+          item[key_new.to_sym] = (key_new == :match_type && @match_types ? @match_types[value] : value) unless value.nil?
         }
         item
       end
