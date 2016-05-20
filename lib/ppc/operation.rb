@@ -63,7 +63,7 @@ module PPC
         when "get", "delete", "enable", "pause", "status", "quality"
           call( unit ).send( method, @auth, [@id].flatten )
         when "update"
-          call( unit ).send( method, @auth, [args.merge(id: @id)].flatten )
+          call( unit ).send( method, @auth, [args[0].merge(id: @id)].flatten )
         when "activate"
           call( unit ).enable( @auth, [@id].flatten )
         else
