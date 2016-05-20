@@ -57,9 +57,7 @@ module PPC
         result[:succ]   = response[:header][:desc] == 'success'
         result[:failure] = response[:header][:failures]
         result[:no_quota] = (response[:header][:failures][:code] == '18') rescue false
-        unless response[:body].nil? or response[:body][key.snake_case.to_sym].nil?
-          result[:result] = func[ response[:body][ key.snake_case.to_sym ] ]
-        end
+        result[:result] = func[ response[:body][ key.snake_case.to_sym ] ] rescue nil
         result[:rquota] = response[:header][:rquota] if response[:header][:rquota]
         result
       end
