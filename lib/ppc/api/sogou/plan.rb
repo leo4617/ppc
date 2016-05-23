@@ -25,6 +25,11 @@ module PPC
         }
         @map = PlanType
 
+        def self.info( auth, ids )
+          response = request( auth, Service, 'getCpcPlanByCpcPlanId', {cpcPlanIds: ids} )
+          process( response, 'cpcPlanTypes' ){ |x| reverse_type(x)[0] }
+        end
+
         def self.all( auth )
           response = request( auth, Service, 'getAllCpcPlan' )
           process( response, 'cpcPlanTypes' ){ |x| reverse_type(x) }
