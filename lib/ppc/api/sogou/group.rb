@@ -15,6 +15,10 @@ module PPC
           pause:          :pause,
           status:         :status,
           opt:            :opt,
+          "plan_id" =>    :cpc_plan_id,
+          "id" =>         :cpc_grp_id,
+          "plan_name" =>  :cpc_plan_name,
+          "name" =>       :cpc_grp_name,
         }
         @map = GroupType
 
