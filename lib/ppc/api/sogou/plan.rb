@@ -41,9 +41,7 @@ module PPC
         end
 
         def self.get( auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { cpcPlanIds: ids }
-          response = request( auth, Service, 'getCpcPlanByCpcPlanId', body)
+          response = request( auth, Service, 'getCpcPlanByCpcPlanId', {cpcPlanIds: ids} )
           process( response, 'cpcPlanTypes' ){ |x| reverse_type(x) }
         end
 
@@ -62,9 +60,7 @@ module PPC
         end
 
         def self.delete(auth, ids )
-          ids = [ ids ] unless ids.class == Array
-          body = { cpcPlanIds: ids }
-          response = request( auth, Service, 'deleteCpcPlan', body)
+          response = request( auth, Service, 'deleteCpcPlan', {cpcPlanIds: ids} )
           process( response, '' ){ |x| x }
         end
 
