@@ -17,6 +17,12 @@ module PPC
           mobile_display:     :mobileShowUrl,
           pause:              :pause,
           status:             :status,
+          "group_id" =>       :cpc_grp_id,
+          "id" =>             :cpc_idea_id,
+          "pc_destination" => :visit_url,
+          "pc_display" =>     :show_url,
+          "mobile_display" => :mobile_show_url,
+          "creative_ids" =>   :cpc_idea_ids,
         }
         @map = CreativeType
 
