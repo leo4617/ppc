@@ -44,43 +44,43 @@ module PPC
         def self.info( auth, ids )
           body = { ids: ids, idType: 11, wordFields: KeywordType.values}
           response = request( auth, Service, 'getWord', body )
-          return process(response, 'keywordType' ){|x| reverse_type( x )[0] }
+          process(response, 'keywordType' ){|x| reverse_type( x )[0] }
         end
 
         def self.all( auth, group_ids )
           body = { ids: group_ids, idType: 5, wordFields: KeywordType.values}
           response = request( auth, Service, 'getWord', body )
-          return process(response, 'groupKeywords' ){|x| reverse_type( x ) }
+          process(response, 'groupKeywords' ){|x| reverse_type( x ) }
         end
 
         def self.ids( auth, group_ids )
           body = { ids: group_ids, idType: 5, wordFields: [:keywordId]}
           response = request( auth, Service, 'getWord', body )
-          return process(response, 'groupKeywordIds' ){|x| reverse_type( x ) }
+          process(response, 'groupKeywordIds' ){|x| reverse_type( x ) }
         end
 
         def self.get( auth, ids )
           body = { ids: ids, idType: 11, wordFields: KeywordType.values}
           response = request( auth, Service, 'getWord', body )
-          return process(response, 'keywordTypes' ){|x| reverse_type( x ) }
+          process(response, 'keywordTypes' ){|x| reverse_type( x ) }
         end
 
         def self.add( auth, keywords )
           body = { keywordTypes: make_type( keywords ) }
           response = request( auth, Service, "addWord", body )
-          return process(response, 'keywordTypes' ){|x| reverse_type(x)  }
+          process(response, 'keywordTypes' ){|x| reverse_type(x)  }
         end
 
         def self.update( auth, keywords  )
           body = { keywordTypes: make_type( keywords ) }
           response = request( auth, Service, "updateWord", body )
-          return process(response, 'keywordTypes' ){|x| reverse_type(x)  }
+          process(response, 'keywordTypes' ){|x| reverse_type(x)  }
         end
 
         def self.delete( auth, ids )
           body = { keywordIds: ids}
           response = request( auth, Service, 'deleteWord', body )
-          return process(response, 'result' ){|x| x }
+          process(response, 'result' ){|x| x }
         end
 
         def self.enable( auth, ids )
@@ -96,13 +96,13 @@ module PPC
         def self.status( auth, ids )
           body = { ids: ids, idType: 11, keywordTypes: [:keywordId, :status]}
           response = request( auth, Service, 'getWord', body )
-          return process(response, 'groupKeywords' ){|x| reverse_type( x ) }
+          process(response, 'groupKeywords' ){|x| reverse_type( x ) }
         end
 
         def self.quality( auth, ids )
           body = { ids: ids, idType: 11, keywordTypes: KeywordQualityType.values}
           response = request( auth, Service, 'getWord', body )
-          return process(response, 'groupKeywords' ){|x| reverse_type( x , KeywordQualityType) }
+          process(response, 'groupKeywords' ){|x| reverse_type( x , KeywordQualityType) }
         end
 
       end # keyword

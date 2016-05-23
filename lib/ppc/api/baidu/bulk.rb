@@ -68,7 +68,7 @@ module PPC
           rescue => e
             p "Error encounter:#{e.to_s}"
           end  
-          return false
+          false
         end
 
       end

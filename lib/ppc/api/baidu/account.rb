@@ -31,7 +31,7 @@ module PPC
         def self.info( auth )
           body = {:accountFields => AccountInfoType.values}
           response = request(auth,Service,'getAccountInfo',body)
-          return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
+          process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end
 
         def self.update(auth, param = {} )
@@ -43,7 +43,7 @@ module PPC
           # for account service, there is not bulk operation
           body = { accountInfo: make_type( param )[0] }
           response = request(auth,Service,'updateAccountInfo', body)
-          return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
+          process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end
 
       end

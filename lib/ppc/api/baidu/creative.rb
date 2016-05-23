@@ -25,19 +25,19 @@ module PPC
         def self.info( auth, ids )
           body = { ids: ids, idType: 7, creativeFields: CreativeType.values }
           response = request( auth, Service, 'getCreative', body )
-          return process(response, 'creativeType' ){|x| reverse_type( x )[0] }
+          process(response, 'creativeType' ){|x| reverse_type( x )[0] }
         end
 
         def self.all( auth, group_ids )
           body = { ids: group_ids, idType: 5, creativeFields: CreativeType.values}
           response = request( auth, Service, 'getCreative', body )
-          return process(response, 'groupCreatives' ){|x| reverse_type( x ) }
+          process(response, 'groupCreatives' ){|x| reverse_type( x ) }
         end
 
         def self.ids( auth, group_ids )
           body = { ids: group_ids, idType: 5, creativeFields: [:creativeId]}
           response = request( auth, Service, 'getCreative', body )
-          return process(response, 'groupCreativeIds' ){|x| reverse_type( x ) }
+          process(response, 'groupCreativeIds' ){|x| reverse_type( x ) }
         end
 
         def self.add( auth, creatives )
@@ -77,7 +77,7 @@ module PPC
         def self.status( auth, ids )
           body = { ids: ids, idType: 7, creativeFields: [:creativeId, :status]}
           response = request( auth, Service, 'getCreative', body )
-          return process(response, 'groupCreatives' ){|x| reverse_type( x ) }
+          process(response, 'groupCreatives' ){|x| reverse_type( x ) }
         end
 
       end

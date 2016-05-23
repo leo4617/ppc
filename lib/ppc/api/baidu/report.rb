@@ -65,7 +65,7 @@ module PPC
           requesttype[:idOnly]            =     param[:id_only] || false
           requesttype[:startDate]         =     parse_date( param[:startDate] )
           requesttype[:endDate]           =     parse_date( param[:endDate] )
-          return requesttype
+          requesttype
         end
 
         private 
