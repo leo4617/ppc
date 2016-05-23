@@ -20,6 +20,8 @@ module PPC
           price_ratio:          :mobilePriceRate,
           pause:                :pause,
           status:               :status,
+          "id" =>               :cpc_plan_id,
+          "name" =>             :cpc_plan_name,
         }
         @map = PlanType
 
