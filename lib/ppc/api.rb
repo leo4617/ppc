@@ -110,7 +110,7 @@ module PPC
       '''
       [ params ].flatten.map do |item| 
         item.select!{|key| maps.any?{|m| m[0] == key} }
-        maps.each{|key_new, key_old| item[key_old] = (key_new == :match_type && @match_type ? @match_types[item.delete(key_new)] : item.delete(key_new)) if item[key_new] }
+        maps.each{|key_new, key_old| item[key_old] = (key_new == :match_type && @match_types ? @match_types[item.delete(key_new)] : item.delete(key_new)) if item[key_new] }
         item
       end
     end
