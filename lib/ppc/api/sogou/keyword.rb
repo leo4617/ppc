@@ -21,6 +21,13 @@ module PPC
           pause:              :pause,
           status:             :status,
           quality:            :cpcQuality,
+          "group_id" =>       :cpc_grp_id,
+          "keyword_ids" =>    :cpc_ids,
+          "keywords" =>       :cpc_types,
+          "id" =>             :cpc_id,
+          "pc_destination" => :visit_url,
+          "quality" =>        :cpc_quality,
+          "mobile_destination" => :mobile_visit_url,
         }
         @map = KeywordType
 
