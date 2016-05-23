@@ -67,6 +67,16 @@ module PPC
           response = request( auth, Service, 'deleteCpcPlan', body)
           process( response, '' ){ |x| x }
         end
+
+        def self.enable( auth, ids )
+          plans = ids.map{|id| {id: id, pause: false} }
+          self.update( auth, plans )
+        end
+
+        def self.pause( auth, ids )
+          plans = ids.map{|id| {id: id, pause: true} }
+          self.update( auth, plans )
+        end
        
       end # Service
     end # baidu
