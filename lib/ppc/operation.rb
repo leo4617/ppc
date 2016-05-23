@@ -59,7 +59,7 @@ module PPC
       unit   = self.class.to_s.downcase[/(account|plan|group|keyword|creative|sublink)/]
       case method
         when "info"
-          call( unit ).send( method, @auth )
+          unit == "account" ? call( unit ).send( method, @auth ) : call( unit ).send( method, @auth, [@id].flatten )
         when "get", "delete", "enable", "pause", "status", "quality"
           call( unit ).send( method, @auth, [@id].flatten )
         when "update"
