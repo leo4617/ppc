@@ -15,6 +15,12 @@ module PPC
       # group opeartion
       include ::PPC::Operation::Group_operation
 
+      # keyword opeartion
+      include ::PPC::Operation::Keyword_operation
+
+      # creative opeartion
+      include ::PPC::Operation::Creative_operation
+
       # Overwirte add_group method to provide more function
       def add_group( groups )
         call( "group" ).add( @auth, groups.map{|group| group.merge(plan_id: @id)} )
