@@ -6,6 +6,7 @@ module PPC
 
         AccountType = {
           id:             :userId,
+          name:           :userName,
           balance:        :balance,
           cost:           :cost,
           payment:        :payment,
@@ -17,6 +18,7 @@ module PPC
           reg_domain:     :regDomain,
           offline_time:   :budgetOfflineTime,
           weekly_budget:  :weeklyBudget,
+          status:         :userStat,
         }
         @map = AccountType
 
