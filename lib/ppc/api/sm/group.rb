@@ -15,78 +15,56 @@ module PPC
           pause:          :pause,
           status:         :status,
           os:             :adPlatformOS,
+          group_ids:      :adgroupIds,
+          groups:         :adgroupTypes,
         }
         @map = GroupType
 
-        def self.ids( auth )
-          response = request(auth, Service, "getAllAdgroupId")
-          process(response, 'campaignAdgroupIds'){|x| make_planGroupIds(x)}
+        def self.info(auth, ids)
+          response = request(auth, Service, "getAdgroupByAdgroupId", {adgroupIds: ids} )
+          process(response, 'adgroupTypes'){|x| reverse_type(x)[0] }
+        end
+
+        def self.all( auth, plan_ids )
+          response = request(auth, Service, "getAdgroupByCampaignId", {campaignIds: plan_ids} )
+          process(response, 'campaignAdgroups' ){ |x| reverse_type( x ) }
+        end
+
+        def self.ids( auth, plan_ids )
+          response = request(auth, Service, "getAdgroupIdByCampaignId", {campaignIds: plan_ids} )
+          process(response, 'campaignAdgroupIds'){ |x| reverse_type( x ) }
         end
 
         def self.get(auth, ids)
-          ids = [ ids ] unless ids.is_a? Array
-          body = {adgroupIds: ids}
-          response = request(auth, Service, "getAdgroupByAdgroupId", body)
-          process(response, 'adgroupTypes'){|x| reverse_type(x)}
+          response = request(auth, Service, "getAdgroupByAdgroupId", {adgroupIds: ids} )
+          process(response, 'adgroupTypes'){|x| reverse_type(x) }
         end
 
         def self.add(auth, groups)
-          adgroup_types = make_type(groups)
-          body = {adgroupTypes: adgroup_types}
+          body = {adgroupTypes: make_type(groups)}
           response = request(auth, Service, "addAdgroup", body)
-          process(response, 'adgroupTypes'){|x| reverse_type(x)}
+          process(response, 'adgroupTypes'){|x| reverse_type(x) }
         end
 
         def self.update(auth, groups)
-          adgroup_types = make_type(groups)
-          body = {adgroupTypes: adgroup_types}
+          body = {adgroupTypes: make_type(groups)}
           response = request(auth, Service, "updateAdgroup", body)
-          process(response, 'adgroupTypes'){|x| reverse_type(x)}
+          process(response, 'adgroupTypes'){|x| reverse_type(x) }
         end
 
         def self.delete(auth, ids)
-          ids = [ids] unless ids.is_a? Array
-          body = {adgroupIds: ids}
-          response = request(auth, Service, "deleteAdgroup", body, "delete")
+          response = request(auth, Service, "deleteAdgroup", {adgroupIds: ids} , "delete")
           process(response, 'result'){ |x|  x  }
         end
 
-        def self.search_by_plan_id(auth, ids)
-          ids = [ ids ] unless ids.class == Array
-          body = { campaignIds: ids }
-          response = request(auth, Service, "getAdgroupByCampaignId", body)
-          process(response, 'campaignAdgroups' ){ |x| make_planGroups( x ) }
+        def self.enable( auth, ids )
+          groups = ids.map{|id| {id: id, pause: false} }
+          self.update( auth, groups )
         end
 
-        def self.search_id_by_plan_id( auth, ids )
-          ids = [ ids ] unless ids.class == Array
-          body = { campaignIds: ids }
-          response = request(auth, Service, "getAdgroupIdByCampaignId", body)
-          process(response, 'campaignAdgroupIds'){ |x| make_planGroupIds( x ) }
-        end
-
-        private
-        def self.make_planGroupIds( campaignAdgroupIds )
-          planGroupIds = []
-          campaignAdgroupIds.each do |campaignAdgroupId|
-            planGroupId = { }
-            planGroupId[:plan_id] = campaignAdgroupId['campaignId']
-            planGroupId[:group_ids] = campaignAdgroupId['adgroupIds']
-            planGroupIds << planGroupId
-          end
-          return planGroupIds
-        end
-
-        private
-        def self.make_planGroups( campaignAdgroups )
-          planGroups = []
-          campaignAdgroups.each do |campaignAdgroup|
-            planGroup = {}
-            planGroup[:plan_id] = campaignAdgroup['campaignId']
-            planGroup[:groups] = reverse_type( campaignAdgroup['adgroupTypes'] )
-            planGroups << planGroup
-          end
-          return planGroups
+        def self.pause( auth, ids )
+          groups = ids.map{|id| {id: id, pause: true} }
+          self.update( auth, groups )
         end
 
       end # class group
