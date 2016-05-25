@@ -27,7 +27,7 @@ module PPC
 
         def self.all( auth, plan_ids )
           response = request(auth, Service, "getAdgroupByCampaignId", {campaignIds: plan_ids} )
-          process(response, 'campaignAdgroups' ){ |x| reverse_type( x ) }
+          process(response, 'campaignAdgroups' ){ |x| reverse_type(x.map{|temp| temp["adgroupTypes"]}.flatten) }
         end
 
         def self.ids( auth, plan_ids )
