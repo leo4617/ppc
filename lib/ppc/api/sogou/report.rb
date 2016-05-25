@@ -55,26 +55,9 @@ module PPC
           requesttype[:unitOfTime]         =     Unit_map[ param[:unit] ]        if param[:unit] 
           requesttype[:platform]           =     Device_map[ param[:device] ]    if param[:device]
           requesttype[:idOnly]             =     param[:id_only]                 if param[:id_only]!=nil
-          requesttype[:startDate] = parse_date( param[:startDate] )
-          requesttype[:endDate]   = parse_date( param[:endDate] )
+          requesttype[:startDate]          =     (Time.parse( param[:startDate] ) rescue Time.now - 86400).utc.iso8601
+          requesttype[:endDate]            =     (Time.parse( param[:endDate] ) rescue Time.now - 86400).utc.iso8601
           return requesttype
-        end
-
-        private 
-        def self.parse_date( date )
-          """
-          Cast string to time:
-          'YYYYMMDD' => Time
-          """
-          if date
-            y = date[0..3]
-            m = date[4..5]
-            d = date[6..7]
-            date = Time.new( y, m, d )
-          else
-            date = (Time.now - 24*3600)
-          end
-          date.utc.iso8601
         end
 
         ###########################

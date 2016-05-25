@@ -67,23 +67,10 @@ module PPC
           requesttype[:unitOfTime]        =     Unit_map[ param[:unit] ]      if param[:unit]
           requesttype[:device]            =     Device_map[ param[:device] ]  if param[:device]
           requesttype[:idOnly]            =     param[:id_only] || false
-          requesttype[:startDate]         =     parse_date( param[:startDate] )
-          requesttype[:endDate]           =     parse_date( param[:endDate] )
+          requesttype[:startDate]         =     Date.parse( param[:startDate] ) rescue Date.today
+          requesttype[:endDate]           =     Date.parse( param[:endDate] ) rescue Date.today
           requesttype[:statIds]           =     param[:statIds] if param[:type] == "keyword" && param[:range] != "account"
           return requesttype
-        end
-
-        private
-        def self.parse_date( date )
-          """
-          Cast string to time:
-          'YYYYMMDD' => Time
-          """
-          if date
-            date = Date.parse(date)
-          else
-            date = Date.today
-          end
         end
 
         #################################
