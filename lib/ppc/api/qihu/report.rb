@@ -41,9 +41,7 @@ module PPC
           end
           # typeCount
           define_singleton_method (type+'_count').to_sym do |auth, param|
-              response = abstract( auth, type, type+'Count', '', param ){ |x| x || reverse_type( x ) }
-              response[:result] = response[:result][0] rescue nil
-              return response
+              abstract( auth, type, type+'Count', '', param ){ |x| reverse_type( x )[0] }
           end
           # typeNow
           define_singleton_method (type+'_now').to_sym do |auth, param|
@@ -51,9 +49,7 @@ module PPC
           end
           # typeNowCount
           define_singleton_method (type+'_now_count').to_sym do |auth, param|
-              response = abstract( auth, type, type+'NowCount', '', param ){ |x| x || reverse_type( x ) }
-              response[:result] = response[:result][0]
-              return response
+              abstract( auth, type, type+'NowCount', '', param ){ |x| reverse_type( x )[0] }
           end
         end
 
@@ -70,7 +66,7 @@ module PPC
         
         def self.download_report(auth, type, param, debug = false)
           # deal_with time
-          is_now = Time.now.to_s[0...10] == parse_date(param[:startDate])
+          is_now = Date.today == Date.parse(param[:startDate])
         
           # get page num
           method    = (type+ (is_now ? '_now' : '') + '_count').to_sym
@@ -82,7 +78,7 @@ module PPC
             count[:total_page].to_i.times.map do | page_i|
               p "Start downloading #{page_i+1}th page, totally #{count[:total_page]} pages"
               param[:page] = page_i +1
-              send(method, auth, param)[:result]
+              return send(method, auth, param)[:result]
             end
           else
             response
@@ -99,8 +95,8 @@ module PPC
           param[:level]   ||= 'account'
           param[:page]    ||= 1
           param[:IdList]    = [param.delete(:ids)].flatten.map(&:to_s)
-          param[:startDate] = Time.parse(param[:startDate]).strftime("%Y-%m-%d") rescue Time.now.strftime("%Y-%m-%d")
-          param[:endDate]   = Time.parse(param[:endDate]).strftime("%Y-%m-%d")   rescue (Time.now - 24*3600).strftime("%Y-%m-%d")
+          param[:startDate] = Date.parse(param[:startDate]).to_s rescue Date.today.to_s
+          param[:endDate]   = Date.parse(param[:endDate]).to_s   rescue Date.today.to_s
           param
         end
 
