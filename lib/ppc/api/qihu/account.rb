@@ -18,7 +18,7 @@ module PPC
           budget:             :budget,
           mv_budget:          :mvBudget,
           resources:          :Resources,
-          resources:          :resources,
+          "resources" =>      :resources,
           status:             :status,
           open_mobile_domain: :allowMobileDomain,
           open_domains:       :allowDomain,
