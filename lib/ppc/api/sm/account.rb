@@ -24,8 +24,7 @@ module PPC
 
         def self.info( auth )
           response = request(auth, Service, 'getAccount', {requestData: ["account_all"]})
-          p response
-          return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
+          process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end
 
         def self.update(auth, param = {} )
@@ -35,10 +34,9 @@ module PPC
           @return : account info_type
           """
           # for account service, there is not bulk operation
-          infoType = make_type( param )[0]
-          body = { accountInfoType: infoType }
+          body = { accountInfoType: make_type( param )[0] }
           response = request(auth, Service, 'updateAccount', body)
-          return process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
+          process( response, 'accountInfoType' ){ |x|reverse_type(x)[0] }
         end
 
       end

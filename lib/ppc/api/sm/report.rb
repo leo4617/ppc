@@ -29,23 +29,17 @@ module PPC
         end
 
         def self.get_state( auth, id )
-          '''
-          input id should be string
-          '''
-          body = { taskId:  id }
-          response = request( auth, 'task' , 'getTaskState' ,body)
+          response = request( auth, 'task' , 'getTaskState' , {taskId: id} )
           process( response, 'status' ){ |x| x }
         end
 
         def self.get_fileId( auth,  id  )
-          body = { taskId:  id }
-          response = request( auth, 'task' , 'getTaskState' ,body)
+          response = request( auth, 'task' , 'getTaskState' , {taskId: id} )
           process( response, 'fileId' ){ |x| x }
         end
 
         def self.get_file( auth,  id  )
-          body = { fileId:  id }
-          response = request( auth, 'file' , 'download' ,body)
+          request( auth, 'file' , 'download' , {fileId: id} )
         end
 
         private

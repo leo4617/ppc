@@ -30,9 +30,7 @@ module PPC
         result = {}
         result[:succ] = response['header']['desc'] =='success'
         result[:failure] = response['header']['failures']
-        if !response['body'].nil? && response['body'][key]
-          result[:result] = func[ response['body'][key] ]
-        end
+        result[:result] = func[ response['body'][key] ] rescue nil
         result[:no_quota] = (response['header']['failures']['code'] == '8501') rescue true
         result
       end # process
