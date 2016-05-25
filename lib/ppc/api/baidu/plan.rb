@@ -48,7 +48,7 @@ module PPC
 
         def self.get( auth, ids )
           body = { campaignIds: ids, campaignFields: PlanType.values}
-          response = request(auth,Service,'getCampaign',body)
+          response = request( auth, Service, 'getCampaign', body)
           process( response, 'campaignTypes' ){ |x| reverse_type(x)}
         end
 
@@ -65,8 +65,7 @@ module PPC
         end
 
         def self.delete(auth, ids )
-          body = { campaignIds: ids }
-          response = request( auth, Service, 'deleteCampaign', body)
+          response = request( auth, Service, 'deleteCampaign', {campaignIds: ids} )
           process( response, 'result' ){ |x| x }
         end
 
