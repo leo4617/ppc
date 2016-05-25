@@ -12,6 +12,14 @@ module PPC
         call( "group" ).ids( @auth, [@id].flatten )
       end
 
+      def keywords( group_ids )
+        call( "keyword" ).all( @auth, [group_ids].flatten )
+      end
+
+      def keyword_ids( group_ids )
+        call( "keyword" ).ids( @auth, [group_ids].flatten )
+      end
+
       # group opeartion
       include ::PPC::Operation::Group_operation
 
