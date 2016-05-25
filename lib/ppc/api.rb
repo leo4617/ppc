@@ -138,7 +138,7 @@ module PPC
               key_new = :status
             end
           end
-          item[key_new.to_sym] = (key_new == :match_type && @match_types ? @match_types[value] : value) unless value.nil?
+          item[key_new.to_sym] = (key_new == :match_type && @match_types ? @match_types[value] : value)
         }
         item
       end
