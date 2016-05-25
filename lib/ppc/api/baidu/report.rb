@@ -25,7 +25,7 @@ module PPC
           request = make_reportrequest( params )
           body =  { reportRequestType:  request }
           response = request( auth, Service, 'getProfessionalReportId' ,body) 
-          process( response, 'reportId' ){ |x| x }
+          process( response, 'reportId' ){ |x| x[0]["reportId"] }
         end
 
         def self.get_state( auth, id )
@@ -35,13 +35,13 @@ module PPC
           status = {1=>'Waiting' ,2=>'Opearting' ,3=>'Finished'}
           body = { reportId:  id }
           response = request( auth, Service, 'getReportState' ,body)
-          process( response, 'isGenerated' ){ |x| status[x] }
+          process( response, 'isGenerated' ){ |x| status[x[0]["isGenerated"]] }
         end
 
         def self.get_url( auth, id  )
           body = { reportId:  id }
           response = request( auth, Service, 'getReportFileUrl' ,body)
-          process( response, 'reportFilePath' ){ |x| x }       
+          process( response, 'reportFilePath' ){ |x| x[0]["reportFilePath"] }       
         end
         
         private
