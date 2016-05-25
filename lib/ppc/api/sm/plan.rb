@@ -20,6 +20,11 @@ module PPC
         }
         @map = PlanType
 
+        def self.info( auth, ids )
+          response = request( auth, Service, 'getCampaignByCampaignId', {campaignIds: ids})
+          process( response, 'campaignTypes' ){ |x| reverse_type(x)[0] }
+        end
+
         def self.all( auth )
           response = request( auth, Service, 'getAllCampaign' )
           process( response, 'campaignTypes' ){ |x| reverse_type(x) }
@@ -31,31 +36,35 @@ module PPC
         end
 
         def self.get( auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { campaignIds: ids }
-          response = request( auth, Service, 'getCampaignByCampaignId', body)
+          response = request( auth, Service, 'getCampaignByCampaignId', {campaignIds: ids})
           process( response, 'campaignTypes' ){ |x| reverse_type(x) }
         end
 
         def self.add( auth, plans )
-          campaign_types = make_type( plans )
-          body = { campaignTypes: campaign_types }
+          body = { campaignTypes: make_type( plans ) }
           response = request( auth, Service, 'addCampaign', body)
           process( response, 'campaignTypes' ){ |x| reverse_type(x) }
         end
 
-        def self.update(auth,plans )
-          campaign_types = make_type( plans )
-          body = { campaignTypes: campaign_types }
+        def self.update( auth, plans )
+          body = { campaignTypes: make_type( plans ) }
           response = request( auth, Service, 'updateCampaign', body)
           process( response, 'campaignTypes' ){ |x| reverse_type(x) }
         end
 
-        def self.delete(auth, ids )
-          ids = [ ids ] unless ids.is_a? Array
-          body = { campaignIds: ids }
-          response = request( auth, Service, 'deleteCampaign', body, "delete")
+        def self.delete( auth, ids )
+          response = request( auth, Service, 'deleteCampaign', {campaignIds: ids}, "delete")
           process( response, 'result' ){ |x| x }
+        end
+
+        def self.enable( auth, ids )
+          plans = ids.map{|id| {id: id, pause: false} }
+          self.update( auth, plans )
+        end
+
+        def self.pause( auth, ids )
+          plans = ids.map{|id| {id: id, pause: true} }
+          self.update( auth, plans )
         end
        
       end # Service
