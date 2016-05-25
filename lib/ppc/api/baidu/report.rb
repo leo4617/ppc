@@ -71,8 +71,7 @@ module PPC
         #################################
         # useful function for operation #
         #################################
-        def self.query_report( auth, param = nil, debug = false )
-          param = {} if not param
+        def self.query_report( auth, param = {}, debug = false )
           param[:type]   ||= 'query'
           param[:fields] ||=  %w(click impression)
           param[:level]  ||= 'pair'
@@ -81,8 +80,7 @@ module PPC
           download_report( auth, param, debug )
         end
 
-        def self.creative_report( auth, param = nil, debug = false )
-          param = {} if not param
+        def self.creative_report( auth, param = {}, debug = false )
           param[:type]   ||= 'creative'
           param[:fields] ||=  %w(impression click cpc cost ctr cpm position conversion)
           param[:level]  ||= 'creative'
@@ -91,8 +89,7 @@ module PPC
           download_report( auth, param, debug )
         end
 
-        def self.keyword_report( auth, param = nil, debug = false )
-          param = {} if not param
+        def self.keyword_report( auth, param = {}, debug = false )
           param[:type]   ||= 'keyword'
           param[:fields] ||=  %w(impression click cpc cost ctr cpm position conversion)
           param[:level]  ||= 'keywordid'
