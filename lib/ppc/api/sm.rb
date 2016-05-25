@@ -31,7 +31,7 @@ module PPC
         result[:succ] = response['header']['desc'] =='success'
         result[:failure] = response['header']['failures']
         result[:result] = func[ response['body'][key] ] rescue nil
-        result[:no_quota] = (response['header']['failures']['code'] == '8501') rescue true
+        result[:no_quota] = (response['header']['failures']['code'] == '8501') rescue false
         result[:rquota] = response["header"]["leftQuota"] rescue 0
         result
       end # process
