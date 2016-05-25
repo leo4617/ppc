@@ -128,8 +128,10 @@ module PPC
       '''
       [ types ].flatten.map do |item| 
         maps.each{|key_new, key_old| 
-          value = item.delete(key_old.to_s) || item.delete(key_old)
-          if value && key_new == :pause && key_old == :status
+          value = item.delete(key_old)
+          value = item.delete(key_old.to_s) if value.nil?
+          next if value.nil?
+          if key_new == :pause && key_old == :status
             if value[/(pause|enable)/]
               value = value[/pause/] ? true : false
             else
