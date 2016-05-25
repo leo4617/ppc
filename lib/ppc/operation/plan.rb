@@ -20,6 +20,14 @@ module PPC
         call( "keyword" ).ids( @auth, [group_ids].flatten )
       end
 
+      def creatives( group_ids )
+        call( "creative" ).all( @auth, [group_ids].flatten )
+      end
+
+      def creative_ids( group_ids )
+        call( "creative" ).ids( @auth, [group_ids].flatten )
+      end
+
       # group opeartion
       include ::PPC::Operation::Group_operation
 
