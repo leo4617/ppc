@@ -28,7 +28,7 @@ module PPC
 
         def self.all(auth, group_ids)
           response = request(auth, Service, "getKeywordByAdgroupId", {adgroupIds: group_ids} )
-          process(response, 'groupKeywords'){|x| reverse_type(x)}
+          process(response, 'groupKeywords'){|x| reverse_type( x.map{|temp| temp["keywordTypes"]}.flatten ) }
         end
 
         def self.ids(auth, group_ids)
