@@ -78,7 +78,7 @@ module PPC
             count[:total_page].to_i.times.map do | page_i|
               p "Start downloading #{page_i+1}th page, totally #{count[:total_page]} pages"
               param[:page] = page_i +1
-              return send(method, auth, param)[:result]
+              send(method, auth, param)[:result]
             end
           else
             response
