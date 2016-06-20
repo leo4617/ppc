@@ -75,11 +75,11 @@ module PPC
           method    = (type+ (is_now ? '_now' : '')).to_sym
           
           if count && count[:total_page]
-            count[:total_page].to_i.times.map do | page_i|
+            count[:total_page].to_i.times.map{ | page_i|
               p "Start downloading #{page_i+1}th page, totally #{count[:total_page]} pages"
               param[:page] = page_i +1
               send(method, auth, param)[:result]
-            end
+            }.flatten
           else
             response
           end
