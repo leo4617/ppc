@@ -16,7 +16,8 @@ module PPC
 
         def self.getRank( auth, region, queryInfo )
           body  = {'region'=> region, 'queryInfo' => queryInfo}
-          request(auth, Service, 'realTimeQueryResult', body)
+          response = request( auth, Service, 'realTimeQueryResult', body)
+          process( response, "" ){|x| x["left"]["ranking"]}
         end
 
       end

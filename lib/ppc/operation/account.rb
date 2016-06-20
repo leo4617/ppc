@@ -18,6 +18,10 @@ module PPC
       def keyword_ids( group_id )
         call( "keyword" ).ids( @auth, group_id )
       end
+
+      def get_rank( region, keyword )
+        call( "rank" ).getRank( @auth, region, keyword )
+      end
       
       # plan operations
       include ::PPC::Operation::Plan_operation
