@@ -51,7 +51,7 @@ module PPC
           group[0][:negative] = {exact: group[0].delete(:exact_negative), phrase: group[0].delete(:negative)}.to_json if group[0][:exact_negative] || group[0][:negative]
           params = make_type(group)[0]
           response = request( auth, Service, 'update', params )
-          process( response, '' ){ |x| [{id: x['id'], name: group[0][:name]}] }
+          process( response, 'id' ){ |x| [{id: x, name: group[0][:name]}] }
         end
 
         def self.delete( auth, id )
