@@ -40,7 +40,7 @@ module PPC
         def self.all( auth, ids,  getTemp = 0 )
           body = { cpcGrpIds: ids, getTemp: getTemp }
           response = request( auth, Service, 'getCpcIdeaByCpcGrpId', body )
-          process( response, 'cpcGrpIdeas' ){ |x| x.map{|y| reverse_type(y[:cpc_idea_types])}.flatten }
+          process( response, 'cpcGrpIdeas' ){ |x| ids.count == 1 ? reverse_type(x[:cpc_idea_types]) : x.map{|y| reverse_type(y[:cpc_idea_types])}.flatten }
         end
 
         def self.ids( auth, ids,  getTemp = 0 )
