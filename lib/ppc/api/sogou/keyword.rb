@@ -46,13 +46,13 @@ module PPC
           process(response, 'cpcTypes'){|x| reverse_type( x )[0] }
         end
 
-        def self.all( auth, group_ids )
-          response = request( auth, Service, "getCpcByCpcGrpId", {cpcGrpIds: group_ids} )
-          process(response, 'cpcGrpCpcs'){|x| reverse_type( x[:cpc_types] ) }
+        def self.all( auth, ids )
+          response = request( auth, Service, "getCpcByCpcGrpId", {cpcGrpIds: ids} )
+          process(response, 'cpcGrpCpcs'){|x| ids.count == 1 ? reverse_type(x[:cpc_types]) : x.map{|y| reverse_type(y[:cpc_types])}.flatten }
         end
 
-        def self.ids( auth, group_ids )
-          response = request( auth, Service, "getCpcIdByCpcGrpId", {cpcGrpIds: group_ids} )
+        def self.ids( auth, ids )
+          response = request( auth, Service, "getCpcIdByCpcGrpId", {cpcGrpIds: ids} )
           process(response, 'cpcGrpCpcIds'){|x| reverse_type( x ) }
         end
 
