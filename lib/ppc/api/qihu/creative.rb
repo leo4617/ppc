@@ -12,6 +12,7 @@ module PPC
           title:              :title,
           description1:       :description1,
           description2:       :description2,
+          description3:       :descSecondLine,
           pc_destination:     :destinationUrl,
           pc_display:         :displayUrl,
           mobile_destination: :mobileDestinationUrl,
