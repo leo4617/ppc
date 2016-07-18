@@ -26,7 +26,7 @@ module PPC
 
         def self.all(auth, ids)
           response = request(auth, Service, 'getCreativeByAdgroupId', {adgroupIds: ids})
-          process(response, 'groupCreatives'){|x| reverse_type(x)}
+          process(response, 'groupCreatives'){|x| x.map{|y| y["creativeTypes"].map{|z| reverse_type(z)}}.flatten }
         end
 
         def self.ids(auth, ids)
