@@ -21,7 +21,7 @@ module PPC
 
         def self.info(auth, ids)
           response = request(auth, Service, 'getCreativeByCreativeId', {creativeIds: ids})
-          process(response, 'creativeTypes'){|x| reverse_type(x)}
+          process(response, 'creativeTypes'){|x| reverse_type(x)[0]}
         end
 
         def self.all(auth, ids)
