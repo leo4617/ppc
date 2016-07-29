@@ -7,7 +7,7 @@ ppc
 ----------
 ##How to use it ?
 
-### Create an account:
+### Create an objects:
 
     param = {
         se:         'baidu',        # baidu,qihu,sogou,sm
@@ -20,10 +20,11 @@ ppc
     # if it's a 奇虎 account
     # param[:cipherkey] = 'cipherkey'
     # param[:cipheriv]  = 'cipheriv'
-    account  = ::PPC::Operaion::Account.new(param)
     
     # if it's a 神马 account
     # param[:target] = 'username'
+    
+    account  = ::PPC::Operaion::Account.new(param)
 
     plan     = ::PPC::Operaion::Plan.new(param)
     group    = ::PPC::Operaion::Group.new(param)
@@ -40,17 +41,18 @@ ppc
     keyword.info[:result]
     
 ###Add keywords:
-    keyword1 = { keyword: 'ppc', group_id: 123, price:0.6, match_type:'wide'}
-    keyword2 = { keyword: 'test_ppc', group_id: 123, price:0.6, match_type:'exact'}
+    keyword1 = { keyword: 'ppc1', group_id: 123, price:0.6, match_type:'wide'}
+    keyword2 = { keyword: 'ppc2', group_id: 123, price:0.6, match_type:'phrase'}
+    keyword3 = { keyword: 'ppc3', group_id: 123, price:0.6, match_type:'exact'}
 
-    account.add_keyword( [keyword1, keyword2] )
-    plan.add_keyword( [keyword1, keyword2] )
-    group.add_keyword( [keyword1, keyword2] )
+    account.add_keyword( [keyword1, keyword2, keyword3] )
+    plan.add_keyword( [keyword1, keyword2, keyword3] )
+    group.add_keyword( [keyword1, keyword2, keyword3] )
 
 ###Delete keywords
-    account.delete_keyword( [123, 234] )
-    plan.delete_keyword( [123, 234] )
-    adgroup.delete_keyword( [123, 234] )
+    account.delete_keyword( [123, 234, 345] )
+    plan.delete_keyword( [123, 234, 345] )
+    adgroup.delete_keyword( [123, 234, 345] )
     
 -----------------------------------------------
     
