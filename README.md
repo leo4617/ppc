@@ -8,37 +8,49 @@ ppc
 ##How to use it ?
 
 ### Create an account:
-    param = {}
-    param[:se] = 'baidu'
-    param[:username] = 'username'
-    param[:password] = 'password'
-    param[:token] = 'token'
-    # if it is  qihu account
+
+    param = {
+        se:         'baidu',        # baidu,qihu,sogou,sm
+        username:   'username',
+        password:   'password',
+        token:      'token',
+        id:         id,
+    }
+
+    # if it's a 奇虎 account
     # param[:cipherkey] = 'cipherkey'
-    # param[:cipheriv] = 'cipheriv'
-    account = ::PPC::Operaion::account.new(param)
+    # param[:cipheriv]  = 'cipheriv'
+    account  = ::PPC::Operaion::Account.new(param)
+    
+    # if it's a 神马 account
+    # param[:target] = 'username'
+
+    plan     = ::PPC::Operaion::Plan.new(param)
+    group    = ::PPC::Operaion::Group.new(param)
+    creative = ::PPC::Operaion::Creative.new(param)
+    keyword  = ::PPC::Operaion::Keyword.new(param)
     
 ###Get objects info:
 
-    # get account info
-    account.info()[:result]
+    # get info
+    account.info[:result]
+    plan.info[:result]
+    group.info[:result]
+    creative.info[:result]
+    keyword.info[:result]
     
-    #get group info
-    group = account.get_group( {group_id} )
-    group.info()[:result]
-
 ###Add keywords:
     keyword1 = { keyword: 'ppc', group_id: 123, price:0.6, match_type:'wide'}
     keyword2 = { keyword: 'test_ppc', group_id: 123, price:0.6, match_type:'exact'}
+
     account.add_keyword( [keyword1, keyword2] )
-    
-###Another way to add keyword:
-    # no need to enter group_id
-    keyword1 = { keyword: 'ppc', price:0.6, match_type:'wide'}
-    keyword2 = { keyword: 'test_ppc', price:0.6, match_type:'exact'}
-    group = account.get_group( group_id )[:result][0]
-    group.add_keyword( [ keyword1, keyword2 ] ) 
-    
+    plan.add_keyword( [keyword1, keyword2] )
+    group.add_keyword( [keyword1, keyword2] )
+
+###Delete keywords
+    account.delete_keyword( [123, 234] )
+    plan.delete_keyword( [123, 234] )
+    adgroup.delete_keyword( [123, 234] )
     
 -----------------------------------------------
     
