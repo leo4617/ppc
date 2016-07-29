@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{ppc api for  baidu qihu sogou}
   spec.description   = %q{ppc api for  baidu qihu sogou}
   spec.homepage      = "https://github.com/warriors-of-the-night/ppc"
-  spec.license       = "GNU"
+  spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
