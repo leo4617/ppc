@@ -14,8 +14,8 @@ puts """################ WARNING #################
 Gem::Specification.new do |spec|
   spec.name          = "ppc"
   spec.version       = PPC::VERSION
-  spec.authors       = ["Chienli Ma, 刘梦晨， 刘明"]
-  spec.email         = ["maqianlie@gmail.com, liuyu_tc@163.com, seoaqua@qq.com"]
+  spec.authors       = ["Chienli Ma", "刘梦晨", "刘明", "范捷琦"]
+  spec.email         = ["maqianlie@gmail.com", "liuyu_tc@163.com", "seoaqua@qq.com", "fjqqiqi@163.com"]
   spec.summary       = %q{ppc api for  baidu qihu sogou}
   spec.description   = %q{ppc api for  baidu qihu sogou}
   spec.homepage      = "https://github.com/warriors-of-the-night/ppc"
