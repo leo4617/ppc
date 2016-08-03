@@ -39,13 +39,14 @@ module PPC
 
         # combine search_id and get to provide another method
         def self.all( auth, group_id )
-          keyword_ids = self.ids( auth, group_id )[:result][:keyword_ids]
-          self.get( auth, keyword_ids )
+          results = self.ids( auth, group_id )
+          return results unless results[:succ]
+          self.get( auth , results[:result] )
         end
 
         def self.ids( auth, group_id )
           response = request( auth, Service, 'getIdListByGroupId', {'groupId' => group_id[0]} )
-          process( response, 'keywordIdList' ){ |x| {group_id: group_id, keyword_ids: x.map(&:to_i) } }
+          process( response, 'keywordIdList' ){ |x| x.map(&:to_i) }
         end
 
         def self.get( auth, ids )
