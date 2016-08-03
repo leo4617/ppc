@@ -37,15 +37,14 @@ module PPC
 
         # combine two methods to provide another mether
         def self.all( auth, group_id )
-          creative_ids = self.ids( auth, group_id )[:result][0][:creative_ids]
-          response = self.get( auth , creative_ids )
-          response[:result] = [ { group_id: id, creatives: response[:result ] } ] if response[:succ]
-          response
+          results = self.ids( auth, group_id )
+          return results unless results[:succ]
+          self.get( auth , results[:result] )
         end
 
         def self.ids( auth, group_id )
           response = request( auth, Service, 'getIdListByGroupId', {"groupId" => group_id[0]} )
-          process( response, 'creativeIdList' ){ |x| { group_id: id, creative_ids: x.map(&:to_i) } }
+          process( response, 'creativeIdList' ){ |x| x.map(&:to_i) }
         end
 
         def self.get( auth, ids )
