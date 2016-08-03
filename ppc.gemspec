@@ -16,8 +16,8 @@ Gem::Specification.new do |spec|
   spec.version       = PPC::VERSION
   spec.authors       = ["Chienli Ma", "刘梦晨", "刘明", "范捷琦"]
   spec.email         = ["maqianlie@gmail.com", "liuyu_tc@163.com", "seoaqua@qq.com", "fjqqiqi@163.com"]
-  spec.summary       = %q{ppc api for  baidu qihu sogou}
-  spec.description   = %q{ppc api for  baidu qihu sogou}
+  spec.summary       = %q{ppc api for  baidu qihu sogou sm}
+  spec.description   = %q{ppc api for  baidu qihu sogou sm}
   spec.homepage      = "https://github.com/warriors-of-the-night/ppc"
   spec.license       = "MIT"
 
