@@ -28,6 +28,14 @@ module PPC
         call( "creative" ).ids( @auth, [group_ids].flatten )
       end
 
+      def sublinks( group_ids )
+        call( "sublink" ).all( @auth, [group_ids].flatten )
+      end
+
+      def sublink_ids( group_ids )
+        call( "sublink" ).ids( @auth, [group_ids].flatten )
+      end
+
       # group opeartion
       include ::PPC::Operation::Group_operation
 

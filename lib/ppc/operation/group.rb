@@ -19,6 +19,14 @@ module PPC
         call( "creative" ).ids( @auth, [@id].flatten )
       end
 
+      def sublinks
+        call( "sublink" ).all( @auth, [@id].flatten )
+      end
+
+      def sublink_ids
+        call( "sublink" ).ids( @auth, [@id].flatten )
+      end
+
       # keyword opeartion
       include ::PPC::Operation::Keyword_operation
 
