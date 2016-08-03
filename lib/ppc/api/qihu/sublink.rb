@@ -17,7 +17,7 @@ module PPC
 
         def self.info( auth, ids )
           response = request( auth, Service, 'getInfoByIdList', { idList: ids } )
-          process( response, 'sublinkList'){ |x| reverse_type( x['item'] )[0] }
+          process( response, 'sublinkList'){ |x| reverse_type( x )[0] }
         end
 
         def self.all( auth, group_id )
@@ -33,12 +33,12 @@ module PPC
 
         def self.get( auth, ids )
           response = request( auth, Service, 'getInfoByIdList', { idList: ids } )
-          process( response, 'sublinkList'){ |x| reverse_type( x['item'] ) }
+          process( response, 'sublinkList'){ |x| reverse_type( x ) }
         end
 
         def self.add( auth, sublinks )
           response = request( auth, Service, 'add', { sublinks: make_type( sublinks ) } )
-          process( response, 'sublinkIdList'){ |x| x['item'].map(&:to_i) }
+          process( response, 'sublinkIdList'){ |x| x.map(&:to_i) }
         end
 
         def self.delete( auth, ids )
