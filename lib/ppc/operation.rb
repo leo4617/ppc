@@ -127,7 +127,6 @@ module PPC
     module Sublink_operation
 
       def method_missing(method_name, *args, &block)
-        p 'ko-1'
         if method_name.to_s[/_sublink$/]
           call( "sublink" ).send(method_name.to_s[/^(get|add|update|delete|enable|pause)/], @auth, [args].flatten )
         else
