@@ -45,6 +45,9 @@ module PPC
       # creative opeartion
       include ::PPC::Operation::Creative_operation
 
+      # sublink opeartion
+      include ::PPC::Operation::Sublink_operation
+
       # Overwirte add_group method to provide more function
       def add_group( groups )
         call( "group" ).add( @auth, groups.map{|group| group.merge(plan_id: @id)} )

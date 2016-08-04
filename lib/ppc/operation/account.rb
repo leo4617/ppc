@@ -35,6 +35,9 @@ module PPC
       # creative opeartions
       include ::PPC::Operation::Creative_operation
 
+      # sublink opeartion
+      include ::PPC::Operation::Sublink_operation
+
       # report operations
       include ::PPC::Operation::Report
 

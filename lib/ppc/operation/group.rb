@@ -33,6 +33,9 @@ module PPC
       # creative opeartion
       include ::PPC::Operation::Creative_operation
 
+      # sublink opeartion
+      include ::PPC::Operation::Sublink_operation
+
       # Overwrite add method to provide more function
       def add_keyword( keywords )
         call( "keyword" ).add( @auth, keywords.map{|keyword| keyword.merge(group_id: @id)} )
