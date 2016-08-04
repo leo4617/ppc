@@ -11,7 +11,11 @@ module PPC
           anchor:   :text,
           url:      :link,
           image:    :image,
-          pause:    :status,
+          pause:    :sysStatus,
+          status:   :status,
+          add_time: :addTime,
+          update_time: :updateTime,
+          cause:    :cause,
         }
         @map = SublinkType
 
