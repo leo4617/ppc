@@ -24,14 +24,14 @@ module PPC
           process( response, 'sublinkList'){ |x| reverse_type( x )[0] }
         end
 
-        def self.all( auth, group_id )
-          results = self.ids( auth, group_id )
+        def self.all( auth, group_ids )
+          results = self.ids( auth, group_ids )
           return results unless results[:succ]
           self.get( auth , results[:result] )
         end
 
-        def self.ids( auth, group_id )
-          response = request( auth, Service, 'getIdListByGroupId', {"groupId" => group_id[0]} )
+        def self.ids( auth, group_ids )
+          response = request( auth, Service, 'getIdListByGroupIdList', {groupIdList: group_ids} )
           process( response, 'sublinkIdListList' ){ |x| x.map(&:to_i) }
         end
 
