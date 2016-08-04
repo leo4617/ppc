@@ -42,7 +42,7 @@ module PPC
 
         def self.add( auth, sublinks )
           response = request( auth, Service, 'add', { sublinks: make_type( sublinks ) } )
-          process( response, 'sublinkIdList'){ |x| x.map(&:to_i) }
+          process( response, 'sublinkIdList'){ |x| x.map{|id| {id: id} } }
         end
 
         def self.delete( auth, ids )
