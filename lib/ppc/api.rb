@@ -131,7 +131,7 @@ module PPC
           value = item.delete(key_old)
           value = item.delete(key_old.to_s) if value.nil?
           next if value.nil?
-          if key_new == :pause && key_old == :status
+          if key_new == :pause && (key_old == :status || key_old == :sysStatus)
             if value[/(pause|enable)/]
               value = value[/pause/] ? true : false
             else
