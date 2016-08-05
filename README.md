@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/ppc.svg)](https://badge.fury.io/rb/ppc)
+
 ppc
 ===
 
