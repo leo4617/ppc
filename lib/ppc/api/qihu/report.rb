@@ -11,6 +11,7 @@ module PPC
           queryword:    :queryword,
           plan_id:      :campaignId,
           creative_id:  :creativeId,
+          creative_name: :creativeName,
           keyword:      :keyword,
           views:        :views,
           clicks:       :clicks,
