@@ -18,6 +18,10 @@ module PPC
         call( "report" ).keyword_report( @auth, param, debug )
       end
 
+      def rank_report( device = 0, debug = false )
+        call( "bulk" ).rank_report( @auth, device, debug)
+      end
+
     end
   end
 end

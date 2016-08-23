@@ -1,4 +1,6 @@
 # -*- coding:utf-8 -*-
+require "open-uri"
+require "zip"
 module PPC
   module API
     class Sogou
@@ -61,6 +63,18 @@ module PPC
             return get_cpc_rank_path(auth, rank_id) if status[:result] == '1'
             sleep 15
           end
+        end
+
+        def self.rank_report(auth, device = 0, debug)
+          url = download_cpc_rank(auth, device)[:result]
+          file = "sogou_rank_#{Time.now.to_i}.zip"
+          File.open(file, "w"){|f| f.puts open(url).read} 
+          content = Zip::File.open(file) do |zip_file|
+            entry = zip_file.glob('*.csv').first
+            content = entry.get_input_stream.read.force_encoding('gb18030').encode('utf-8')
+          end
+          File.delete(file)
+          content
         end
 
       end
