@@ -68,10 +68,12 @@ module PPC
           if response[:succ]
             id = response[:result]
             p "Got report id:" + id.to_s if debug 
+            times = 0
             loop do
-              sleep 2 
+              raise "The speed of get_status is too slow." if (times += 1) > 10
               break if get_state( auth, id )[:result] == 'Finished'
               p "Report is not generated, waiting..." if debug 
+              sleep 5
             end
 
             url = get_url( auth, id )[:result]

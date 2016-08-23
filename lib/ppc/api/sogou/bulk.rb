@@ -58,10 +58,12 @@ module PPC
         def self.download_cpc_rank(auth, device = 0)
           result = get_cpc_rank(auth, device)
           rank_id = result[:result]
+          times = 0
           loop do 
+            raise "The speed of get_status is too slow." if (times += 1) > 10
             status = get_cpc_rank_status(auth, rank_id)
             return get_cpc_rank_path(auth, rank_id) if status[:result] == '1'
-            sleep 15
+            sleep 10
           end
         end
 
