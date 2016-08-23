@@ -81,8 +81,7 @@ module PPC
           end
         end
 
-        def self.query_report( auth, param = nil, debug = false )
-          param = {} if not param
+        def self.query_report( auth, param = {}, debug = false )
           param[:type]   ||= 'query'
           param[:fields] ||=  %w(click)
           param[:range]  ||= 'account'
@@ -90,16 +89,14 @@ module PPC
           download_report( auth, param, debug )
         end
 
-        def self.creative_report( auth, param = nil, debug = false )
-          param = {} if not param
+        def self.creative_report( auth, param = {}, debug = false )
           param[:type]   ||= 'creative'
           param[:fields] ||=  %w( cost cpc click impression ctr )
           param[:range]  ||= 'account'
           download_report( auth, param, debug )
         end
 
-        def self.keyword_report( auth, param = nil, debug = false )
-          param = {} if not param
+        def self.keyword_report( auth, param = {}, debug = false )
           param[:type]   ||= 'keyword'
           param[:fields] ||=  %w( cost cpc click impression ctr )
           param[:range]  ||= 'account'
