@@ -25,6 +25,7 @@ module PPC
           reg_domain:           :regDomain,
           offline_time:         :budgetOfflineTime,
           weekly_budget:        :weeklyBudget,
+          user_level:           :userLevel,
         }
         @map = AccountInfoType
 
