@@ -10,7 +10,7 @@ ppc
 #How to use it ?
 
 ### Create an objects:
-
+```ruby
     param = {
         se:         'baidu',        # baidu,qihu,sogou,sm
         username:   'username',
@@ -32,17 +32,18 @@ ppc
     group    = ::PPC::Operaion::Group.new(param)
     creative = ::PPC::Operaion::Creative.new(param)
     keyword  = ::PPC::Operaion::Keyword.new(param)
-    
+```
 ###Get objects info:
-
+```ruby
     # get info
     account.info[:result]
     plan.info[:result]
     group.info[:result]
     creative.info[:result]
     keyword.info[:result]
-    
+```
 ###Add keywords:
+```ruby
     keyword1 = { keyword: 'ppc1', group_id: 123, price:0.6, match_type:'wide'}
     keyword2 = { keyword: 'ppc2', group_id: 123, price:0.6, match_type:'phrase'}
     keyword3 = { keyword: 'ppc3', group_id: 123, price:0.6, match_type:'exact'}
@@ -50,19 +51,20 @@ ppc
     account.add_keyword( [keyword1, keyword2, keyword3] )
     plan.add_keyword( [keyword1, keyword2, keyword3] )
     group.add_keyword( [keyword1, keyword2, keyword3] )
-
+```
 ###Delete keywords
+```ruby
     account.delete_keyword( [123, 234, 345] )
     plan.delete_keyword( [123, 234, 345] )
     adgroup.delete_keyword( [123, 234, 345] )
-    
+```
 -----------------------------------------------
     
 #API:
 
 ### Return values:
 All mehtods return a hash:
-    
+
     {
         succ: boolean,          # true if operation success else false
         failure: Array,         # failures info if operation false, else nil
@@ -74,7 +76,7 @@ All mehtods return a hash:
 ###API casting:
 In each service class ::PPC::API::#{SE}::#{Service} there is a member map casting PPC API to Search engine Service API, 
 For example:
-
+```ruby
     ::PPC::API::Baidu::Keyword.map  = [
             [:id,:keywordId],
             [:group_id,:adgroupId],
@@ -87,7 +89,7 @@ For example:
             [:status,:status],
             [:pause,:pause]
          ]
-
+```
 ppc API keys are at the left side while search engine API keys are at the right side. 
 
 For more info please have a look into files in /ppc/api/  
