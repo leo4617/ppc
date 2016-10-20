@@ -65,6 +65,7 @@ module PPC
           requesttype[:idOnly]            =     param[:id_only] || false
           requesttype[:startDate]         =     Time.parse( param[:startDate] ) rescue Time.now - 86400
           requesttype[:endDate]           =     Time.parse( param[:endDate] )   rescue Time.now - 86400
+          requesttype[:statIds]           =     param[:statIds]               if param[:statIds]
           requesttype
         end
 
