@@ -105,6 +105,27 @@ module PPC
           download_report( auth, param, debug )
         end
 
+        def self.account_report( auth, param = {}, debug = false )
+          param[:type]   ||= 'account'
+          param[:fields] ||=  %w( cost cpc click impression ctr )
+          param[:range]  ||= 'account'
+          download_report( auth, param, debug )
+        end
+
+        def self.plan_report( auth, param = {}, debug = false )
+          param[:type]   ||= 'plan'
+          param[:fields] ||=  %w( cost cpc click impression ctr )
+          param[:range]  ||= 'plan'
+          download_report( auth, param, debug )
+        end
+
+        def self.group_report( auth, param = {}, debug = false )
+          param[:type]   ||= 'group'
+          param[:fields] ||=  %w( cost cpc click impression ctr)
+          param[:range]  ||= 'group'
+          download_report( auth, param, debug )
+        end
+
       end # Repost
     end # Baidu
   end # API

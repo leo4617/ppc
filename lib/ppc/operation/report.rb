@@ -18,6 +18,18 @@ module PPC
         call( "report" ).keyword_report( @auth, param, debug )
       end
 
+      def account_report( param = {}, debug = false )
+        call( "report" ).account_report( @auth, param, debug )
+      end
+
+      def plan_report( param = {}, debug = false )
+        call( "report" ).plan_report( @auth, param, debug )
+      end
+
+      def group_report( param = {}, debug = false )
+        call( "report" ).group_report( @auth, param, debug )
+      end
+
       def rank_report( device = 0, debug = false )
         call( "bulk" ).rank_report( @auth, device, debug)
       end

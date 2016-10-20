@@ -97,7 +97,31 @@ module PPC
           param[:unit]   ||= 'day'
           download_report( auth, param, debug )
         end
-   
+
+        def self.account_report( auth, param = {}, debug = false )
+          param[:type]   ||= 'account'
+          param[:fields] ||=  %w(impression click cpc cost ctr cpm conversion)
+          param[:level]  ||= 'account'
+          param[:unit]   ||= 'day'
+          download_report( auth, param, debug )
+        end
+
+        def self.plan_report( auth, param = {}, debug = false )
+          param[:type]   ||= 'plan'
+          param[:fields] ||=  %w(impression click cpc cost ctr cpm conversion)
+          param[:level]  ||= 'plan'
+          param[:unit]   ||= 'day'
+          download_report( auth, param, debug )
+        end
+
+        def self.group_report( auth, param = {}, debug = false )
+          param[:type]   ||= 'group'
+          param[:fields] ||=  %w(impression click cpc cost ctr cpm conversion)
+          param[:level]  ||= 'group'
+          param[:unit]   ||= 'day'
+          download_report( auth, param, debug )
+        end
+
         def self.download_report( auth, param, debug = false )
           p param
           response = get_id( auth, param )
