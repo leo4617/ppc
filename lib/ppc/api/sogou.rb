@@ -31,14 +31,14 @@ module PPC
         }
         operation.body = {  (method+'Request').to_sym => params }
         # debug print
-        debug_print( operation ) if @debug
+        debug_print( operation ) if ENV["DEBUG"]
         result = operation.call.hash[:envelope]
         #extract header and body
         response = { }
         response[:header] = result[:header][:res_header]
         response[:body] = result[:body][ (method + "Response").snake_case.to_sym ]
         # debug print
-        puts response if @debug
+        puts response if ENV["DEBUG"]
         return response
       end
 

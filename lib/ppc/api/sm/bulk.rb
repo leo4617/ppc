@@ -45,7 +45,7 @@ module PPC
               raise "获取task id 失败"
             end
 
-            puts "task_id: #{task_id}" if @debug
+            puts "task_id: #{task_id}" if ENV["DEBUG"]
 
             loop do
               file_id = get_file_id( auth, task_id )[:result]

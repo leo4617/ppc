@@ -67,7 +67,7 @@ module PPC
           end
         end
 
-        def self.rank_report(auth, device = 0, debug)
+        def self.rank_report(auth, device = 0 )
           url = download_cpc_rank(auth, device)[:result]
           file = "sogou_rank_#{Time.now.to_i}.zip"
           File.open(file, "w"){|f| f.puts open(url).read} 

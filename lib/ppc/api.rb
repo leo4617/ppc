@@ -14,16 +14,7 @@ module PPC
   module API
 
     @map = nil
-    @debug = false
     @match_types = nil
-
-    def debug_on
-      @debug = true
-    end
-
-    def debug_off
-      @debug = false
-    end
 
     def request_uri(param = {})
       raise 'you need build the uri'
@@ -62,7 +53,7 @@ module PPC
       end
 
       # 是否显示http通信输出
-      http.set_debug_output( $stdout ) if @debug
+      http.set_debug_output( $stdout ) if ENV["DEBUG"]
       http.use_ssl = true
       if http_method == 'delete'
         req = Net::HTTP::Delete.new(uri.path, http_header)

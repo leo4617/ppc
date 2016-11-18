@@ -64,16 +64,16 @@ module PPC
         ###########################
         # intreface for Operation #
         ###########################
-        def self.download_report( auth, param, debug = false )
+        def self.download_report( auth, param )
           response = get_id( auth, param )
           if response[:succ]
             id = response[:result]
-            p "Got report id:" + id.to_s if debug 
+            p "Got report id:" + id.to_s if ENV["DEBUG"] 
             times = 0
             loop do
               raise "The speed of get_status is too slow." if (times += 1) > 10
               break if get_state( auth, id )[:result] == 'Finished'
-              p "Report is not generated, waiting..." if debug 
+              p "Report is not generated, waiting..." if ENV["DEBUG"] 
               sleep 5
             end
 
@@ -84,47 +84,47 @@ module PPC
           end
         end
 
-        def self.query_report( auth, param = {}, debug = false )
+        def self.query_report( auth, param = {} )
           param[:type]   ||= 'query'
           param[:fields] ||=  %w(click)
           param[:range]  ||= 'account'
           param[:unit]   ||= 'day'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
-        def self.creative_report( auth, param = {}, debug = false )
+        def self.creative_report( auth, param = {} )
           param[:type]   ||= 'creative'
           param[:fields] ||=  %w( cost cpc click impression ctr )
           param[:range]  ||= 'account'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
-        def self.keyword_report( auth, param = {}, debug = false )
+        def self.keyword_report( auth, param = {} )
           param[:type]   ||= 'keyword'
           param[:fields] ||=  %w( cost cpc click impression ctr )
           param[:range]  ||= 'account'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
-        def self.account_report( auth, param = {}, debug = false )
+        def self.account_report( auth, param = {} )
           param[:type]   ||= 'account'
           param[:fields] ||=  %w( cost cpc click impression ctr )
           param[:range]  ||= 'account'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
-        def self.plan_report( auth, param = {}, debug = false )
+        def self.plan_report( auth, param = {} )
           param[:type]   ||= 'plan'
           param[:fields] ||=  %w( cost cpc click impression ctr )
           param[:range]  ||= 'plan'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
-        def self.group_report( auth, param = {}, debug = false )
+        def self.group_report( auth, param = {} )
           param[:type]   ||= 'group'
           param[:fields] ||=  %w( cost cpc click impression ctr)
           param[:range]  ||= 'group'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
       end # Repost

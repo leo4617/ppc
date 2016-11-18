@@ -57,15 +57,15 @@ module PPC
         ############################
         # Interfaces for operation #
         ############################
-        def self.keyword_report( auth, param, debug = false )
-          download_report(auth, 'keyword', param, debug )
+        def self.keyword_report( auth, param )
+          download_report(auth, 'keyword', param )
         end
 
-        def self.creative_report( auth, param, debug = false )
-          download_report(auth, 'creative', param, debug)
+        def self.creative_report( auth, param )
+          download_report(auth, 'creative', param )
         end
         
-        def self.download_report(auth, type, param, debug = false)
+        def self.download_report(auth, type, param )
           # deal_with time
           is_now = Date.today == Date.parse(param[:startDate])
         

@@ -70,63 +70,63 @@ module PPC
         #################################
         # useful function for operation #
         #################################
-        def self.query_report( auth, param = {}, debug = false )
+        def self.query_report( auth, param = {} )
           param[:type]   ||= 'query'
           param[:fields] ||=  %w(click impression)
           param[:range]  ||= 'account'
           param[:unit]   ||= 'day'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
-        def self.creative_report( auth, param = {}, debug = false )
+        def self.creative_report( auth, param = {} )
           param[:type]   ||= 'creative'
           param[:fields] ||=  %w(click impression)
           param[:range]  ||= 'account'
           param[:unit]   ||= 'day'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
-        def self.keyword_report( auth, param = {}, debug = false )
+        def self.keyword_report( auth, param = {} )
           param[:type]   ||= 'keyword'
           param[:fields] ||=  %w(click impression cost cpc ctr)
           param[:range]  ||= 'account'
           param[:unit]   ||= 'day'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
-        def self.account_report( auth, param = {}, debug = false )
+        def self.account_report( auth, param = {} )
           param[:type]   ||= 'account'
           param[:fields] ||=  %w(click impression cost cpc ctr)
           param[:range]  ||= 'account'
           param[:unit]   ||= 'day'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
-        def self.plan_report( auth, param = {}, debug = false )
+        def self.plan_report( auth, param = {} )
           param[:type]   ||= 'plan'
           param[:fields] ||=  %w(click impression cost cpc ctr)
           param[:range]  ||= 'plan'
           param[:unit]   ||= 'day'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
-        def self.group_report( auth, param = {}, debug = false )
+        def self.group_report( auth, param = {} )
           param[:type]   ||= 'group'
           param[:fields] ||=  %w(click impression cost cpc ctr)
           param[:range]  ||= 'group'
           param[:unit]   ||= 'day'
-          download_report( auth, param, debug )
+          download_report( auth, param )
         end
 
-        def self.download_report( auth, param, debug = false )
+        def self.download_report( auth, param )
           response = get_id( auth, param )
           if response[:succ]
             id = response[:result]
-            p "Got report id:" + id.to_s if debug
+            p "Got report id:" + id.to_s if ENV["DEBUG"]
             loop do
               sleep 2
               break if get_state( auth, id )[:result] == 'FINISHED'
-              p "Report is not generated, waiting..." if debug
+              p "Report is not generated, waiting..." if ENV["DEBUG"]
             end
             fileId = get_fileId(auth, id)[:result]
             return get_file(auth, fileId).force_encoding("utf-8")

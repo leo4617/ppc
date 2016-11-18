@@ -2,36 +2,36 @@ module PPC
   module Operation
     module Report
 
-      def download_report( param = {}, debug = false )
-        call( "report" ).download_report( @auth, param, debug )
+      def download_report( param = {} )
+        call( "report" ).download_report( @auth, param )
       end
 
-      def query_report( param = {}, debug = false )
-        call( "report" ).query_report( @auth, param, debug )
+      def query_report( param = {} )
+        call( "report" ).query_report( @auth, param )
       end
 
-      def creative_report( param = {}, debug = false )
-        call( "report" ).creative_report( @auth, param, debug )
+      def creative_report( param = {} )
+        call( "report" ).creative_report( @auth, param )
       end
 
-      def keyword_report( param = {}, debug = false )
-        call( "report" ).keyword_report( @auth, param, debug )
+      def keyword_report( param = {} )
+        call( "report" ).keyword_report( @auth, param )
       end
 
-      def account_report( param = {}, debug = false )
-        call( "report" ).account_report( @auth, param, debug )
+      def account_report( param = {} )
+        call( "report" ).account_report( @auth, param )
       end
 
-      def plan_report( param = {}, debug = false )
-        call( "report" ).plan_report( @auth, param, debug )
+      def plan_report( param = {} )
+        call( "report" ).plan_report( @auth, param )
       end
 
-      def group_report( param = {}, debug = false )
-        call( "report" ).group_report( @auth, param, debug )
+      def group_report( param = {} )
+        call( "report" ).group_report( @auth, param )
       end
 
-      def rank_report( device = 0, debug = false )
-        call( "bulk" ).rank_report( @auth, device, debug)
+      def rank_report( device = 0 )
+        call( "bulk" ).rank_report( @auth, device )
       end
 
     end

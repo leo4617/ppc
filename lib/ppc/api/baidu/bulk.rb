@@ -52,17 +52,17 @@ module PPC
               raise file_id[:failure][0]['message']
             end
 
-            puts "file_id: #{file_id}" if @debug
+            puts "file_id: #{file_id}" if ENV["DEBUG"]
 
             loop do
               state = state( auth, file_id )[:result].to_s
               raise "invalid file state: #{state}" unless %w(1 2 3 null).include? state
               break if state == '3'
-              puts "waiting for #{file_id} to be ready. current state:#{state}" if @debug
+              puts "waiting for #{file_id} to be ready. current state:#{state}" if ENV["DEBUG"]
               sleep 3
             end
 
-            puts "#{file_id} is ready" if @debug
+            puts "#{file_id} is ready" if ENV["DEBUG"]
             return path( auth, file_id )
 
           rescue => e
