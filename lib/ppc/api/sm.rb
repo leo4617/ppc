@@ -28,7 +28,7 @@ module PPC
         result is the processed response body.
         '''
         result = {}
-        result[:succ] = response['header']['desc'][/(success|执行成功)/] || false
+        result[:succ] = response['header']['desc'][/(success|执行成功)/] ? true : false
         result[:failure] = response['header']['failures']
         result[:result] = func[ response['body'][key] ] rescue nil
         result[:no_quota] = (response['header']['failures']['code'] == '8501') rescue false
