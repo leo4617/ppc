@@ -9,6 +9,12 @@ ppc
 ----------
 #How to use it ?
 
+### Add ppc and savon(version3) to Gemfile
+```ruby
+gem "savon", git: "https://github.com/savonrb/savon", branch: "version3"
+gem "ppc", "~>2.0.3"
+```
+
 ### Create an objects:
 ```ruby
     param = {
