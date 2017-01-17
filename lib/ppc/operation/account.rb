@@ -41,6 +41,10 @@ module PPC
       # report operations
       include ::PPC::Operation::Report
 
+      def search_keyword( keyword )
+        call( "keyword" ).search( @auth, {keyword: keyword})
+      end
+
     end
   end
 end

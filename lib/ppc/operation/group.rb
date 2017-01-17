@@ -44,6 +44,10 @@ module PPC
       def add_creative( creatives )
         call( "creative" ).add( @auth, creatives.map{|creative| creative.merge(group_id: @id)} )
       end
+
+      def search_keyword( keyword )
+        call( "keyword" ).search( @auth, {group_id: @id, keyword: keyword})
+      end
       
     end # Group
   end # Operation

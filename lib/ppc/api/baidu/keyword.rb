@@ -105,6 +105,20 @@ module PPC
           process(response, 'groupKeywords' ){|x| reverse_type( x , KeywordQualityType) }
         end
 
+        def self.search( auth, params )
+          body = { 
+            searchWord:   params[:keyword],
+            startNum:     1,
+            endNum:       1000,
+            searchLevel:  2,
+            searchType:   1,
+          }
+          body.merge!(campaignId: params[:plan_id])   if params[:plan_id]
+          body.merge!(adgroupId:  params[:group_id])  if params[:group_id]
+          response = request( auth, "Search", 'getMaterialInfoBySearch', body )
+          process(response, 'materialSearchInfos' ){|x| x[0]["materialSearchInfos"].map{|tmp| tmp["materialInfos"]} }
+        end
+
       end # keyword
     end # Baidu
   end # API

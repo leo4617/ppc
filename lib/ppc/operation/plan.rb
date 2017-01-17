@@ -53,6 +53,9 @@ module PPC
         call( "group" ).add( @auth, groups.map{|group| group.merge(plan_id: @id)} )
       end
 
+      def search_keyword( keyword )
+        call( "keyword" ).search( @auth, {plan_id: @id, keyword: keyword})
+      end
 
     end # class plan
   end # mudole Opeartion
